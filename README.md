@@ -1,6 +1,6 @@
-# AutoProt Framework: Advanced Protein and Ligand Design System
+# AutoMol Framework: Advanced Protein and Ligand Design System
 
-The AutoProt Framework is a multi-phase computational pipeline designed for the automated generation, analysis, and testing of novel molecular structures. This system integrates machine learning techniques, molecular dynamics simulations, and bioinformatics tools to create and optimize molecules tailored to specific biological functions.
+The AutoMol Framework is a multi-phase computational pipeline designed for the automated generation, analysis, and testing of novel molecular structures. This system integrates machine learning techniques, molecular dynamics simulations, and bioinformatics tools to create and optimize molecules tailored to specific biological functions.
 
 ## Table of Contents
 
