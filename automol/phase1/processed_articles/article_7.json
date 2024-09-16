@@ -1,0 +1,24 @@
+{
+  "title": "Surface activity of cancer cells: the fusion of two cell aggregates",
+  "abstract": "  Although a good comprehension of how cancer cells collectively migrate by\nfollowing molecular rules which influence the state of cell-cell adhesion\ncontacts has been generated, the impact of collective migration on cellular\nrearrangement from subcellular to supracellular level remains less understood.\nThus, considering collective cell migration (CCM) of cancer mesenchymal cells\non one side and healthy epithelial cells on the other during the fusion of two\ncell aggregates could result in a powerful tool in order to address the\ncontribution of structural changes at subcellular level which influence the\ncellular rearrangements and help to understand this important, but still\ncontroversial topic. While healthy epithelial cells undergo volumetric cell\nrearrangement driven by the tissue surface tension, which results in a\ncollision of opposite directed velocity front near the contact point between\ntwo cell aggregates, mesenchymal cells follow quite different scenario. These\ncells are capable of reducing the surface tension and undergo surface cell\nrearrangement. The main goal of this contribution is to discuss the origin of\nsurface activity of cancer cells by accounting for the crosstalk between\ncell-cell and cell-ECM adhesion contacts influenced by the cell contractility.\n",
+  "summary": " This text discusses the collective migration of cancer cells compared to healthy epithelial cells, focusing on how they behave during cellular rearrangement from subcellular to supracellular levels. The study suggests that understanding this process could be crucial for addressing a controversial topic regarding structural changes at the subcellular level influencing cell rearrangements. Healthy epithelial cells rearrange by altering tissue surface tension due to opposing velocity fronts at contact points between aggregates, while cancer mesenchymal cells can reduce surface tension and undergo surface rearrangement. The paper aims to explore the origin of this surface activity in cancer cells, considering the interaction between cell-cell and cell-extracellular matrix adhesion contacts influenced by cell contractility.",
+  "extracted_info": {
+    "METHODS": [],
+    "RESULTS": [
+      "Thus, considering collective cell migration (CCM) of cancer mesenchymal cells\non one side and healthy epithelial cells on the other during the fusion of two\ncell aggregates could result in a powerful tool in order to address the\ncontribution of structural changes at subcellular level which influence the\ncellular rearrangements and help to understand this important, but still\ncontroversial topic.",
+      "While healthy epithelial cells undergo volumetric cell\nrearrangement driven by the tissue surface tension, which results in a\ncollision of opposite directed velocity front near the contact point between\ntwo cell aggregates, mesenchymal cells follow quite different scenario."
+    ]
+  },
+  "generated_description": " The study explores the concept of collective cell migration (CCM) among cancer mesenchymal cells compared to healthy epithelial cells during the fusion of two cell aggregates. This research aims to investigate the potential role of subcellular structural changes in influencing cellular rearrangements, a topic that remains controversial. By observing healthy epithelial cells, it was found that their volumetric cell rearrangement is driven by tissue surface tension, resulting in opposing velocity fronts colliding near the contact point between two cell aggregates. In contrast, cancer mesenchymal cells exhibit a different behavior pattern during this process.\n\nThe findings suggest that understanding these differences could lead to a powerful tool for addressing the role of structural changes at the subcellular level in cellular rearrangements. This information is crucial as it may help shed light on mechanisms underlying various diseases, potentially leading to more targeted treatments and improved outcomes.",
+  "citation_info": {
+    "authors": [
+      "Ivana Pajic-Lijakovic",
+      "Milan Milivojevic"
+    ],
+    "year": "",
+    "title": "Surface activity of cancer cells: the fusion of two cell aggregates",
+    "journal": "arXiv",
+    "doi": "http://arxiv.org/abs/2109.09424v1",
+    "publication_date": "N/A"
+  }
+}

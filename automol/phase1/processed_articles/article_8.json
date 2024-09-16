@@ -1,0 +1,23 @@
+{
+  "title": "Regulative Differentiation as Bifurcation of Interacting Cell Population",
+  "abstract": "  In multicellular organisms, several cell states coexist. For determining each\ncell type, cell-cell interactions are often essential, in addition to\nintracellular gene expression dynamics. Based on dynamical systems theory, we\npropose a mechanism for cell differentiation with regulation of populations of\neach cell type by taking simple cell models with gene expression dynamics. By\nincorporating several interaction kinetics, we found that the cell models with\na single intracellular positive-feedback loop exhibit a cell fate switching,\nwith a change in the total number of cells. The number of a given cell type or\nthe population ratio of each cell type is preserved against the change in the\ntotal number of cells, depending on the form of cell-cell interaction. The\ndifferentiation is a result of bifurcation of cell states via the intercellular\ninteractions, while the population regulation is explained by self-consistent\ndetermination of the bifurcation parameter through cell-cell interactions. The\nrelevance of this mechanism to development and differentiation in several\nmulticellular systems is discussed.\n",
+  "summary": " In multicellular organisms, different cells have various states depending on cell-cell interactions and intracellular gene expression dynamics. According to a new theory, there's a method for cell differentiation that involves regulating the population sizes of each type by analyzing simple models with genetic expression changes. When these models include single positive-feedback loops in genes, they can change cell types by switching fates. The number ratio between various cells stays consistent, even when total numbers fluctuate, due to different interactions among them. This mechanism is crucial for understanding development and cellular differentiation within multicellular organisms, suggesting that it could play a significant role in the process of shaping an organism's structure and function throughout its life cycle.",
+  "extracted_info": {
+    "METHODS": [],
+    "RESULTS": [
+      "The\ndifferentiation is a result of bifurcation of cell states via the intercellular\ninteractions, while the population regulation is explained by self-consistent\ndetermination of the bifurcation parameter through cell-cell interactions."
+    ]
+  },
+  "generated_description": " The study explores the mechanisms underlying cell differentiation and population regulation in multicellular organisms. Through detailed analysis of intercellular interactions, it was observed that cell differentiation results from the process of bifurcating cell states via intricate cellular communications. The maintenance of stable cell populations is attributed to the self-consistent adjustment of a bifurcation parameter, driven by continuous cell-cell interactions.\n\nThese findings are crucial for understanding complex biological phenomena such as development and tissue homeostasis. They suggest that the coordinated interplay between cells plays a fundamental role in determining both cellular identity (differentiation) and population balance (regulation). The implications of these results extend beyond basic scientific inquiry, potentially providing insights into therapeutic interventions and regenerative medicine strategies aimed at manipulating cell behavior for practical applications.",
+  "citation_info": {
+    "authors": [
+      "Akihiko Nakajima",
+      "Kunihiko Kaneko"
+    ],
+    "year": "",
+    "title": "Regulative Differentiation as Bifurcation of Interacting Cell Population",
+    "journal": "arXiv",
+    "doi": "http://arxiv.org/abs/0712.0545v1",
+    "publication_date": "N/A"
+  }
+}

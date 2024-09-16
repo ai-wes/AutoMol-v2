@@ -1,0 +1,33 @@
+{
+  "title": "HSPA12A promotes c-Myc lactylation-mediated proliferation of tubular epithelial cells to facilitate renal functional recovery from kidney ischemia/reperfusion injury.",
+  "abstract": "Proliferation of renal tubular epithelial cells (TEC) is essential for restoring tubular integrity and thereby to support renal functional recovery from kidney ischemia/reperfusion (KI/R) injury. Activation of transcriptional factor c-Myc promotes TEC proliferation following KI/R; however, the mechanism regarding c-Myc activation in TEC is incompletely known. Heat shock protein A12A (HSPA12A) is an atypic member of HSP70 family. In this study, we found that KI/R decreased HSPA12A expression in mouse kidneys and TEC, while ablation of HSPA12A in mice impaired TEC proliferation and renal functional recovery following KI/R. Gain-of-functional studies demonstrated that HSPA12A promoted TEC proliferation upon hypoxia/reoxygenation (H/R) through directly interacting with c-Myc and enhancing its nuclear localization to upregulate expression of its target genes related to TEC proliferation. Notably, c-Myc was lactylated in TEC after H/R, and this lactylation was enhanced by HSPA12A overexpression. Importantly, inhibition of c-Myc lactylation attenuated the HSPA12A-induced increases of c-Myc nuclear localization, proliferation-related gene expression, and TEC proliferation. Further experiments revealed that HSPA12A promoted c-Myc lactylation via increasing the glycolysis-derived lactate generation in a Hif1\u03b1-dependent manner. The results unraveled a role of HSPA12A in promoting TEC proliferation and facilitating renal recovery following KI/R, and this role of HSPA12A was achieved through increasing lactylation-mediated c-Myc activation. Therefore, targeting HSPA12A in TEC might be a viable strategy to promote renal functional recovery from KI/R injury in patients.",
+  "summary": " Heat shock protein A12A (HSPA12A) plays a crucial role in promoting the proliferation of renal tubular epithelial cells (TEC) following kidney ischemia/reperfusion (KI/R) injury by directly interacting with transcription factor c-Myc and enhancing its nuclear localization, which in turn upregulates genes related to TEC proliferation. Studies showed that KI/R decreases HSPA12A expression in mouse kidneys and TEC, while ablation of HSPA12A impairs TEC proliferation and renal functional recovery following KI/R injury. The findings highlight a significant role for HSPA12A in facilitating renal recovery by promoting c-Myc activation through lactylation, which is increased by HSPA12A overexpression. Inhibition of c-Myc lactylation attenuated the effects of HSPA12A on TEC proliferation and gene expression related to it. Further experiments revealed that HSPA12A promotes c-Myc lactylation via increasing glycolysis-derived lactate generation, a process dependent on Hif1\u03b1. Thus, targeting HSPA12A in TEC could be a viable strategy for promoting renal functional recovery from KI/R injury in patients.",
+  "extracted_info": {
+    "METHODS": [],
+    "RESULTS": [
+      "The results unraveled a role of HSPA12A in promoting TEC proliferation and facilitating renal recovery following KI/R, and this role of HSPA12A was achieved through increasing lactylation-mediated c-Myc activation."
+    ]
+  },
+  "generated_description": " The study conducted by [Authors' Name], published in [Journal or Conference Name], highlights an important discovery regarding the role of heat shock protein 12A (HSPA12A) in promoting the proliferation of tubular epithelial cells (TECs) and facilitating renal recovery after injury, particularly through potassium iodide (KI)/reflux (R) damage. The research team revealed that HSPA12A plays a critical role in enhancing TEC function post-injury by upregulating c-Myc activation via lactylation.\n\nThe significance of this discovery lies in its potential to provide new therapeutic targets for kidney diseases, which are commonly associated with impaired renal function and potentially irreversible tissue damage. By understanding how HSPA12A influences the proliferation and survival of TECs under such conditions, scientists can develop more effective strategies to protect and repair damaged kidneys, minimizing adverse effects on patient health.\n\nThe implications of these findings extend beyond basic research into practical applications in clinical practice. Knowing that lactylation-mediated c-Myc activation is a key mechanism through which HSPA12A promotes renal recovery could lead to the design of targeted therapies aimed at modulating this pathway, potentially improving outcomes and patient life quality for conditions such as kidney injury due to KI/R.\n\nFurthermore, these findings might also inspire additional investigations into the broader role of heat shock proteins in cellular responses to stress and how they can be manipulated therapeutically across various organs beyond the kidneys, suggesting a potential link between HSPs and other pathological states. Overall, this study not only enhances our understanding of kidney health but may pave the way for innovative therapeutic approaches that could revolutionize care for patients suffering from renal dysfunction.",
+  "citation_info": {
+    "authors": [
+      "Li",
+      "Min",
+      "Zhang",
+      "Cao",
+      "Kong",
+      "Mao",
+      "Cheng",
+      "Gou",
+      "Li",
+      "Li",
+      "Liu",
+      "Ding"
+    ],
+    "year": "",
+    "title": "HSPA12A promotes c-Myc lactylation-mediated proliferation of tubular epithelial cells to facilitate renal functional recovery from kidney ischemia/reperfusion injury.",
+    "journal": "Cellular and molecular life sciences : CMLS",
+    "doi": "10.1007/s00018-024-05427-5",
+    "publication_date": "N/A"
+  }
+}

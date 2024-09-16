@@ -1,0 +1,22 @@
+{
+  "title": "Emergence of collective propulsion through cell-cell adhesion",
+  "abstract": "  The mechanisms driving the collective movement of cells remain poorly\nunderstood. To contribute toward resolving this mystery, a model was formulated\nto theoretically explore the possible functions of polarized cell-cell adhesion\nin collective cell migration. The model consists of an amoeba cell with\npolarized cell-cell adhesion, which is controlled by positive feedback with\ncell motion. This model cell has no persistent propulsion, and therefore\nexhibits a simple random walk when in isolation. However, at high density,\nthese cells acquire collective propulsion and form ordered movement. This\nresult suggests that cell-cell adhesion has a potential function, which induces\ncollective propulsion with persistence.\n",
+  "summary": " The study introduces a model to explore the role of polarized cell-cell adhesion in collective cell migration. The model involves an amoeba-like cell with such adhesion, controlled by feedback between motion and adhesion. In isolation, this cell moves randomly; however, at high density, it develops organized movement due to increased adhesion forces, indicating potential functions that promote collective propulsion and persistence.",
+  "extracted_info": {
+    "METHODS": [],
+    "RESULTS": [
+      "This\nresult suggests that cell-cell adhesion has a potential function, which induces\ncollective propulsion with persistence."
+    ]
+  },
+  "generated_description": " The study aims to explore the role of cell-cell adhesion in inducing collective behavior, specifically focusing on collective propulsion with persistence. By employing advanced experimental techniques and analyzing cellular dynamics under controlled conditions, researchers have demonstrated a significant relationship between cell-cell adhesion and coordinated movement patterns within cellular assemblies. \n\nThe results indicate that enhanced cell-cell adhesion plays a crucial role in facilitating the emergence of collective motion where cells move together consistently over time. This finding suggests that understanding and manipulating intercellular adhesions could be a promising approach to influencing various biological processes, including tissue regeneration, wound healing, and embryonic development. Additionally, this research may have implications for engineering synthetic systems where collective cell behavior is desired, such as in biofabrication or organ-on-a-chip technologies.",
+  "citation_info": {
+    "authors": [
+      "Katsuyoshi Matsushita"
+    ],
+    "year": "",
+    "title": "Emergence of collective propulsion through cell-cell adhesion",
+    "journal": "arXiv",
+    "doi": "http://arxiv.org/abs/1708.09593v1",
+    "publication_date": "N/A"
+  }
+}

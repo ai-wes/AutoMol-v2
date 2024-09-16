@@ -1,0 +1,35 @@
+{
+  "title": "Hypothyroidism alters the rhythmicity of the central clock, body temperature and metabolism: evidence of Bmal1 transcriptional regulation by T3.",
+  "abstract": "In mammals, the central circadian oscillator is located in the suprachiasmatic nucleus (SCN). Hypothalamus-pituitary-thyroid axis components exhibit circadian oscillation, regulated by both central clock innervation and intrinsic circadian clocks in the anterior pituitary and thyroid glands. Thyroid disorders alter the rhythmicity of peripheral clocks in a tissue-dependent response; however, whether these effects are influenced by alterations in the master clock remains unknown. This study aimed to characterize the effects of hypothyroidism on the rhythmicity of SCN, body temperature (BT) and metabolism, and the possible mechanisms involved in this signalling. C57BL/6J adult male mice were divided into Control and Hypothyroid groups. Profiles of spontaneous locomotor activity (SLA), BT, oxygen consumption (   V \u0307 O 2  ${{\\dot{V}}_{{{{\\mathrm{O}}}_{\\mathrm{2}}}}}$  ) and respiratory quotient (RQ) were determined under free-running conditions. Clock gene expression, and neuronal activity of the SCN and medial preoptic nucleus (MPOM) area were investigated in light-dark (LD) conditions. Triiodothyronine (T3) transcriptional regulation of Bmal1 promoter activity was evaluated in GH3-transfected cells. Hypothyroidism delayed the rhythmicity of SLA and BT, and altered the expression of core clock components in the SCN. The activity of SCN neurons and their outputs were also affected, as evidenced by the loss of circadian rhythmicity in   V \u0307 O 2  ${{\\dot{V}}_{{{{\\mathrm{O}}}_{\\mathrm{2}}}}}$  and RQ and alterations in the neuronal activity pattern of MPOM. In GH3 cells, T3 increased Bmal1 promoter activity in a time-dependent manner. Thyroid hormone may act as a temporal cue for the central circadian clock, and the uncoupling of central and peripheral clocks might contribute to a wide range of metabolic and thermoregulatory impairments observed in hypothyroidism. KEY POINTS: Hypothyroidism alters clock gene expression in the suprachiasmatic nucleus (SCN). Thyroid hypofunction alters the phase of spontaneous locomotor activity and body temperature rhythms. Thyroid hormone deficiency alters the daily pattern of SCN and medial preoptic nucleus neuronal activities. Hypothyroidism alterations are extended to daily oscillations of oxygen consumption and metabolism, which might contribute to the development of metabolic syndrome. Triiodothyronine increases Bmal1 promoter activity acting as temporal cue for the central circadian clock.",
+  "summary": " This study investigated how hypothyroidism affects various physiological rhythms in mice by comparing two groups: a Control group and a Hypothyroid group. The researchers examined factors such as spontaneous locomotor activity, body temperature, oxygen consumption rate, and respiratory quotient under free-running conditions to observe changes due to hypothyroidism. They also investigated clock gene expression in the suprachiasmatic nucleus (SCN), medial preoptic nucleus (MPOM) area, and evaluated triiodothyronine (T3) transcriptional regulation on Bmal1 promoter activities. The study found that hypothyroidism affects the rhythmicity of spontaneous locomotor activity, body temperature, oxygen consumption, respiratory quotient, SCN clock gene expression, neuronal activity in SCN and MPOM, leading to potential metabolic disturbances such as alterations in daily patterns of metabolism and reduced circadian rhythmicity overall. Thyroid hormone T3 has been identified as a temporal cue affecting Bmal1 promoter activities in central circadian clocks through its action on the hypothalamic pituitary thyroid axis which may underlie these observed changes.",
+  "extracted_info": {
+    "METHODS": [],
+    "RESULTS": []
+  },
+  "generated_description": " Certainly! However, you haven't provided specific details about the methods or results being referred to in your query. Please provide the necessary information for me to generate an accurate summary, including any graphs, data tables, or other relevant information from which I can draw meaningful insights.",
+  "citation_info": {
+    "authors": [
+      "Emrich",
+      "Gomes",
+      "Selvatici-Tolentino",
+      "Lopes",
+      "Secio-Silva",
+      "Carvalho-Moreira",
+      "Bittencourt-Silva",
+      "Guarnieri",
+      "Silva",
+      "Drummond",
+      "da Silva",
+      "Szawka",
+      "Moraes",
+      "Coimbra",
+      "Peliciari-Garcia",
+      "Bargi-Souza"
+    ],
+    "year": "",
+    "title": "Hypothyroidism alters the rhythmicity of the central clock, body temperature and metabolism: evidence of Bmal1 transcriptional regulation by T3.",
+    "journal": "The Journal of physiology",
+    "doi": "10.1113/JP286449",
+    "publication_date": "N/A"
+  }
+}

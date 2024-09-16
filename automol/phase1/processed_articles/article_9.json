@@ -1,0 +1,23 @@
+{
+  "title": "Modelling cell-cell collision and adhesion with the Filament Based\n  Lamellipodium Model",
+  "abstract": "  We extend the live-cell motility Filament Based Lamellipodium Model to\nincorporate the forces exerted on the lamellipodium of the cells due to\ncell-cell collision and cadherin induced cell-cell adhesion. We take into\naccount the nature of these forces via physical and biological constraints and\nmodelling assumptions. We investigate the effect these new components have in\nthe migration and morphology of the cells through particular experiments. We\nexhibit moreover the similarities between our simulated cells and HeLa cancer\ncells.\n",
+  "summary": " The text discusses an extension of a model that predicts cell movement by considering forces from cell-cell collisions and adhesion due to cadherin interactions. This extended model incorporates physical and biological factors affecting these forces and investigates their impact on cellular migration and shape using specific experiments. Additionally, it compares simulated cells with HeLa cancer cells in terms of behavior.",
+  "extracted_info": {
+    "METHODS": [],
+    "RESULTS": []
+  },
+  "generated_description": " I'm sorry for any confusion, but you haven't provided the specific details regarding the \"methods\" and \"results\" you mentioned. To assist you effectively, please share the methods used in your experiment or study, as well as the results obtained. This will enable me to generate a comprehensive summary that explains their significance and implications.",
+  "citation_info": {
+    "authors": [
+      "Nikolaos Sfakianakis",
+      "Diane Peurichard",
+      "Aaron Brunk",
+      "Christian Schmeiser"
+    ],
+    "year": "",
+    "title": "Modelling cell-cell collision and adhesion with the Filament Based\n  Lamellipodium Model",
+    "journal": "arXiv",
+    "doi": "http://arxiv.org/abs/1809.07852v1",
+    "publication_date": "N/A"
+  }
+}
