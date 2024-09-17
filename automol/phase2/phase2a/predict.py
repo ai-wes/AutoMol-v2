@@ -1,7 +1,11 @@
 
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+import sys
+import os
+
+
 import subprocess
 import platform
 import asyncio

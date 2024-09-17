@@ -50,7 +50,7 @@ else:
     
     
 client = OpenAI(base_url="http://localhost:11434/v1", api_key="lm-studio")
-llm_model = "deepseek-coder-v2:16b-lite-instruct-q6_K"
+llm_model = "minicpm-v:8b-2.6-q6_K"
 # SSL Context for NLTK download
 
 # Download necessary NLTK data
@@ -66,7 +66,6 @@ lemmatizer = WordNetLemmatizer()
 RATE_LIMIT = 2  # requests per second
 RATE_LIMIT_PERIOD = 1  # second
 
-client = OpenAI()
 
 
 class DatabaseQuerier:
@@ -103,7 +102,7 @@ class DatabaseQuerier:
     def query_database(self, query):
         return self.retrieve_from_db(query)
 
-class ComprehensiveHypothesisSystem:
+class Phase1:
     def __init__(self):
         logger.info("Initializing ComprehensiveHypothesisSystem...")
         self.documents = []
@@ -345,21 +344,27 @@ class ComprehensiveHypothesisSystem:
             protein_start = content.index(protein_start_marker) + len(protein_start_marker)
             protein_end = content.index(protein_end_marker, protein_start)
             protein_description = content[protein_start:protein_end].strip()
+            print(f"DEBUG: Extracted protein description: {protein_description[:100]}...")  # Print first 100 chars
 
             # Extract ligand description
             ligand_start = content.index(ligand_start_marker) + len(ligand_start_marker)
             ligand_end = content.index(ligand_end_marker, ligand_start)
             ligand_description = content[ligand_start:ligand_end].strip()
+            print(f"DEBUG: Extracted ligand description: {ligand_description[:100]}...")  # Print first 100 chars
 
-            return {
+            result = {
                 "technical_description_protein": protein_description,
                 "technical_description_ligand": ligand_description
             }
-        except ValueError:
-            logger.error("Could not find markers in the content")
+            print(f"DEBUG: Extracted JSON: {result}")
+            return result
+        except ValueError as ve:
+            logger.error(f"DEBUG: ValueError in extract_json_between_markers: {str(ve)}")
+            print(f"DEBUG: Content causing error: {content}")
             return None
         except Exception as e:
-            logger.error(f"Error extracting descriptions: {str(e)}")
+            logger.error(f"DEBUG: Error extracting descriptions: {str(e)}")
+            print(f"DEBUG: Content causing error: {content}")
             return None
         
         
@@ -386,18 +391,19 @@ class ComprehensiveHypothesisSystem:
             {"role": "user", "content": research_descriptions}
         ]
         
+        print(f"DEBUG: Sending request to LLM with messages: {messages}")
         response = self.client.chat.completions.create(
             messages=messages,
             model=model,
             stream=False,
         )
         response_content = response.choices[0].message.content
-        print("Response: ", response_content)
+        print(f"DEBUG: Raw LLM Response: {response_content}")
         
         json_output = self.extract_json_between_markers(response_content)
-        print("JSON Output: ", json_output)
+        print(f"DEBUG: Extracted JSON Output: {json_output}")
         assert json_output is not None, "Failed to extract JSON from LLM output"
-        print(json_output)
+        print(f"DEBUG: Final JSON output: {json_output}")
         
         return json_output
     
@@ -405,73 +411,95 @@ class ComprehensiveHypothesisSystem:
         """Prepare the final technical description."""
         logger.info("Preparing technical description.")
         research_descriptions = "\n".join([article['generated_description'] for article in research_data])
+        print(f"DEBUG: Combined research descriptions: {research_descriptions[:200]}...")  # Print first 200 chars
         generated_technical_description = self.generate_technical_descriptions(research_descriptions)
+        print(f"DEBUG: Generated technical description: {generated_technical_description}")
         technical_description = (
             f"<technical_description_protein>\n{refined_hypothesis}\n</technical_description_protein>\n\n"
             f"<technical_description_ligand>\n{research_descriptions}\n</technical_description_ligand>"
         )
+        print(f"DEBUG: Final technical description: {technical_description[:200]}...")  # Print first 200 chars
         logger.info("Technical description prepared.")
         return technical_description
 
-    def run_pipeline(self, user_input: str):
-        """Run the entire pipeline with a user input."""
-        logger.info("Starting the pipeline.")
-        
-        
-        # Generate Initial Hypothesis
-        initial_hypothesis = self.generate_initial_hypothesis(user_input)
-        print("Initial Hypothesis: ", initial_hypothesis)
-        
-        
-        # Extract Keywords
-        keywords = self.extract_keywords(initial_hypothesis)
-        print("Keywords: ", keywords)
-       
-       
-        # Research Articles
-        articles = self.search_academic_sources(keywords, max_results=1)
-        if not articles:
-            logger.warning("No relevant articles found to refine hypotheses.")
-            return
-        print("Articles: ", articles)
-        
-        
-        # Process Articles
-        summarized_articles = self.process_articles(articles)
-        print("Research Data: ", summarized_articles)
-        
-        
-        # Query Database
-        db_results = self.querier.query_database(user_input)
-        print("DB Results: ", db_results)
-        
-        
-        # Prepare Technical Description
-        research_descriptions = self.prepare_technical_description(initial_hypothesis, research_data=summarized_articles)
-        print("Research Descriptions: ", research_descriptions) 
-        
-        
-        # Output Technical Description
-        technical_description = self.generate_technical_descriptions(research_descriptions)
-        print(Fore.CYAN + "\nFinal Technical Description for Sequence Generation:")
-        print(Fore.GREEN + json.dumps(technical_description, indent=2))  # Convert dict to JSON string for printing
-        
-        
-        # Save the final technical description to a json file
-        os.makedirs("final_output", exist_ok=True)
-        with open("technical_descriptions/technical_description.json", "w") as f:
-            json.dump(technical_description, f, indent=4)
-        
-        
-        # Print Database Results
-        print(Fore.CYAN + "\nDatabase Results:")
-        for i, result in enumerate(db_results, 1):
-            print(Fore.YELLOW + f"\nResult {i}:")
-            print(Fore.WHITE + f"Content: {result.page_content[:5000]}...")  # Print first 5000 characters
-            print(Fore.MAGENTA + f"Metadata: {result.metadata}")
+import time
+import random
 
-if __name__ == "__main__":
-    user_input = input("Enter your prompt: ")
-    system = ComprehensiveHypothesisSystem()
-    db = DatabaseQuerier(r"C:\Users\wes\AutoProtGenerationSystem\Phase_1\technical_description_molecular_database")
-    system.run_pipeline(user_input)
+def run_pipeline(self, user_input: str, max_attempts=5):
+    """Run the entire pipeline with a user input."""
+    logger.info("Starting the pipeline.")
+    
+    for attempt in range(1, max_attempts + 1):
+        try:
+            logger.info(f"Attempt {attempt} of {max_attempts}")
+            
+            # Generate Initial Hypothesis
+            initial_hypothesis = self.generate_initial_hypothesis(user_input)
+            print(f"DEBUG: Initial Hypothesis: {initial_hypothesis}")
+            
+            # Extract Keywords
+            keywords = self.extract_keywords(initial_hypothesis)
+            print(f"DEBUG: Extracted Keywords: {keywords}")
+            
+            # Research Articles
+            articles = self.search_academic_sources(keywords, max_results=1)
+            if not articles:
+                logger.warning("No relevant articles found to refine hypotheses.")
+                continue  # Try again
+            print(f"DEBUG: Found Articles: {len(articles)}")
+            
+            # Process Articles
+            summarized_articles = self.process_articles(articles)
+            print(f"DEBUG: Processed Articles: {len(summarized_articles)}")
+            
+            # Query Database
+            db_results = self.querier.query_database(user_input)
+            print(f"DEBUG: Database Query Results: {len(db_results)}")
+            
+            # Prepare Technical Description
+            research_descriptions = self.prepare_technical_description(initial_hypothesis, research_data=summarized_articles)
+            print(f"DEBUG: Prepared Research Descriptions: {research_descriptions[:200]}...")  # Print first 200 chars
+            
+            # Output Technical Description
+            technical_description = self.generate_technical_descriptions(research_descriptions)
+            print(Fore.CYAN + "\nDEBUG: Final Technical Description for Sequence Generation:")
+            print(Fore.GREEN + json.dumps(technical_description, indent=2))  # Convert dict to JSON string for printing
+            
+            # Create the directory if it doesn't exist
+            directory = "technical_descriptions"
+            os.makedirs(directory, exist_ok=True)
+
+            # Save the final technical description to a json file
+            file_path = os.path.join(directory, "technical_description.json")
+            with open(file_path, "w") as f:
+                json.dump(technical_description, f, indent=4)
+            print(f"DEBUG: Saved technical description to {file_path}")
+
+            # Verify if the file was created
+            if os.path.exists(file_path):
+                print(f"DEBUG: File {file_path} was successfully created.")
+                
+                # Print Database Results
+                print(Fore.CYAN + "\nDEBUG: Database Results:")
+                for i, result in enumerate(db_results, 1):
+                    print(Fore.YELLOW + f"\nDEBUG: Result {i}:")
+                    print(Fore.WHITE + f"Content: {result.page_content[:200]}...")  # Print first 200 characters
+                    print(Fore.MAGENTA + f"Metadata: {result.metadata}")
+                
+                return technical_description  # Successfully completed, exit the function
+            else:
+                print(f"ERROR: Failed to create file {file_path}.")
+                raise Exception("File creation failed")
+
+        except Exception as e:
+            print(f"ERROR: An error occurred during attempt {attempt}: {str(e)}")
+            if attempt < max_attempts:
+                wait_time = random.uniform(1, 5)  # Random wait between 1 and 5 seconds
+                print(f"Retrying in {wait_time:.2f} seconds...")
+                time.sleep(wait_time)
+            else:
+                print("Max attempts reached. Pipeline failed.")
+                return None
+
+    print("Pipeline completed all attempts without success.")
+    return None

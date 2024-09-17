@@ -6,34 +6,19 @@ import tempfile
 import numpy as np
 from openmm import *
 from openmm.app import *
-from openmm.unit import *
+from openmm import unit
 from pdbfixer import PDBFixer
 import nglview as nv
-import mdtraj as md
+import logging
+import tempfile
+from openmm import Platform, LangevinMiddleIntegrator, OpenMMException
+from openmm.app import PDBFile, ForceField, Modeller, Simulation, DCDReporter, StateDataReporter
+from openmm.unit import nanometer, kelvin, picosecond, femtosecond
+from openmm.app import PME, HBonds
+from openmm.app import PDBFile
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-
-from pdbfixer import PDBFixer
-from openmm.app import PDBFile
-
-import tempfile
-
-import os
-import asyncio
-import logging
-import mdtraj as md
-import tempfile
-from pdbfixer import PDBFixer
-from openmm.app import PDBFile
-
-import tempfile
-from openmm import *
-from openmm.app import *
-from openmm.unit import *
-from pdbfixer import PDBFixer
-import nglview as nv
-import mdtraj as md
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -133,7 +118,6 @@ async def run_simulation(system, modeller, output_dir, steps=10000):
     
     
     
-from openmm.app import PDBFile
 
 def check_steric_clashes(pdb_file, cutoff=1.0):
     pdb = PDBFile(pdb_file)

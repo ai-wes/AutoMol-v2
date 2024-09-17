@@ -33,7 +33,7 @@ class SMILESLigandPipeline:
         retry=tenacity.retry_if_exception_type(Exception),
         reraise=True
     )
-    async def run(self, technical_instruction: str, output_dir: str) -> Dict[str, Any]:
+    async def run_Phase_2b(self, technical_instruction: str, output_dir: str) -> Dict[str, Any]:
         try:
             os.makedirs(output_dir, exist_ok=True)
 
@@ -101,23 +101,3 @@ class SMILESLigandPipeline:
 
 
 
-async def main():
-    output_dir = Path("./SMILESLigand_results")
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    technical_instruction = "Design a ligand that binds to the ATP binding site of protein kinase A"
-
-    pipeline = SMILESLigandPipeline()
-
-    try:
-        result = await pipeline.run(
-            technical_instruction=technical_instruction,
-            output_dir=str(output_dir)
-        )
-        logger.info(f"Optimized Ligand SMILES: {result.get('smiles')}")
-        logger.info(f"Ligand Score: {result.get('score')}")
-    except Exception as e:
-        logger.error(f"An error occurred during pipeline execution: {e}")
-
-if __name__ == "__main__":
-    asyncio.run(main())

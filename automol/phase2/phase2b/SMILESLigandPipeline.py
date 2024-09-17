@@ -30,7 +30,7 @@ from rdkit import Chem
 import logging
 import asyncio
 from .optimize_ligand import optimize_ligand_smiles
-from ...utils.shared_state import get_protein_sequences
+from utils.shared_state import get_protein_sequences
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

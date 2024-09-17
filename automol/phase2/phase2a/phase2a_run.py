@@ -1,19 +1,33 @@
+#set the path to the parent directory
+import sys
+sys.path.append('..')
+
 import os
 import asyncio
 import logging
-from Phase_2_protein.analyze import run_analysis_pipeline
-from Phase_2_protein.generate import generate_protein_sequence
-from Phase_2_protein.optimize_new import run_optimization_pipeline
-from Phase_2_protein.predict import run_prediction_pipeline
-from Phase_2_protein.simulate import run_simulation_pipeline
-from utils.save_utils import create_sequence_directories, save_partial_results
-from utils.shared_state import set_protein_sequences
+
+import sys
+import os
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+# Now import predict from the same directory
+from .predict import predict_protein_function, predict_properties, predict_structure
+
+from automol.phase2.phase2a.generate import generate_protein_sequence
+from automol.phase2.phase2a.optimize_new import run_optimization_pipeline
+from automol.phase2.phase2a.predict import run_prediction_pipeline
+from automol.utils.save_utils import create_sequence_directories, save_partial_results
+from automol.utils.shared_state import set_protein_sequences
 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-async def run_Phase_2(input_text, optimization_steps, score_threshold, technical_descriptions, predicted_structures_dir, results_dir):
+async def run_Phase_2a(input_text, optimization_steps, score_threshold, technical_descriptions, predicted_structures_dir, results_dir):
     logger.info("\nStarting Phase 2: Generating and analyzing novel proteins")
 
     all_analysis_results = []
@@ -60,30 +74,6 @@ async def run_Phase_2(input_text, optimization_steps, score_threshold, technical
 
                         prediction_result = prediction_results[0]
                         pdb_file = prediction_result['pdb_file']
-
-                        simulation_result = await run_simulation_pipeline(pdb_file, simulation_dir)
-
-                        analysis_result = await run_analysis_pipeline(
-                            simulation_result['trajectory_file'],
-                            simulation_result['final_pdb'],
-                            analysis_dir
-                        )
-
-                        if analysis_result:
-                            analysis_result['sequence'] = optimized_sequence
-                            analysis_result['score'] = analysis_result['final_score']
-                            analysis_result['optimization_info'] = {
-                                'optimized_score': optimized_score,
-                                'best_method': best_method
-                            }
-                            analysis_result['technical_description'] = technical_instruction
-                            all_analysis_results.append(analysis_result)
-                            best_score = optimized_score
-                            logger.info(f"New best score: {best_score}")
-                            await save_partial_results(all_analysis_results, results_dir, i)
-                            break
-                        else:
-                            logger.info(f"Skipping simulation for sequence with score {optimized_score} (not better than {best_score})")
 
             attempts += 1
             if attempts == max_attempts:

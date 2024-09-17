@@ -1,12 +1,27 @@
 
 import random
 import os
+
+
+import sys
+import os
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+
 import logging
 import asyncio
 from pymol import cmd
-from Phase_3.d_twin import DigitalTwinSimulator
+from automol.phase3.digital_twin import DigitalTwinSimulator
 import multiprocessing
 from subprocess import run
+from automol.phase3.analyze import run_analysis_pipeline
+from automol.phase3.simulate import prepare_system, run_simulation_pipeline
+
+
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -93,31 +108,61 @@ def placeholder_vht_screening(receptor_pdb, ligands_dir, output_dir):
             f.write(f"Simulated docking score for {ligand}: {simulated_score:.2f}")
     logger.info(f"Placeholder VHT screening completed for {len(ligands)} ligands")
 
+
+
+
+
 async def run_Phase_3(protein_results, ligand_results, input_text, output_dir):
     """
-    Run Phase 3 analysis including PyMOL analysis, digital twin simulation, and VHT screening.
+    Run Phase 3 analysis including simulation, PyMOL analysis, digital twin simulation, and VHT screening.
     """
     try:
         logger.info("Starting Phase 3 analysis")
         os.makedirs(output_dir, exist_ok=True)
 
-        # Step 1: PyMOL Analysis
+        all_analysis_results = []
+
+        for idx, protein_result in enumerate(protein_results):
+            protein_output_dir = os.path.join(output_dir, f'protein_{idx}')
+            os.makedirs(protein_output_dir, exist_ok=True)
+
+            # Step 1: Run Simulation
+            simulation_dir = os.path.join(protein_output_dir, 'simulation')
+            os.makedirs(simulation_dir, exist_ok=True)
+            simulation_result = await run_simulation_pipeline(protein_result['final_pdb'], simulation_dir)
+
+            # Step 2: Run Analysis
+            analysis_dir = os.path.join(protein_output_dir, 'analysis')
+            os.makedirs(analysis_dir, exist_ok=True)
+            analysis_result = await run_analysis_pipeline(
+                simulation_result['trajectory_file'],
+                simulation_result['final_pdb'],
+                analysis_dir
+            )
+
+            if analysis_result:
+                analysis_result['protein_id'] = idx
+                analysis_result['simulation_info'] = simulation_result
+                all_analysis_results.append(analysis_result)
+                logger.info(f"Analysis completed for protein {idx}")
+            else:
+                logger.warning(f"Analysis failed for protein {idx}")
+
+        # Step 3: PyMOL Analysis
         pymol_output_dir = os.path.join(output_dir, 'pymol_analysis')
         os.makedirs(pymol_output_dir, exist_ok=True)
-        
-        for idx, result in enumerate(protein_results):
-            structure_file = result.get('final_pdb')
-            trajectory_file = result.get('trajectory_file')
-            if structure_file and trajectory_file:
-                protein_output_dir = os.path.join(pymol_output_dir, f'protein_{idx}')
-                os.makedirs(protein_output_dir, exist_ok=True)
-                run_pymol_analysis(structure_file, trajectory_file, protein_output_dir)
-                logger.info(f"PyMOL analysis completed for protein {idx}")
-            else:
-                logger.warning(f"Missing structure or trajectory file for protein {idx}")
+        for idx, result in enumerate(all_analysis_results):
+            structure_file = result['simulation_info']['final_pdb']
+            trajectory_file = result['simulation_info']['trajectory_file']
+            protein_output_dir = os.path.join(pymol_output_dir, f'protein_{idx}')
+            os.makedirs(protein_output_dir, exist_ok=True)
+            run_pymol_analysis(structure_file, trajectory_file, protein_output_dir)
+            logger.info(f"PyMOL analysis completed for protein {idx}")
 
-        # Step 2: Digital Twin Simulation
-        json_path = os.path.join(output_dir, 'aging_model.json')
+        # Step 4: Digital Twin Simulation
+        dt_output_dir = os.path.join(output_dir, 'digital_twin')
+        os.makedirs(dt_output_dir, exist_ok=True)
+        json_path = os.path.join(dt_output_dir, 'aging_model.json')
         simulator = DigitalTwinSimulator(json_path)
         
         drug_effects = {'TERT_activation': 1.0}
@@ -130,15 +175,13 @@ async def run_Phase_3(protein_results, ligand_results, input_text, output_dir):
             condition_changes=condition_changes
         )
         logger.info(f"Digital twin simulation completed. Growth rate: {solution.objective_value}")
+        fva_result.to_csv(os.path.join(dt_output_dir, 'fva_results.csv'))
 
-        fva_result.to_csv(os.path.join(output_dir, 'fva_results.csv'))
-
-        # Step 3: Placeholder Virtual High-Throughput Screening
+        # Step 5: Virtual High-Throughput Screening
         vht_output_dir = os.path.join(output_dir, 'vht_screening')
         os.makedirs(vht_output_dir, exist_ok=True)
         receptor_pdb = protein_results[0]['final_pdb']  # Assuming the first protein is the receptor
-        # In the run_Phase_3 function
-        ligands_dir = os.path.join(output_dir, 'ligands')  # Update this path to where your ligand files are
+        ligands_dir = os.path.join(output_dir, 'ligands')
         if not os.path.exists(ligands_dir):
             os.makedirs(ligands_dir)
             logger.warning(f"Created ligands directory: {ligands_dir}")
@@ -148,12 +191,12 @@ async def run_Phase_3(protein_results, ligand_results, input_text, output_dir):
         logger.info("Phase 3 analysis completed successfully")
 
         phase_3_results = {
+            "protein_analyses": all_analysis_results,
             "pymol_analysis_dir": pymol_output_dir,
             "digital_twin_growth_rate": solution.objective_value,
-            "fva_results_file": os.path.join(output_dir, 'fva_results.csv'),
+            "fva_results_file": os.path.join(dt_output_dir, 'fva_results.csv'),
             "vht_screening_dir": vht_output_dir
         }
-        print("Phase 3 results:", phase_3_results)
         return phase_3_results
 
     except Exception as e:
@@ -161,12 +204,13 @@ async def run_Phase_3(protein_results, ligand_results, input_text, output_dir):
         raise
 
 
+
 if __name__ == "__main__":
     async def test_run():
         protein_results = [
             {'final_pdb': r'C:\Users\wes\AutoProtGenerationSystem\results\run_20240913_221622\results\structure_0\simulation\final.pdb', 'trajectory_file': r'C:\Users\wes\AutoProtGenerationSystem\results\run_20240913_221622\results\structure_0\simulation\trajectory.dcd'},
             {'final_pdb': r'C:\Users\wes\AutoProtGenerationSystem\results\run_20240908_060132\results\structure_0\simulation\final.pdb', 'trajectory_file': r'C:\Users\wes\AutoProtGenerationSystem\results\run_20240908_060132\results\structure_0\simulation\trajectory.dcd'}
-        ]
+        ]       
         ligand_results = {}
         input_text = "create a small molecule that activates telomerase in a tissue-specific manner to counteract cellular senescence in critical organs"
         

@@ -2,13 +2,23 @@ import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import numpy as np
 from scipy.stats import boltzmann
+import sys
+import os
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+# Now import predict from the same directory
+from .predict import predict_protein_function, predict_properties, predict_structure
 
 import torch
 from transformers import BertForMaskedLM, BertTokenizer
 import asyncio
 import logging
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
-from Phase_2_protein.predict import predict_protein_function, predict_properties, predict_structure
+from predict import predict_protein_function, predict_properties, predict_structure
 import random
 import numpy as np
 from scipy.stats import boltzmann
