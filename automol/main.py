@@ -61,8 +61,7 @@ async def main():
     results_dir = "results"
     
     # Phase 2: Molecule Generation and Optimization
-    protein_task = asyncio.create_task(
-        run_Phase_2a(
+    protein_task =  run_Phase_2a(
             descriptions,
             predicted_structures_dir,
             results_dir,
@@ -70,9 +69,8 @@ async def main():
             args.optimization_steps,
             args.score_threshold
         )
-    )
-    ligand_task = asyncio.create_task(
-        run_Phase_2b(
+    
+    ligand_task = run_Phase_2b(
             descriptions,
             predicted_structures_dir,
             results_dir,
@@ -80,7 +78,7 @@ async def main():
             args.optimization_steps,
             args.score_threshold
         )
-    )
+    
     
     proteins, ligands = await asyncio.gather(protein_task, ligand_task)
     logging.info("Phase 2 completed: Molecules generated and optimized.")
