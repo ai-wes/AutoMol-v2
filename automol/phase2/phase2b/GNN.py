@@ -1,14 +1,21 @@
 import torch
-import torch.nn.functional as F
 import torch.nn as nn
+import torch.nn.functional as F
 from torch_geometric.nn import GATConv, SAGEConv, global_mean_pool
+from torch_geometric.data import Data, Batch
 
-
-class EnhancedTelomeraseGNN(torch.nn.Module):
-    def __init__(self, num_node_features: int, num_edge_features: int, hidden_channels: int, num_heads: int, num_node_types: int):
+class EnhancedTelomeraseGNN(nn.Module):
+    def __init__(
+        self,
+        num_node_features: int,
+        num_edge_features: int,
+        hidden_channels: int,
+        num_heads: int,
+        num_node_types: int
+    ):
         super(EnhancedTelomeraseGNN, self).__init__()
-        self.node_embedding = torch.nn.Embedding(num_node_types, hidden_channels)
-        self.edge_embedding = torch.nn.Linear(num_edge_features, hidden_channels)
+        self.node_embedding = nn.Embedding(num_node_types, hidden_channels)
+        self.edge_embedding = nn.Linear(num_edge_features, hidden_channels)
         self.conv1 = GATConv(
             in_channels=num_node_features + hidden_channels, 
             out_channels=hidden_channels, 
@@ -24,14 +31,20 @@ class EnhancedTelomeraseGNN(torch.nn.Module):
             concat=False
         )
         self.conv3 = SAGEConv(hidden_channels, hidden_channels)
-        self.lin1 = torch.nn.Linear(hidden_channels, hidden_channels)
-        self.lin2 = torch.nn.Linear(hidden_channels, hidden_channels)
-        self.telomerase_activity_head = torch.nn.Linear(hidden_channels, 1)
-        self.compound_effectiveness_head = torch.nn.Linear(hidden_channels, 1)
-        self.pchembl_value_head = torch.nn.Linear(hidden_channels, 1)
+        self.lin1 = nn.Linear(hidden_channels, hidden_channels)
+        self.lin2 = nn.Linear(hidden_channels, hidden_channels)
+        self.telomerase_activity_head = nn.Linear(hidden_channels, 1)
+        self.compound_effectiveness_head = nn.Linear(hidden_channels, 1)
+        self.pchembl_value_head = nn.Linear(hidden_channels, 1)
 
-    def forward(self, x: torch.Tensor, edge_index: torch.Tensor, edge_attr: torch.Tensor, batch: torch.Tensor, node_type: torch.Tensor):
-
+    def forward(
+        self, 
+        x: torch.Tensor, 
+        edge_index: torch.Tensor, 
+        edge_attr: torch.Tensor, 
+        batch: torch.Tensor, 
+        node_type: torch.Tensor
+    ):
         node_embed = self.node_embedding(node_type)
         x = torch.cat([x, node_embed], dim=-1)
 
@@ -52,7 +65,3 @@ class EnhancedTelomeraseGNN(torch.nn.Module):
         pchembl_value = self.pchembl_value_head(x)
 
         return telomerase_activity, compound_effectiveness, pchembl_value
-
-
-
-

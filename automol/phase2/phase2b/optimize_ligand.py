@@ -1,5 +1,17 @@
 import pandas as pd
     # Target values
+    
+import sys
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+
 from rdkit import Chem
 from typing import List, Tuple
 import logging

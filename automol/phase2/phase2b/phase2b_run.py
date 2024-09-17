@@ -1,103 +1,88 @@
-# optimize_ligand.py
-
-# Necessary imports (rdkit, torch, asyncio, etc.)
+import sys
+import os
 import asyncio
 import logging
-import os
 from pathlib import Path
-from .SMILESLigandPipeline import SMILESGenerator, SMILESOptimizer, StructurePredictor, EnsembleDocking, DockingAnalyzer, LigandScorer, validate_smiles
-import torch
-import json
 from typing import List, Dict, Any
-from utils.shared_state import get_protein_sequences
+from pathlib import Path
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+
+from SMILESLigandPipeline import SMILESLigandPipeline
+
 import tenacity
 
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
-class SMILESLigandPipeline:
-    def __init__(self):
-        self.generator = SMILESGenerator()
-        self.optimizer = SMILESOptimizer()
-        self.predictor = StructurePredictor()
-        self.ensemble_docker = EnsembleDocking()
-        self.analyzer = DockingAnalyzer()
-        self.scorer = LigandScorer()
+# Initialize the SMILESLigandPipeline
+smiles_ligand_pipeline = SMILESLigandPipeline()
 
-    @tenacity.retry(
-        stop=tenacity.stop_after_attempt(3),
-        wait=tenacity.wait_exponential(min=2, max=10),
-        retry=tenacity.retry_if_exception_type(Exception),
-        reraise=True
-    )
-    async def run_Phase_2b(self, technical_instruction: str, output_dir: str) -> Dict[str, Any]:
-        try:
-            os.makedirs(output_dir, exist_ok=True)
+@tenacity.retry(
+    stop=tenacity.stop_after_attempt(3),
+    wait=tenacity.wait_exponential(min=2, max=10),
+    retry=tenacity.retry_if_exception_type(Exception),
+    reraise=True
+)
+async def run_Phase_2b(
+    technical_descriptions: List[str],
+    predicted_structures_dir: str,
+    results_dir: str,
+    num_sequences: int,
+    optimization_steps: int,
+    score_threshold: float
+) -> List[Dict[str, Any]]:
+    try:
+        print("Running Phase 2b")
+        return await smiles_ligand_pipeline.run_smiles_ligand_pipeline(
+            technical_descriptions,
+            predicted_structures_dir,
+            results_dir,
+            num_sequences,
+            optimization_steps,
+            score_threshold
+        )
+    except Exception as e:
+        logger.error(f"An error occurred in run_Phase_2b: {e}")
+        raise e
 
-            # SMILES generation and optimization
-            logger.info("Starting SMILES Generation")
-            smiles = await self.generator.generate(technical_instruction)
-            logger.info(f"SMILES Generation completed: {smiles}")
+async def main():
+    technical_descriptions = [
+        "Design a small molecule that acts as a selective agonist for tissue-specific telomerase-associated proteins, such as those found in skin stem cells, to promote wound healing and reduce skin aging.",
+    ]
+    predicted_structures_dir = "predicted_structures"
+    results_dir = "results"
+    num_sequences = 2
+    optimization_steps = 100
+    score_threshold = 0.8
 
-            logger.info("Starting SMILES Optimization")
-            optimized_smiles = await self.optimizer.optimize(smiles)
-            logger.info(f"SMILES Optimization completed: {optimized_smiles}")
+    # Ensure output directories exist
+    Path(predicted_structures_dir).mkdir(parents=True, exist_ok=True)
+    Path(results_dir).mkdir(parents=True, exist_ok=True)
 
-            if not validate_smiles(optimized_smiles):
-                raise ValueError("Invalid SMILES string after optimization")
+    try:
+        ligand_sequences = await run_Phase_2b(
+            technical_descriptions,
+            predicted_structures_dir,
+            results_dir,
+            num_sequences,
+            optimization_steps,
+            score_threshold
+        )
+        print(f"Generated ligand sequences: {ligand_sequences}")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
 
-            logger.info("Starting 3D Structure Prediction")
-            ligand_pdb = await self.predictor.predict(optimized_smiles, output_dir)
-            logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
-
-            # Retrieve protein sequences from shared state
-            protein_sequences = await get_protein_sequences()
-            logger.info(f"Retrieved {len(protein_sequences)} protein sequences from shared state")
-
-            # Generate protein structures (this step might be part of the protein pipeline)
-            protein_ensemble = await self.generate_protein_structures(protein_sequences, output_dir)
-
-            # Continue with ensemble docking using the generated protein structures
-            logger.info("Starting Ensemble Docking")
-            docking_results = await self.ensemble_docker.dock_ensemble(ligand_pdb, protein_ensemble, output_dir)
-            logger.info("Ensemble Docking completed")
-
-
-            logger.info("Starting Docked Ligands Analysis")
-            analysis_tasks = [
-                self.analyzer.analyze(docking_result['docked_ligand'], protein_ensemble[docking_result['index']], output_dir)
-                for docking_result in docking_results if 'docked_ligand' in docking_result
-            ]
-            analysis_results = await asyncio.gather(*analysis_tasks, return_exceptions=True)
-
-            # Filter out failed analyses
-            valid_analysis = []
-            for result in analysis_results:
-                if isinstance(result, dict):
-                    valid_analysis.append(result)
-                else:
-                    logger.warning(f"Analysis task failed: {result}")
-
-            logger.info("Docked Ligands Analysis completed")
-
-            logger.info("Starting Ligand Scoring")
-            best_ligand = await self.scorer.score(valid_analysis, docking_results)
-            logger.info(f"Ligand Scoring completed: {best_ligand}")
-
-            logger.info("Pipeline completed successfully")
-            return best_ligand
-        except Exception as e:
-            logger.error(f"An error occurred in the pipeline: {e}")
-            raise e
-
-
-    async def generate_protein_structures(self, protein_sequences: List[str], output_dir: str) -> List[str]:
-        # This method should generate protein structures from sequences
-        # For now, we'll just return dummy PDB paths
-        return [os.path.join(output_dir, f"protein_{i}.pdb") for i in range(len(protein_sequences))]
-
-
-
+if __name__ == "__main__":
+    asyncio.run(main())

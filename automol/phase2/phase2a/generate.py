@@ -27,7 +27,7 @@ def extract_amino_acids(sequence):
     """Extract only valid amino acids from the sequence."""
     return ''.join(char for char in sequence if char in VALID_AMINO_ACIDS)
 
-async def generate_protein_sequence(input_text, num_sequences=1):
+async def generate_protein_sequence(input_text, num_sequences=5):
     """Generate protein sequences based on the input description."""
     model.eval()
     max_length = 256
@@ -65,3 +65,7 @@ async def generate_protein_sequence(input_text, num_sequences=1):
     except Exception as e:
         logger.error(f"Error in generate_protein_sequence: {str(e)}")
         return None
+    
+    
+if __name__ == "__main__":
+    asyncio.run(generate_protein_sequence("Synthesize a small molecule that activates telomerase in a tissue-specific manner to counteract cellular senescence in critical organs."))

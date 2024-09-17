@@ -6,9 +6,15 @@ import sys
 import tenacity
 
 from pathlib import Path
-            
-            
-            
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
+sys.path.append(project_root)
+sys.path.append(os.path.dirname(current_dir))  # Add the parent directory of phase2b
+sys.path.append(current_dir)  # Add the current directory (phase2b)
+sys.path.append(os.path.join(current_dir, 'utils'))  # Add the utils directory            
 from deap import base, creator, tools, algorithms
 from rdkit.Chem import Descriptors, AllChem
 import numpy as np
@@ -29,8 +35,11 @@ from transformers import T5Tokenizer, T5ForConditionalGeneration
 from rdkit import Chem
 import logging
 import asyncio
-from .optimize_ligand import optimize_ligand_smiles
-from utils.shared_state import get_protein_sequences
+from optimize_ligand import optimize_ligand_smiles
+from shared_state import get_protein_sequences
+
+
+
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -559,56 +568,105 @@ class SMILESLigandPipeline:
 
     @tenacity.retry(
         stop=tenacity.stop_after_attempt(3),
-        wait=tenacity.wait_exponential(multiplier=1, min=2, max=10),
+        wait=tenacity.wait_exponential(min=2, max=10),
         retry=tenacity.retry_if_exception_type(Exception),
         reraise=True
     )
-    async def run(self, technical_instruction: str, protein_ensemble: List[str], output_dir: str) -> Dict[str, Any]:
+    async def run_smiles_ligand_pipeline(
+        self,
+        technical_descriptions: List[str],
+        predicted_structures_dir: str,
+        results_dir: str,
+        num_sequences: int,
+        optimization_steps: int,
+        score_threshold: float
+    ) -> List[Dict[str, Any]]:
         try:
-            os.makedirs(output_dir, exist_ok=True)
-            logger.info("Starting SMILES Generation")
-            smiles = await self.generator.generate(technical_instruction)
-            logger.info(f"SMILES Generation completed: {smiles}")
+            os.makedirs(results_dir, exist_ok=True)
+            os.makedirs(predicted_structures_dir, exist_ok=True)
+            all_results = []
+            for technical_instruction in technical_descriptions:
+                # SMILES Generation
+                print(f"Starting SMILES Generation for: {technical_instruction}")
+                logger.info(f"Starting SMILES Generation for: {technical_instruction}")
+                smiles = await self.generator.generate(technical_instruction)
+                print(f"SMILES Generation completed: {smiles}")
+                logger.info(f"SMILES Generation completed: {smiles}")
 
-            logger.info("Starting SMILES Optimization")
-            optimized_smiles = await self.optimizer.optimize(smiles)
-            logger.info(f"SMILES Optimization completed: {optimized_smiles}")
+                # SMILES Optimization
+                print("Starting SMILES Optimization")
+                logger.info("Starting SMILES Optimization")
+                optimized_smiles = await self.optimizer.optimize(smiles)
+                print(f"SMILES Optimization completed: {optimized_smiles}")
+                logger.info(f"SMILES Optimization completed: {optimized_smiles}")
 
-            logger.info("Starting 3D Structure Prediction")
-            ligand_pdb = await self.predictor.predict(optimized_smiles, output_dir)
-            logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
+                if not validate_smiles(optimized_smiles):
+                    raise ValueError("Invalid SMILES string after optimization")
 
-            logger.info("Starting Ensemble Docking")
-            docking_results = await self.ensemble_docker.dock_ensemble(ligand_pdb, protein_ensemble, output_dir)
-            logger.info("Ensemble Docking completed")
+                # 3D Structure Prediction
+                print("Starting 3D Structure Prediction")
+                logger.info("Starting 3D Structure Prediction")
+                ligand_pdb = await self.predictor.predict(optimized_smiles, predicted_structures_dir)
+                print(f"3D Structure Prediction completed: {ligand_pdb}")
+                logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
 
-            logger.info("Starting Docked Ligands Analysis")
-            analysis_tasks = [
-                self.analyzer.analyze(docking_result['docked_ligand'], protein_ensemble[docking_result['index']], output_dir)
-                for docking_result in docking_results if 'docked_ligand' in docking_result
-            ]
-            analysis_results = await asyncio.gather(*analysis_tasks, return_exceptions=True)
+                # Retrieve Protein Sequences
+                protein_sequences = await get_protein_sequences()
+                print(f"Retrieved {len(protein_sequences)} protein sequences from shared state")
+                logger.info(f"Retrieved {len(protein_sequences)} protein sequences from shared state")
 
-            # Filter out failed analyses
-            valid_analysis = []
-            for idx, result in enumerate(analysis_results):
-                if isinstance(result, dict):
-                    valid_analysis.append(result)
-                else:
-                    logger.warning(f"Analysis task for protein index {idx} failed: {result}")
+                # Generate Protein Structures
+                protein_ensemble = await self.generate_protein_structures(protein_sequences, predicted_structures_dir)
+                print(f"Generated {len(protein_ensemble)} protein structures")
+                logger.info(f"Generated {len(protein_ensemble)} protein structures")
 
-            logger.info("Docked Ligands Analysis completed")
+                # Ensemble Docking
+                print("Starting Ensemble Docking")
+                logger.info("Starting Ensemble Docking")
+                docking_results = await self.ensemble_docker.dock_ensemble(ligand_pdb, protein_ensemble, results_dir)
+                print("Ensemble Docking completed")
+                logger.info("Ensemble Docking completed")
 
-            logger.info("Starting Ligand Scoring")
-            best_ligand = await self.scorer.score(valid_analysis, docking_results)
-            logger.info(f"Ligand Scoring completed: {best_ligand}")
+                # Docked Ligands Analysis
+                print("Starting Docked Ligands Analysis")
+                logger.info("Starting Docked Ligands Analysis")
+                analysis_tasks = [
+                    self.analyzer.analyze(
+                        docking_result['docked_ligand'],
+                        protein_ensemble[docking_result['index']],
+                        results_dir
+                    )
+                    for docking_result in docking_results if 'docked_ligand' in docking_result
+                ]
+                analysis_results = await asyncio.gather(*analysis_tasks, return_exceptions=True)
+                print("Docked Ligands Analysis completed")
+                logger.info("Docked Ligands Analysis completed")
+
+                # Filter Valid Analyses
+                valid_analysis = []
+                for result in analysis_results:
+                    if isinstance(result, dict):
+                        valid_analysis.append(result)
+                    else:
+                        logger.warning(f"Analysis task failed: {result}")
+
+                logger.info("Docked Ligands Analysis completed")
+
+                # Ligand Scoring
+                logger.info("Starting Ligand Scoring")
+                best_ligand = await self.scorer.score(valid_analysis, docking_results)
+                logger.info(f"Ligand Scoring completed: {best_ligand}")
+
+                all_results.append(best_ligand)
 
             logger.info("Pipeline completed successfully")
-            return best_ligand
+            return all_results
         except Exception as e:
             logger.error(f"An error occurred in the pipeline: {e}")
-            raise
-
+            raise e
+    
+        
+"""        
 # 9. Usage Example
 async def main():
     # Ensure the output directory exists
@@ -642,4 +700,4 @@ async def main():
         logger.error(f"An error occurred during pipeline execution: {e}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(main())"""
