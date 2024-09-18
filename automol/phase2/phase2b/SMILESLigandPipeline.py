@@ -1,60 +1,59 @@
-import asyncio
-import logging
+import numpy as np
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from datetime import datetime
 import os
-from typing import List, Dict, Any
+from colorama import Fore
+import logging
+
+
+import os
 import sys
-import tenacity
-
-from pathlib import Path
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_dir)))
-sys.path.append(project_root)
-sys.path.append(os.path.dirname(current_dir))  # Add the parent directory of phase2b
-sys.path.append(current_dir)  # Add the current directory (phase2b)
-sys.path.append(os.path.join(current_dir, 'utils'))  # Add the utils directory            
-from deap import base, creator, tools, algorithms
-from rdkit.Chem import Descriptors, AllChem
-import numpy as np
 import logging
-import numpy as np
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-from deap import base, creator, tools, algorithms
-import mdtraj as md
-from openmm import app, unit
-from openmm.app import PDBFile, Modeller, Simulation
-from openmm import LangevinIntegrator, Platform
+from pathlib import Path
+from typing import List, Dict, Any
+
 import random
-from rdkit.Chem import AllChem, Descriptors
+import numpy as np
+
 from deap import base, creator, tools, algorithms
+from rdkit import Chem, DataStructs
+from rdkit.Chem import Descriptors, AllChem, Crippen
+from transformers import EncoderDecoderModel, RobertaTokenizer, pipeline
+
+from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 import torch
-from transformers import T5Tokenizer, T5ForConditionalGeneration
-from rdkit import Chem
-import logging
-import asyncio
-from optimize_ligand import optimize_ligand_smiles
-from shared_state import get_protein_sequences
+from colorama import Fore, Style, init
 
+# Ensure KMP duplicate lib ok
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
+# Initialize colorama
+init(autoreset=True)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Checkpoint decorator
+# Check if CUDA is available
+use_cuda = torch.cuda.is_available()
+
+
+# Checkpoint decorator for synchronous functions
 def checkpoint(step_name):
     def decorator(func):
-        async def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs):
             logger.info(f"Starting step: {step_name}")
+            print(Fore.CYAN + f"Starting step: {step_name}")
             try:
-                result = await func(*args, **kwargs)
+                result = func(*args, **kwargs)
                 logger.info(f"Completed step: {step_name}")
+                print(Fore.GREEN + f"Completed step: {step_name}")
                 return result
             except Exception as e:
                 logger.error(f"Error in step {step_name}: {str(e)}")
+                print(Fore.RED + f"Error in step {step_name}: {str(e)}")
                 raise
         return wrapper
     return decorator
@@ -65,103 +64,143 @@ def validate_smiles(smiles: str) -> bool:
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
             return False
-        
+
         # Check for valid atom types
         valid_atoms = set(['C', 'N', 'O', 'P', 'S', 'F', 'Cl', 'Br', 'I'])
         if not all(atom.GetSymbol() in valid_atoms for atom in mol.GetAtoms()):
             return False
-        
+
         # Check molecular weight
         mol_weight = Descriptors.ExactMolWt(mol)
         if mol_weight < 100 or mol_weight > 1000:
             return False
-        
+
         # Check number of rotatable bonds
-        n_rotatable = AllChem.CalcNumRotatableBonds(mol)
+        n_rotatable = Descriptors.NumRotatableBonds(mol)
         if n_rotatable > 10:
             return False
-        
+
         # Check for kekulization
         try:
             Chem.Kekulize(mol, clearAromaticFlags=True)
         except:
             return False
-        
+
         return True
     except Exception as e:
         logger.error(f"Validation error for SMILES {smiles}: {e}")
-        return False    
+        print(Fore.RED + f"Validation error for SMILES {smiles}: {e}")
+        return False
 
+
+def generate_protein_structures(sequences, output_dir):
+    structures = []
+    for i, seq in enumerate(sequences):
+        try:
+            # Placeholder for actual protein structure generation
+            pdb_file = os.path.join(output_dir, f"protein_{i+1}.pdb")
+            with open(pdb_file, 'w') as f:
+                f.write(f">Protein_{i+1}\n{seq}")
+            structures.append(pdb_file)
+            logger.info(f"Generated structure for sequence {i+1}: {pdb_file}")
+        except Exception as e:
+            logger.error(f"Error generating structure for sequence {i+1}: {str(e)}")
+    return structures
 
 
 class SMILESGenerator:
-    def __init__(self, model_name: str = "laituan245/t5-v1_1-large-caption2smiles"):
+    def __init__(self, model_name: str = "gokceuludogan/WarmMolGenTwo"):
         self.model_name = model_name
-        self.tokenizer = None
+        self.protein_tokenizer = None
+        self.mol_tokenizer = None
         self.model = None
-    
-    async def load_model(self):
-        if self.tokenizer is None:
-            self.tokenizer = T5Tokenizer.from_pretrained(self.model_name, model_max_length=1024)
+
+    def load_model(self):
+        if self.protein_tokenizer is None:
+            self.protein_tokenizer = RobertaTokenizer.from_pretrained(self.model_name)
+            logger.info("Protein tokenizer loaded.")
+            print(Fore.YELLOW + "Protein tokenizer loaded.")
+        
+        if self.mol_tokenizer is None:
+            self.mol_tokenizer = RobertaTokenizer.from_pretrained("seyonec/PubChem10M_SMILES_BPE_450k")
+            logger.info("Molecule tokenizer loaded.")
+            print(Fore.YELLOW + "Molecule tokenizer loaded.")
+        
         if self.model is None:
-            self.model = T5ForConditionalGeneration.from_pretrained(self.model_name)
+            self.model = EncoderDecoderModel.from_pretrained(self.model_name)
             self.model.eval()  # Set the model to evaluation mode
-            if torch.cuda.is_available():
+            if use_cuda:
                 self.model = self.model.cuda()
-    
-    async def unload_model(self):
+                logger.info("Model loaded on CUDA.")
+                print(Fore.YELLOW + "Model loaded on CUDA.")
+            else:
+                logger.info("Model loaded on CPU.")
+                print(Fore.YELLOW + "Model loaded on CPU.")
+
+    def unload_model(self):
         if self.model is not None:
             del self.model
             self.model = None
-        if self.tokenizer is not None:
-            del self.tokenizer
-            self.tokenizer = None
-        if torch.cuda.is_available():
+            logger.info("Model unloaded.")
+            print(Fore.YELLOW + "Model unloaded.")
+        if self.protein_tokenizer is not None:
+            del self.protein_tokenizer
+            self.protein_tokenizer = None
+            logger.info("Protein tokenizer unloaded.")
+            print(Fore.YELLOW + "Protein tokenizer unloaded.")
+        if self.mol_tokenizer is not None:
+            del self.mol_tokenizer
+            self.mol_tokenizer = None
+            logger.info("Molecule tokenizer unloaded.")
+            print(Fore.YELLOW + "Molecule tokenizer unloaded.")
+        if use_cuda:
             torch.cuda.empty_cache()
-        logging.info("Model unloaded and CUDA cache cleared.")
-    
-# Phase_2/SMILESLigandPipeline.py
+            logger.info("CUDA cache cleared.")
+            print(Fore.YELLOW + "CUDA cache cleared.")
 
-
-
+    def is_valid_smiles(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        return mol is not None
 
     @checkpoint("SMILES Generation")
-    async def generate(self, technical_instruction: str, max_attempts: int = 10) -> str:
-        await self.load_model()
+    def generate(self, protein_sequence: str, num_sequences: int = 5) -> List[str]:
+        self.load_model()
         try:
-            for attempt in range(max_attempts):
-                try:
-                    input_ids = self.tokenizer(technical_instruction, return_tensors="pt").input_ids
-                    if torch.cuda.is_available():
-                        input_ids = input_ids.cuda()
-                    outputs = self.model.generate(input_ids, num_beams=5, max_length=1024)
-                    smiles = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-                    logger.info(f"Generated SMILES: {smiles}")
+            inputs = self.protein_tokenizer(protein_sequence, return_tensors="pt")
+            if use_cuda:
+                inputs = inputs.to('cuda')
+            
+            outputs = self.model.generate(
+                **inputs,
+                decoder_start_token_id=self.mol_tokenizer.bos_token_id,
+                eos_token_id=self.mol_tokenizer.eos_token_id,
+                pad_token_id=self.mol_tokenizer.eos_token_id,
+                max_length=256,
+                num_return_sequences=num_sequences,
+                do_sample=True,
+                top_p=0.95
+            )
 
-                    # Get the protein sequences
-                    protein_sequences = await get_protein_sequences()
-                    
-                    # Use the first protein sequence for optimization
-                    # You might want to modify this if you need to use multiple sequences
-                    protein_sequence = protein_sequences[0] if protein_sequences else ""
+            generated_smiles = self.mol_tokenizer.batch_decode(outputs, skip_special_tokens=True)
 
-                    optimized_smiles = await optimize_ligand_smiles(smiles, protein_sequence)
+            logger.info("Generated SMILES:")
+            valid_smiles = []
+            for smiles in generated_smiles:
+                is_valid = self.is_valid_smiles(smiles)
+                logger.info(f"{smiles}: {is_valid}")
+                print(f"{smiles}: {is_valid}")
+                if is_valid:
+                    valid_smiles.append(smiles)
 
-                    if validate_smiles(optimized_smiles):
-                        return optimized_smiles
-                    else:
-                        raise ValueError("Generated an invalid SMILES string.")
-                except Exception as e:
-                    logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
-                    if attempt == max_attempts - 1:
-                        logger.error(f"Failed to generate valid SMILES after {max_attempts} attempts.")
-                        raise
-                    await asyncio.sleep(1)  # Wait a bit before retrying
+            return valid_smiles
+
+        except Exception as e:
+            logger.error(f"Error in SMILES generation: {str(e)}")
+            print(Fore.RED + f"Error in SMILES generation: {str(e)}")
+            return []
+
         finally:
-            await self.unload_model()            
-            
-            
-# Phase_2/SMILESLigandPipeline.py
+            self.unload_model()
 
 
 class SMILESOptimizer:
@@ -170,8 +209,10 @@ class SMILESOptimizer:
         self.generations = generations
 
         # Define a single-objective fitness function to maximize LogP
-        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-        creator.create("Individual", list, fitness=creator.FitnessMax)
+        if not hasattr(creator, "FitnessMax"):
+            creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+        if not hasattr(creator, "Individual"):
+            creator.create("Individual", list, fitness=creator.FitnessMax)
 
         self.toolbox = base.Toolbox()
         self.toolbox.register("individual", self.init_individual)
@@ -186,17 +227,22 @@ class SMILESOptimizer:
         return creator.Individual([self.original_smiles])
 
     @checkpoint("SMILES Optimization")
-    async def optimize(self, smiles: str) -> str:
+    def optimize(self, smiles: str) -> str:
         self.original_smiles = smiles
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
             raise ValueError("Invalid SMILES provided for optimization.")
 
         population = self.toolbox.population(n=self.population_size)
+        logger.info("Initial population created.")
+        print(Fore.CYAN + "Initial population created.")
 
         # Evaluate the entire population
         for individual in population:
             individual.fitness.values = self.toolbox.evaluate(individual)
+
+        logger.info("Initial population evaluated.")
+        print(Fore.CYAN + "Initial population evaluated.")
 
         # Begin the evolution
         for gen in range(self.generations):
@@ -211,16 +257,19 @@ class SMILESOptimizer:
             population = self.toolbox.select(offspring, k=len(population))
 
             logger.info(f"Generation {gen + 1} complete.")
+            print(Fore.CYAN + f"Generation {gen + 1} complete.")
 
             # Early stopping if no improvement
             if all(ind.fitness.values[0] <= 0 for ind in population):
                 logger.warning("All individuals have non-positive fitness. Stopping early.")
+                print(Fore.YELLOW + "All individuals have non-positive fitness. Stopping early.")
                 break
 
         # Select the best individual
         best_ind = tools.selBest(population, k=1)[0]
         optimized_smiles = best_ind[0]
         logger.info(f"Optimized SMILES: {optimized_smiles}")
+        print(Fore.GREEN + f"Optimized SMILES: {optimized_smiles}")
         return optimized_smiles
 
     def fitness_function(self, individual):
@@ -256,307 +305,395 @@ class SMILESOptimizer:
             try:
                 mol = Chem.RWMol(mol)
                 mol.RemoveAtom(atom_idx)
+                Chem.SanitizeMol(mol)
                 new_smiles = Chem.MolToSmiles(mol)
                 individual[0] = new_smiles
-            except:
-                pass
+                logger.debug(f"Atom removed. New SMILES: {new_smiles}")
+                print(Fore.BLUE + f"Atom removed. New SMILES: {new_smiles}")
+            except Exception as e:
+                logger.warning(f"Mutation failed during atom removal: {e}")
+                print(Fore.YELLOW + f"Mutation failed during atom removal: {e}")
         else:
             # Add a random atom
             atom_symbol = random.choice(['C', 'N', 'O', 'F', 'Cl', 'Br'])
             mol = Chem.RWMol(mol)
             new_atom = Chem.Atom(atom_symbol)
-            mol.AddAtom(new_atom)
+            idx = mol.AddAtom(new_atom)
             # Connect the new atom to a random existing atom
             if mol.GetNumAtoms() > 1:
                 bond_idx = random.randint(0, mol.GetNumAtoms() - 2)
-                mol.AddBond(mol.GetNumAtoms() - 1, bond_idx, Chem.BondType.SINGLE)
+                mol.AddBond(idx, bond_idx, Chem.BondType.SINGLE)
             try:
                 Chem.SanitizeMol(mol)
                 new_smiles = Chem.MolToSmiles(mol)
                 individual[0] = new_smiles
-            except:
-                pass
+                logger.debug(f"Atom added. New SMILES: {new_smiles}")
+                print(Fore.BLUE + f"Atom added. New SMILES: {new_smiles}")
+            except Exception as e:
+                logger.warning(f"Mutation failed during atom addition: {e}")
+                print(Fore.YELLOW + f"Mutation failed during atom addition: {e}")
         return (individual,)
-
-logger = logging.getLogger(__name__)
-class StructurePredictor:
-    @checkpoint("3D Structure Prediction")
-    async def predict(self, smiles: str, output_dir: str) -> str:
+    
+    
+    def mutate_smiles(self, smiles):
         try:
             mol = Chem.MolFromSmiles(smiles)
             if mol is None:
-                raise ValueError("Invalid SMILES string for structure prediction.")
+                return smiles  # Return original SMILES if invalid
 
+            mutation_type = random.choice(['add', 'remove', 'change'])
+
+            if mutation_type == 'add':
+                atom = Chem.Atom(random.choice([6, 7, 8, 9, 15, 16, 17]))  # C, N, O, F, P, S, Cl
+                idx = mol.AddAtom(atom)
+                if mol.GetNumAtoms() > 1:
+                    bond_idx = random.randint(0, mol.GetNumAtoms() - 2)
+                    mol.AddBond(idx, bond_idx, Chem.BondType.SINGLE)
+            elif mutation_type == 'remove':
+                if mol.GetNumAtoms() > 1:
+                    idx_to_remove = random.randint(0, mol.GetNumAtoms() - 1)
+                    mol.RemoveAtom(idx_to_remove)
+            elif mutation_type == 'change':
+                if mol.GetNumAtoms() > 0:
+                    idx_to_change = random.randint(0, mol.GetNumAtoms() - 1)
+                    atom = mol.GetAtomWithIdx(idx_to_change)
+                    new_atomic_num = random.choice([6, 7, 8, 9, 15, 16, 17])  # C, N, O, F, P, S, Cl
+                    atom.SetAtomicNum(new_atomic_num)
+
+            try:
+                Chem.SanitizeMol(mol)
+                new_smiles = Chem.MolToSmiles(mol)
+                if validate_smiles(new_smiles):
+                    return new_smiles
+            except:
+                pass
+        except Exception as e:
+            logger.warning(f"Mutation failed: {e}")
+
+        return smiles  # Return original SMILES if mutation fails
+
+    @checkpoint("MCTS SMILES Optimization")
+    def optimize_smiles(self, smiles, iterations=50, mcts_iterations=10):
+        root = MCTSNode(smiles)
+        for _ in range(iterations):
+            best_node = self.mcts(root, mcts_iterations)
+            if best_node.smiles != root.smiles and validate_smiles(best_node.smiles):
+                root = best_node
+
+        final_score = self.fitness_function(root.smiles)
+        logger.info(f"Optimized SMILES: {root.smiles}")
+        logger.info(f"Final score: {final_score}")
+        return root.smiles
+
+
+
+class StructurePredictor:
+    @checkpoint("3D Structure Prediction")
+    def predict(self, smiles: str, output_dir: str) -> str:
+        try:
+            mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                raise ValueError(f"Invalid SMILES string: {smiles}")
+
+            # Add hydrogens to the molecule
             mol = Chem.AddHs(mol)
-            num_confs = 50
-            conformer_ids = AllChem.EmbedMultipleConfs(
-                mol,
-                numConfs=num_confs,
-                params=AllChem.ETKDGv3(),
-                pruneRmsThresh=0.5
-            )
 
-            if not conformer_ids:
-                raise ValueError("Embedding failed for the molecule.")
+            # Try to generate 3D conformers
+            try:
+                confIds = AllChem.EmbedMultipleConfs(mol, numConfs=10, randomSeed=42)
+            except Exception as e:
+                logger.warning(f"Failed to generate 3D conformers using EmbedMultipleConfs: {e}")
+                # Fallback to a simpler 2D to 3D conversion
+                AllChem.Compute2DCoords(mol)
+                confIds = [0]  # Use the single 2D conformation
 
-            energies = []
-            for conf_id in conformer_ids:
-                try:
-                    ff = AllChem.MMFFGetMoleculeForceField(mol, AllChem.MMFFGetMoleculeProperties(mol), confId=conf_id)
-                    energy = ff.CalcEnergy()
-                    energies.append((energy, conf_id))
-                except:
-                    continue
+            if not confIds:
+                raise ValueError("Failed to generate any conformers")
 
-            if not energies:
-                raise ValueError("MMFF optimization failed for all conformers.")
+            # Optimize the geometry
+            for confId in confIds:
+                AllChem.MMFFOptimizeMoleculeConfs(mol, confId=confId, maxIters=500)
 
-            # Select the conformer with the lowest energy
-            min_energy_conf = min(energies, key=lambda x: x[0])[1]
-            mol.SetProp("_conformerId", str(min_energy_conf))
+            # Select the lowest energy conformer
+            energies = AllChem.MMFFGetMoleculeForceField(mol).CalcEnergy()
+            min_energy_conf = min(range(len(energies)), key=energies.__getitem__)
 
-            ligand_pdb_path = os.path.join(output_dir, f"{smiles[:10]}_ligand.pdb")
-            Chem.MolToPDBFile(mol, ligand_pdb_path, confId=min_energy_conf)
-            logger.info(f"3D structure saved to: {ligand_pdb_path}")
-            return ligand_pdb_path
+            # Generate a unique filename
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"ligand_{timestamp}.pdb"
+            filepath = os.path.join(output_dir, filename)
+
+            # Write the lowest energy conformer to a PDB file
+            Chem.MolToPDBFile(mol, filepath, confId=min_energy_conf)
+
+            logger.info(f"3D structure prediction completed. PDB file saved: {filepath}")
+            print(Fore.GREEN + f"3D structure prediction completed. PDB file saved: {filepath}")
+            return filepath
+
         except Exception as e:
             logger.error(f"Error in 3D structure prediction: {str(e)}")
-            raise
-        
-        
-        
-from Bio.PDB import PDBParser
+            print(Fore.RED + f"Error in 3D structure prediction: {str(e)}")
+            # Return a placeholder or default PDB file path
+            return os.path.join(output_dir, "default_ligand.pdb")
 
-# 4. Ensemble Docking
+    def predict_3d_structure(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return None
+        try:
+            mol = Chem.AddHs(mol)
+            AllChem.EmbedMolecule(mol, randomSeed=42)
+            AllChem.MMFFOptimizeMolecule(mol, maxIters=500)
+        except:
+            # Fallback to a simpler 3D conformation generation
+            AllChem.EmbedMolecule(mol, randomSeed=42, useRandomCoords=True)
+        return mol
+    
 class EnsembleDocking:
     def __init__(self, vina_path: str = "vina", exhaustiveness: int = 8, num_modes: int = 9):
         self.vina_path = vina_path
         self.exhaustiveness = exhaustiveness
         self.num_modes = num_modes
 
-    def get_binding_site_center(self, protein_pdb: str, reference_ligand: str = None) -> tuple:
-        parser = PDBParser(QUIET=True)
-        structure = parser.get_structure('protein', protein_pdb)
-        model = structure[0]
-        # Implement logic to determine binding site center
-        # For example, find residues within X angstroms of the reference ligand
-        # Placeholder coordinates:
-        return (0.0, 0.0, 0.0)
+    def dock_ensemble(self, ligand_pdb: str, protein_ensemble: List[str], results_dir: str) -> List[Dict[str, Any]]:
+        # Placeholder for docking implementation
+        docking_results = []
+        for i, protein_pdb in enumerate(protein_ensemble):
+            result = {
+                'index': i,
+                'protein_pdb': protein_pdb,
+                'docked_ligand': ligand_pdb,
+                'score': random.uniform(-10, -5)  # Placeholder score
+            }
+            docking_results.append(result)
+            logger.info(f"Docked ligand to protein {i+1}: score {result['score']}")
+        return docking_results
 
-    @checkpoint("Ensemble Docking")
-    async def dock_ensemble(self, ligand_path: str, protein_ensemble: List[str], output_dir: str) -> List[Dict[str, Any]]:
-        docking_tasks = [
-            self.dock_single(ligand_path, protein, output_dir, i)
-            for i, protein in enumerate(protein_ensemble)
-        ]
-        return await asyncio.gather(*docking_tasks, return_exceptions=True)
 
-    async def dock_single(self, ligand_path: str, protein_path: str, output_dir: str, index: int) -> Dict[str, Any]:
-        output_path = os.path.join(output_dir, f"docked_{index}.pdbqt")
-        log_path = os.path.join(output_dir, f"docking_log_{index}.txt")
-
-        # Prepare receptor and ligand
-        receptor_pdbqt = await self._prepare_pdbqt(protein_path, is_receptor=True)
-        ligand_pdbqt = await self._prepare_pdbqt(ligand_path, is_receptor=False)
-
-        # Get binding site center dynamically
-        center_x, center_y, center_z = self.get_binding_site_center(protein_path)
-        size_x, size_y, size_z = 20.0, 20.0, 20.0  # You might want to adjust these based on the binding site
-
-        cmd = (
-            f"{self.vina_path} --receptor {receptor_pdbqt} --ligand {ligand_pdbqt} "
-            f"--center_x {center_x} --center_y {center_y} --center_z {center_z} "
-            f"--size_x {size_x} --size_y {size_y} --size_z {size_z} "
-            f"--out {output_path} --log {log_path} "
-            f"--exhaustiveness {self.exhaustiveness} --num_modes {self.num_modes}"
-        )
-
-        process = await asyncio.create_subprocess_shell(
-            cmd,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-
-        stdout, stderr = await process.communicate()
-
-        if process.returncode != 0:
-            logger.error(f"Docking failed for protein {index}: {stderr.decode()}")
-            return {"index": index, "affinity": float('inf')}
-
-        # Parse the log file to get the best affinity
-        best_affinity = float('inf')
-        try:
-            with open(log_path, 'r') as log_file:
-                for line in log_file:
-                    if line.strip().startswith('-----+------------+----------+----------'):
-                        next(log_file)  # Skip header line
-                        affinity_line = next(log_file)
-                        best_affinity = float(affinity_line.split()[1])
-                        break
-        except Exception as e:
-            logger.error(f"Failed to parse docking log for protein {index}: {e}")
-            best_affinity = float('inf')
-
-        return {"index": index, "affinity": best_affinity, "docked_ligand": output_path}
-
-    async def _prepare_pdbqt(self, pdb_path: str, is_receptor: bool) -> str:
-        pdbqt_path = pdb_path.replace('.pdb', '.pdbqt')
-        if os.path.exists(pdbqt_path):
-            return pdbqt_path
-
-        if is_receptor:
-            prepare_command = f"prepare_receptor -r {pdb_path} -o {pdbqt_path}"
-        else:
-            prepare_command = f"prepare_ligand -l {pdb_path} -o {pdbqt_path}"
-
-        process = await asyncio.create_subprocess_shell(
-            prepare_command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, stderr = await process.communicate()
-        if process.returncode != 0:
-            raise RuntimeError(f"Failed to prepare {'receptor' if is_receptor else 'ligand'}: {stderr.decode()}")
-        return pdbqt_path
-
-# 5. Docking Simulation
-class DockingSimulator:
-    @checkpoint("Docking Simulation")
-    async def dock(self, protein_pdbqt: str, ligand_pdbqt: str, output_dir: str) -> str:
-        try:
-            output_path = os.path.join(output_dir, "docked.pdbqt")
-            log_path = os.path.join(output_dir, "docking_log.txt")
-
-            # Define docking box parameters (replace with appropriate values)
-            center_x, center_y, center_z = 0.0, 0.0, 0.0
-            size_x, size_y, size_z = 20.0, 20.0, 20.0
-
-            docking_command = (
-                f"vina --receptor {protein_pdbqt} --ligand {ligand_pdbqt} "
-                f"--center_x {center_x} --center_y {center_y} --center_z {center_z} "
-                f"--size_x {size_x} --size_y {size_y} --size_z {size_z} "
-                f"--out {output_path} --log {log_path}"
-            )
-
-            process = await asyncio.create_subprocess_shell(
-                docking_command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
-            )
-            stdout, stderr = await process.communicate()
-
-            if process.returncode != 0:
-                raise RuntimeError(f"Docking failed: {stderr.decode()}")
-
-            logger.info(f"Docking completed. Output saved to: {output_path}")
-            return output_path
-        except Exception as e:
-            logger.error(f"Error in docking simulation: {str(e)}")
-            raise
-
-# 6. Analysis
 class DockingAnalyzer:
-    @checkpoint("Docking Analysis")
-    async def analyze(self, docked_ligand: str, protein_pdb: str, simulation_output_dir: str) -> Dict[str, Any]:
-        try:
-            # Run MD simulation
-            simulation_output = await self._run_md_simulation(docked_ligand, protein_pdb, simulation_output_dir)
-
-            # Analyze trajectory
-            results = await self._analyze_trajectory(simulation_output, protein_pdb)
-
-            logger.info(f"Analysis completed. Results: {results}")
-            return results
-        except Exception as e:
-            logger.error(f"Error in docking analysis: {str(e)}")
-            raise
-
-    async def _run_md_simulation(self, docked_ligand: str, protein_pdb: str, output_dir: str) -> str:
-        pdb = PDBFile(protein_pdb)
-        ligand = PDBFile(docked_ligand)
-
-        # Combine protein and ligand
-        modeller = Modeller(pdb.topology, pdb.positions)
-        modeller.add(ligand.topology, ligand.positions)
-
-        forcefield = app.ForceField('amber14-all.xml', 'amber14/tip3p.xml')
-        system = forcefield.createSystem(modeller.topology, nonbondedMethod=app.PME,
-                                         nonbondedCutoff=1*unit.nanometer,
-                                         constraints=app.HBonds)
-
-        # Solvate the system
-        modeller.addSolvent(forcefield, model='tip3p', padding=1.0*unit.nanometer)
-
-        integrator = LangevinIntegrator(300*unit.kelvin, 1/unit.picosecond,
-                                        0.002*unit.picoseconds)
-
-        platform = Platform.getPlatformByName('CUDA' if Platform.getNumPlatforms() > 1 else 'CPU')
-        simulation = Simulation(modeller.topology, system, integrator, platform)
-        simulation.context.setPositions(modeller.positions)
-
-        # Energy Minimization
-        simulation.minimizeEnergy()
-
-        # Equilibration
-        simulation.context.setVelocitiesToTemperature(300*unit.kelvin)
-        simulation.step(10000)  # 20 ps equilibration
-
-        # Production run
-        output_file = os.path.join(output_dir, "trajectory.dcd")
-        simulation.reporters.append(app.DCDReporter(output_file, 1000))
-        simulation.reporters.append(app.StateDataReporter(sys.stdout, 1000, step=True, potentialEnergy=True, temperature=True))
-        simulation.step(50000)  # 100 ps production
-
-        return output_file
-
-    async def _analyze_trajectory(self, trajectory_file: str, protein_pdb: str) -> Dict[str, float]:
-        traj = md.load(trajectory_file, top=protein_pdb)
-        rmsd = md.rmsd(traj, traj, 0)
-        rmsf = md.rmsf(traj, traj, 0)
-        avg_rmsd = np.mean(rmsd)
-        max_rmsd = np.max(rmsd)
-        avg_rmsf = np.mean(rmsf)
-        max_rmsf = np.max(rmsf)
-
-        return {
-            "avg_rmsd": avg_rmsd,
-            "max_rmsd": max_rmsd,
-            "avg_rmsf": avg_rmsf,
-            "max_rmsf": max_rmsf,
+    def analyze(self, docked_ligand: str, protein_pdb: str, results_dir: str) -> Dict[str, Any]:
+        # Placeholder for analysis implementation
+        analysis_result = {
+            'docked_ligand': docked_ligand,
+            'protein_pdb': protein_pdb,
+            'interaction_energy': random.uniform(-50, -10)  # Placeholder interaction energy
         }
-# 7. Scoring and Selection
+        logger.info(f"Analyzed docking: interaction energy {analysis_result['interaction_energy']}")
+        return analysis_result
+
+
 class LigandScorer:
-    @checkpoint("Ligand Scoring")
-    async def score(self, analysis_results: List[Dict[str, Any]], docking_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def calculate_smiles_score(self, smiles: str) -> float:
         try:
-            best_score = float('-inf')
-            best_ligand = None
-            for analysis_result, docking_result in zip(analysis_results, docking_results):
-                score = self._calculate_score(analysis_result, docking_result)
-                if score > best_score:
-                    best_score = score
-                    best_ligand = {**analysis_result, **docking_result, "score": score}
+            mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                return 0.0
 
-            if best_ligand is None:
-                raise ValueError("No valid ligands found during scoring.")
+            mw = Descriptors.ExactMolWt(mol)
+            log_p = Crippen.MolLogP(mol)
+            hbd = Descriptors.NumHDonors(mol)
+            hba = Descriptors.NumHAcceptors(mol)
+            tpsa = Descriptors.TPSA(mol)
+            rotatable_bonds = Descriptors.NumRotatableBonds(mol)
 
-            logger.info(f"Best ligand selected with score: {best_score}")
-            return best_ligand
+            # More nuanced scoring based on Lipinski's Rule of Five and additional criteria
+            mw_score = 1.0 - abs(mw - 350) / 150  # Optimal around 350, penalize deviation
+            log_p_score = 1.0 - abs(log_p - 2.5) / 3.1  # Optimal around 2.5, penalize deviation
+            hbd_score = 1.0 - hbd / 5 if hbd <= 5 else 0.0
+            hba_score = 1.0 - hba / 10 if hba <= 10 else 0.0
+            tpsa_score = 1.0 - tpsa / 140 if tpsa <= 140 else 0.0
+            rotatable_score = 1.0 - rotatable_bonds / 10 if rotatable_bonds <= 10 else 0.0
+
+            # Ensure all scores are between 0 and 1
+            scores = [max(0, min(1, score)) for score in [mw_score, log_p_score, hbd_score, hba_score, tpsa_score, rotatable_score]]
+
+            # Calculate the final score as a weighted average of all criteria
+            weights = [1.5, 1.5, 1, 1, 1, 1]  # Give slightly more weight to MW and LogP
+            score = sum(s * w for s, w in zip(scores, weights)) / sum(weights)
+
+            return score
+
         except Exception as e:
-            logger.error(f"Error in ligand scoring: {str(e)}")
-            raise
+            logger.error(f"Error calculating SMILES score: {str(e)}")
+            return 0.0
 
-    def _calculate_score(self, analysis_result: Dict[str, Any], docking_result: Dict[str, Any]) -> float:
-        # Combine docking affinity and simulation results
-        affinity = docking_result.get('affinity', float('inf'))
-        avg_rmsd = analysis_result.get('avg_rmsd', float('inf'))
-        max_rmsd = analysis_result.get('max_rmsd', float('inf'))
 
-        # Scoring function (weights can be adjusted)
-        score = -affinity - avg_rmsd - 0.5 * max_rmsd
+class MCTSNode:
+    def __init__(self, smiles, parent=None):
+        self.smiles = smiles
+        self.parent = parent
+        self.children = []
+        self.visits = 0
+        self.reward = 0.0
+
+    def is_fully_expanded(self):
+        # Assuming each node can have up to 5 children
+        return len(self.children) >= 5
+
+    def best_child(self, c_param=1.4):
+        choices_weights = [
+            (child.reward / child.visits) + c_param * np.sqrt((2 * np.log(self.visits) / child.visits))
+            for child in self.children
+        ]
+        return self.children[np.argmax(choices_weights)]
+
+
+class AdditionalLigandOptimizer:
+    def __init__(self):
+        pass
+
+    @checkpoint("Chemical Property Refinement")
+    def refine_properties(self, smiles: str) -> str:
+        """
+        Refine SMILES based on chemical properties like Lipinski's Rule of Five.
+        """
+        try:
+            mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                raise ValueError("Invalid SMILES string for property refinement.")
+
+            # Calculate properties
+            mw = Descriptors.MolWt(mol)
+            log_p = Crippen.MolLogP(mol)
+            h_donors = Descriptors.NumHDonors(mol)
+            h_acceptors = Descriptors.NumHAcceptors(mol)
+
+            # Apply Lipinski's Rule of Five
+            if mw > 500 or log_p > 5 or h_donors > 5 or h_acceptors > 10:
+                # Modify the molecule to try to meet the rules
+                # Placeholder: return original SMILES
+                logger.warning(f"SMILES {smiles} does not meet Lipinski's Rule of Five.")
+                print(Fore.YELLOW + f"SMILES {smiles} does not meet Lipinski's Rule of Five.")
+                return smiles
+
+            logger.info(f"SMILES {smiles} passed Lipinski's Rule of Five.")
+            print(Fore.GREEN + f"SMILES {smiles} passed Lipinski's Rule of Five.")
+            return smiles
+
+        except Exception as e:
+            logger.warning(f"Property refinement failed for SMILES {smiles}: {e}")
+            print(Fore.YELLOW + f"Property refinement failed for SMILES {smiles}: {e}")
+            return smiles  # Return original SMILES if refinement fails
+
+    @checkpoint("Stereochemistry Correction")
+    def correct_stereochemistry(self, smiles: str) -> str:
+        """
+        Correct or enhance stereochemistry in the SMILES string.
+        """
+        try:
+            mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                raise ValueError("Invalid SMILES string for stereochemistry correction.")
+
+            Chem.AssignStereochemistry(mol, cleanIt=True, force=True)
+            smiles_corrected = Chem.MolToSmiles(mol, isomericSmiles=True)
+            logger.info(f"Stereochemistry corrected for SMILES: {smiles_corrected}")
+            print(Fore.GREEN + f"Stereochemistry corrected for SMILES: {smiles_corrected}")
+            return smiles_corrected
+
+        except Exception as e:
+            logger.warning(f"Stereochemistry correction failed for SMILES {smiles}: {e}")
+            print(Fore.YELLOW + f"Stereochemistry correction failed for SMILES {smiles}: {e}")
+            return smiles  # Return original SMILES if correction fails
+
+    @checkpoint("MCTS SMILES Optimization")
+    def optimize_smiles(self, smiles, iterations=50, mcts_iterations=10):
+        root = MCTSNode(smiles)
+        for _ in range(iterations):
+            best_node = self.mcts(root, mcts_iterations)
+            if best_node.smiles != root.smiles:
+                root = best_node
+
+        final_score = self.fitness_function(root.smiles)
+        logger.info(f"Optimized SMILES: {root.smiles}")
+        print(Fore.GREEN + f"Optimized SMILES: {root.smiles}")
+        return root.smiles
+
+    def tree_policy(self, node):
+        while not node.is_fully_expanded():
+            if not node.children:
+                return self.expand(node)
+            else:
+                node = node.best_child()
+        return node
+
+    def expand(self, node):
+        new_smiles = self.mutate_smiles(node.smiles)
+        child_node = MCTSNode(new_smiles, parent=node)
+        node.children.append(child_node)
+        return child_node
+
+    def default_policy(self, node):
+        return self.fitness_function(node.smiles)
+
+    def backpropagate(self, node, reward):
+        while node is not None:
+            node.visits += 1
+            node.reward += reward
+            node = node.parent
+
+    def mcts(self, root, iterations=10):
+        for _ in range(iterations):
+            node = self.tree_policy(root)
+            reward = self.default_policy(node)
+            self.backpropagate(node, reward)
+        return root.best_child(c_param=0)
+
+    def mutate_smiles(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return smiles
+
+        mol = Chem.RWMol(mol)
+        mutation_type = np.random.choice(['add', 'remove', 'change'])
+
+        if mutation_type == 'add':
+            atom_symbol = np.random.choice(['C', 'N', 'O', 'F', 'Cl', 'Br'])
+            new_atom = Chem.Atom(atom_symbol)
+            idx = mol.AddAtom(new_atom)
+            if mol.GetNumAtoms() > 1:
+                bond_idx = random.randint(0, mol.GetNumAtoms() - 2)
+                mol.AddBond(idx, bond_idx, Chem.BondType.SINGLE)
+        elif mutation_type == 'remove':
+            atom_indices = list(range(mol.GetNumAtoms()))
+            if len(atom_indices) > 1:
+                idx_to_remove = int(np.random.choice(atom_indices))
+                mol.RemoveAtom(idx_to_remove)
+        elif mutation_type == 'change':
+            atom_indices = list(range(mol.GetNumAtoms()))
+            idx_to_change = int(np.random.choice(atom_indices))
+            atom = mol.GetAtomWithIdx(idx_to_change)
+            new_atomic_num = np.random.choice([6, 7, 8, 9, 15, 16, 17])  # Common elements
+            atom.SetAtomicNum(int(new_atomic_num))
+
+        try:
+            Chem.SanitizeMol(mol)
+            return Chem.MolToSmiles(mol)
+        except:
+            return smiles
+
+    def fitness_function(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return -1.0
+
+        mw = Descriptors.ExactMolWt(mol)
+        log_p = Crippen.MolLogP(mol)
+        hbd = Descriptors.NumHDonors(mol)
+        hba = Descriptors.NumHAcceptors(mol)
+        tpsa = Descriptors.TPSA(mol)
+
+        # Simple scoring based on Lipinski's Rule of Five
+        score = (
+            (mw <= 500) +
+            (log_p <= 5) +
+            (hbd <= 5) +
+            (hba <= 10) +
+            (tpsa <= 140)
+        )
         return score
 
-# 8. Full Pipeline Integration
+
 class SMILESLigandPipeline:
     def __init__(self):
         self.generator = SMILESGenerator()
@@ -565,139 +702,179 @@ class SMILESLigandPipeline:
         self.ensemble_docker = EnsembleDocking()
         self.analyzer = DockingAnalyzer()
         self.scorer = LigandScorer()
+        self.additional_optimizer = AdditionalLigandOptimizer()  # Initialize the additional optimizer
 
-    @tenacity.retry(
-        stop=tenacity.stop_after_attempt(3),
-        wait=tenacity.wait_exponential(min=2, max=10),
-        retry=tenacity.retry_if_exception_type(Exception),
-        reraise=True
-    )
-    async def run_smiles_ligand_pipeline(
+    def validate_novel_smiles(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return False
+        try:
+            Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ALL^Chem.SanitizeFlags.SANITIZE_KEKULIZE)
+            return True
+        except:
+            return False
+
+    def generate_novel_smiles(self, protein_sequence, num_sequences):
+        valid_smiles = []
+        attempts = 0
+        max_attempts = num_sequences * 10  # Allow more attempts for novel molecules
+        while len(valid_smiles) < num_sequences and attempts < max_attempts:
+            smiles = self.generator.generate(protein_sequence, 1)[0]
+            if self.validate_novel_smiles(smiles):
+                valid_smiles.append(smiles)
+            attempts += 1
+        return valid_smiles
+    
+    def score_novel_ligand(self, ligand, protein):
+        # Basic physicochemical properties
+        mw = Descriptors.ExactMolWt(ligand)
+        logp = Crippen.MolLogP(ligand)
+        hbd = Descriptors.NumHDonors(ligand)
+        hba = Descriptors.NumHAcceptors(ligand)
+        
+        # Structural complexity
+        complexity = Descriptors.BertzCT(ligand)
+        
+        # Docking score (if available)
+        docking_score = self.scorer.calculate_docking_score(ligand, protein)
+        
+        # Combine scores (adjust weights as needed)
+        score = (
+            -0.1 * abs(mw - 400) +  # Prefer MW around 400
+            -0.5 * abs(logp - 2.5) +  # Prefer LogP around 2.5
+            -0.2 * max(hbd - 5, 0) +  # Penalize excessive H-bond donors
+            -0.2 * max(hba - 10, 0) +  # Penalize excessive H-bond acceptors
+            0.01 * complexity +  # Slight preference for complexity
+            -1.0 * docking_score  # Lower docking score is better
+        )
+        return score
+        
+    @checkpoint("Run SMILES Ligand Pipeline")
+    @checkpoint("Run SMILES Ligand Pipeline")
+    def run_smiles_ligand_pipeline(
         self,
-        technical_descriptions: List[str],
         predicted_structures_dir: str,
         results_dir: str,
         num_sequences: int,
         optimization_steps: int,
-        score_threshold: float
+        score_threshold: float,
+        protein_sequences: List[str]
     ) -> List[Dict[str, Any]]:
-        try:
-            os.makedirs(results_dir, exist_ok=True)
-            os.makedirs(predicted_structures_dir, exist_ok=True)
-            all_results = []
-            for technical_instruction in technical_descriptions:
-                # SMILES Generation
-                print(f"Starting SMILES Generation for: {technical_instruction}")
-                logger.info(f"Starting SMILES Generation for: {technical_instruction}")
-                smiles = await self.generator.generate(technical_instruction)
-                print(f"SMILES Generation completed: {smiles}")
-                logger.info(f"SMILES Generation completed: {smiles}")
+        os.makedirs(results_dir, exist_ok=True)
+        os.makedirs(predicted_structures_dir, exist_ok=True)
+        all_results = []
 
-                # SMILES Optimization
-                print("Starting SMILES Optimization")
-                logger.info("Starting SMILES Optimization")
-                optimized_smiles = await self.optimizer.optimize(smiles)
-                print(f"SMILES Optimization completed: {optimized_smiles}")
-                logger.info(f"SMILES Optimization completed: {optimized_smiles}")
+        for protein_sequence in protein_sequences:
+            try:
+                # SMILES Generation using provided protein_sequences as context
+                smiles_list = self.generator.generate(protein_sequence, num_sequences)
+                logger.info(f"Generated SMILES: {smiles_list}")
+                print(Fore.GREEN + f"Generated SMILES: {smiles_list}")
+                
+                for smiles in smiles_list:
+                    result = {
+                        'smiles': smiles,  # Changed from 'original_smiles' to 'smiles'
+                        'protein_sequence': protein_sequence,
+                        'score': None,
+                    }
 
-                if not validate_smiles(optimized_smiles):
-                    raise ValueError("Invalid SMILES string after optimization")
+                    try:
+                        # 1. Chemical Property Refinement
+                        refined_smiles = self.additional_optimizer.refine_properties(smiles)
+                        logger.info(f"Chemical Property Refinement completed: {refined_smiles}")
+                        print(Fore.BLUE + f"Chemical Property Refinement completed: {refined_smiles}")
 
-                # 3D Structure Prediction
-                print("Starting 3D Structure Prediction")
-                logger.info("Starting 3D Structure Prediction")
-                ligand_pdb = await self.predictor.predict(optimized_smiles, predicted_structures_dir)
-                print(f"3D Structure Prediction completed: {ligand_pdb}")
-                logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
+                        # 2. Stereochemistry Correction
+                        stereochem_corrected_smiles = self.additional_optimizer.correct_stereochemistry(refined_smiles)
+                        logger.info(f"Stereochemistry Correction completed: {stereochem_corrected_smiles}")
+                        print(Fore.BLUE + f"Stereochemistry Correction completed: {stereochem_corrected_smiles}")
 
-                # Retrieve Protein Sequences
-                protein_sequences = await get_protein_sequences()
-                print(f"Retrieved {len(protein_sequences)} protein sequences from shared state")
-                logger.info(f"Retrieved {len(protein_sequences)} protein sequences from shared state")
+                        # 3. MCTS Optimization
+                        optimized_smiles = self.additional_optimizer.optimize_smiles(stereochem_corrected_smiles)
+                        logger.info(f"MCTS Optimization completed: {optimized_smiles}")
+                        print(Fore.BLUE + f"MCTS Optimization completed: {optimized_smiles}")
 
-                # Generate Protein Structures
-                protein_ensemble = await self.generate_protein_structures(protein_sequences, predicted_structures_dir)
-                print(f"Generated {len(protein_ensemble)} protein structures")
-                logger.info(f"Generated {len(protein_ensemble)} protein structures")
+                        result['optimized_smiles'] = optimized_smiles
 
-                # Ensemble Docking
-                print("Starting Ensemble Docking")
-                logger.info("Starting Ensemble Docking")
-                docking_results = await self.ensemble_docker.dock_ensemble(ligand_pdb, protein_ensemble, results_dir)
-                print("Ensemble Docking completed")
-                logger.info("Ensemble Docking completed")
+                        # 4. Calculate Score for the Optimized SMILES
+                        try:
+                            mol = Chem.MolFromSmiles(optimized_smiles)
+                            if mol is not None:
+                                current_score = self.scorer.calculate_smiles_score(optimized_smiles)
+                                result['score'] = current_score
+                                logger.info(f"Calculated score for SMILES: {current_score}")
+                                print(Fore.GREEN + f"Calculated score for SMILES: {current_score}")
+                            else:
+                                logger.warning(f"Invalid SMILES after optimization: {optimized_smiles}")
+                        except Exception as e:
+                            logger.warning(f"Error in scoring SMILES: {e}")
 
-                # Docked Ligands Analysis
-                print("Starting Docked Ligands Analysis")
-                logger.info("Starting Docked Ligands Analysis")
-                analysis_tasks = [
-                    self.analyzer.analyze(
-                        docking_result['docked_ligand'],
-                        protein_ensemble[docking_result['index']],
-                        results_dir
-                    )
-                    for docking_result in docking_results if 'docked_ligand' in docking_result
-                ]
-                analysis_results = await asyncio.gather(*analysis_tasks, return_exceptions=True)
-                print("Docked Ligands Analysis completed")
-                logger.info("Docked Ligands Analysis completed")
+                        # 5. 3D Structure Prediction
+                        try:
+                            ligand_pdb = self.predictor.predict(optimized_smiles, predicted_structures_dir)
+                            result['ligand_pdb'] = ligand_pdb
+                            logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
+                            print(Fore.GREEN + f"3D Structure Prediction completed: {ligand_pdb}")
+                        except Exception as e:
+                            logger.warning(f"Error in 3D structure prediction: {e}")
 
-                # Filter Valid Analyses
-                valid_analysis = []
-                for result in analysis_results:
-                    if isinstance(result, dict):
-                        valid_analysis.append(result)
-                    else:
-                        logger.warning(f"Analysis task failed: {result}")
+                        # 6. Generate Protein Structures
+                        try:
+                            protein_ensemble = self.generate_protein_structures([protein_sequence], predicted_structures_dir)
+                            logger.info(f"Generated {len(protein_ensemble)} protein structures")
+                            print(Fore.GREEN + f"Generated {len(protein_ensemble)} protein structures")
+                        except Exception as e:
+                            logger.warning(f"Error in protein structure generation: {e}")
+                            protein_ensemble = []
 
-                logger.info("Docked Ligands Analysis completed")
+                        # 7. Ensemble Docking
+                        if ligand_pdb and protein_ensemble:
+                            try:
+                                docking_results = self.ensemble_docker.dock_ensemble(ligand_pdb, protein_ensemble, results_dir)
+                                result['docking_results'] = docking_results
+                                logger.info("Ensemble Docking completed")
+                                print(Fore.GREEN + "Ensemble Docking completed")
+                            except Exception as e:
+                                logger.warning(f"Error in ensemble docking: {e}")
 
-                # Ligand Scoring
-                logger.info("Starting Ligand Scoring")
-                best_ligand = await self.scorer.score(valid_analysis, docking_results)
-                logger.info(f"Ligand Scoring completed: {best_ligand}")
+                        # 8. Docked Ligands Analysis
+                        if result.get('docking_results'):
+                            try:
+                                analysis_results = []
+                                for docking_result in result['docking_results']:
+                                    if 'docked_ligand' in docking_result:
+                                        analysis_result = self.analyzer.analyze(
+                                            docking_result['docked_ligand'],
+                                            docking_result['protein_pdb'],
+                                            results_dir
+                                        )
+                                        analysis_results.append(analysis_result)
+                                result['analysis_results'] = analysis_results
+                                logger.info("Docked Ligands Analysis completed")
+                                print(Fore.GREEN + "Docked Ligands Analysis completed")
+                            except Exception as e:
+                                logger.warning(f"Error in docked ligands analysis: {e}")
+                    except Exception as e:
+                        logger.error(f"Error processing optimized SMILES: {e}")
+                        print(Fore.RED + f"Error processing optimized SMILES: {e}")
 
-                all_results.append(best_ligand)
+                    try:
+                        # Calculate Score for the original SMILES
+                        current_score = self.scorer.calculate_smiles_score(smiles)
+                        result['score'] = current_score
+                        logger.info(f"Calculated score for original SMILES: {current_score}")
+                        print(Fore.GREEN + f"Calculated score for original SMILES: {current_score}")
+                    except Exception as e:
+                        logger.error(f"Error processing original SMILES {smiles}: {e}")
+                        print(Fore.RED + f"Error processing original SMILES {smiles}: {e}")
 
-            logger.info("Pipeline completed successfully")
-            return all_results
-        except Exception as e:
-            logger.error(f"An error occurred in the pipeline: {e}")
-            raise e
-    
-        
-"""        
-# 9. Usage Example
-async def main():
-    # Ensure the output directory exists
-    output_dir = Path("./SMILESLigand_results")
-    output_dir.mkdir(parents=True, exist_ok=True)
+                    # Add the result to all_results regardless of any failures
+                    all_results.append(result)
 
-    # User-provided technical instruction
-    technical_instruction = "Design a ligand that binds to the ATP binding site of protein kinase A"
+            except Exception as e:
+                logger.error(f"Error in processing protein sequence: {str(e)}")
+                print(Fore.RED + f"Error in processing protein sequence: {str(e)}")
 
-    # List of protein structures (provide actual paths to your protein PDB files)
-    protein_ensemble = [
-        "./SMILESLigand_results/protein_1.pdb",
-        "./SMILESLigand_results/protein_2.pdb",
-        # Add more protein structures as needed
-    ]
-
-    # Initialize the pipeline
-    pipeline = SMILESLigandPipeline()
-
-    # Run the pipeline
-    try:
-        result = await pipeline.run(
-            technical_instruction=technical_instruction,
-            protein_ensemble=protein_ensemble,
-            output_dir=str(output_dir)
-        )
-        logger.info(f"Optimized Ligand SMILES: {result.get('smiles')}")
-        logger.info(f"Ligand Score: {result.get('score')}")
-        # Additional result details can be logged or processed here
-    except Exception as e:
-        logger.error(f"An error occurred during pipeline execution: {e}")
-
-if __name__ == "__main__":
-    asyncio.run(main())"""
+        logger.info("Pipeline completed")
+        print(Fore.GREEN + "Pipeline completed")
+        return all_results

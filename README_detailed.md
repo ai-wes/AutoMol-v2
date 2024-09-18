@@ -231,3 +231,5 @@ h. **Virtual Scale-up and Manufacturing Simulation**:
 - Model large-scale production of promising candidates
 - Simulate potential manufacturing challenges and optimize processes
 - Assess cost-effectiveness and economic viability of production
+
+python automol/main.py --input_text "Design an RNA-based therapeutic that enhances telomerase assembly and localization to telomeres in hematopoietic stem cells to address age-related decline in immune function." --num_sequences 2 --optimization_steps 20 --score_threshold 0.6 --skip_description_gen

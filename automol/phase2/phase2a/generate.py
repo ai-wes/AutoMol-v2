@@ -3,7 +3,6 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import asyncio
 import logging
 
 # Set up logging
@@ -27,10 +26,10 @@ def extract_amino_acids(sequence):
     """Extract only valid amino acids from the sequence."""
     return ''.join(char for char in sequence if char in VALID_AMINO_ACIDS)
 
-async def generate_protein_sequence(input_text, num_sequences=5):
+def generate_protein_sequence(input_text, num_sequences=1):
     """Generate protein sequences based on the input description."""
     model.eval()
-    max_length = 256
+    max_length = 512
     input_text = f"Input Text: {input_text} Sequence:"
     inputs = tokenizer(input_text, return_tensors='pt', padding=True, truncation=True, max_length=max_length)
     input_ids = inputs['input_ids'].to(device)
@@ -40,8 +39,7 @@ async def generate_protein_sequence(input_text, num_sequences=5):
 
     try:
         with torch.no_grad():
-            output = await asyncio.to_thread(
-                model.generate,
+            output = model.generate(
                 input_ids=input_ids,
                 attention_mask=attention_mask,
                 max_length=max_length,
@@ -68,4 +66,4 @@ async def generate_protein_sequence(input_text, num_sequences=5):
     
     
 if __name__ == "__main__":
-    asyncio.run(generate_protein_sequence("Synthesize a small molecule that activates telomerase in a tissue-specific manner to counteract cellular senescence in critical organs."))
+    generate_protein_sequence("Synthesize a small molecule that activates telomerase in a tissue-specific manner to counteract cellular senescence in critical organs.")

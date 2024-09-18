@@ -4,15 +4,15 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import sys
 import os
 
+
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
 # Now import predict from the same directory
-from predict import predict_protein_function, predict_properties, predict_structure
+from phase2a.predict import predict_protein_function
 
-import asyncio
 import logging
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import random
@@ -58,10 +58,10 @@ aa_functions = {
 ############################################################################################################
 
 # Monte Carlo approach with simulated annealing
-async def monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0, cooling_rate=0.95):
+def monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0, cooling_rate=0.95):
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -78,7 +78,7 @@ async def monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0
             mutated_sequence = ''.join(mutated_sequence)
 
             # Evaluate the mutated sequence
-            mutated_score = await predict_protein_function(mutated_sequence)
+            mutated_score = predict_protein_function(mutated_sequence)
 
             # Decide whether to accept the new sequence
             delta_score = mutated_score - current_score
@@ -104,11 +104,11 @@ async def monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0
 ############################################################################################################
 
 # Gradient-based optimization
-async def gradient_optimize(sequence, iterations=50, learning_rate=0.01):
+def gradient_optimize(sequence, iterations=50, learning_rate=0.01):
     # This is a simplified version. In practice, you'd need a differentiable model for protein function prediction.
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -128,7 +128,7 @@ async def gradient_optimize(sequence, iterations=50, learning_rate=0.01):
             current_sequence = new_sequence
 
             # Evaluate new sequence
-            score = await predict_protein_function(current_sequence)
+            score = predict_protein_function(current_sequence)
             logger.info(f"Gradient Iteration {i+1}: Score {score}")
         except Exception as e:
             logger.error(f"Error in Gradient iteration {i+1}: {e}")
@@ -142,10 +142,10 @@ async def gradient_optimize(sequence, iterations=50, learning_rate=0.01):
 ############################################################################################################
 
 # Domain-specific knowledge optimization
-async def domain_knowledge_optimize(sequence, iterations=50):
+def domain_knowledge_optimize(sequence, iterations=50):
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -164,7 +164,7 @@ async def domain_knowledge_optimize(sequence, iterations=50):
                 new_sequence[random.randint(0, len(new_sequence)-1)] = random.choice(['K', 'R', 'D', 'E'])
 
             new_sequence = ''.join(new_sequence)
-            new_score = await predict_protein_function(new_sequence)
+            new_score = predict_protein_function(new_sequence)
 
             if new_score > current_score:
                 current_sequence = new_sequence
@@ -182,14 +182,14 @@ async def domain_knowledge_optimize(sequence, iterations=50):
 ############################################################################################################
 
 # Ensemble approach
-async def ensemble_optimize(sequence, iterations=50):
+def ensemble_optimize(sequence, iterations=50):
     methods = [monte_carlo_optimize, gradient_optimize, domain_knowledge_optimize]
     sequences = []
     scores = []
 
     for method in methods:
         try:
-            optimized_seq, score = await method(sequence, iterations=iterations//len(methods))
+            optimized_seq, score = method(sequence, iterations=iterations//len(methods))
             sequences.append(optimized_seq)
             scores.append(score)
         except Exception as e:
@@ -228,11 +228,11 @@ class RLAgent:
         self.q_table[state, action] = new_q
 
 
-async def rl_optimize(sequence, iterations=1000, epsilon=0.1, alpha=0.1, gamma=0.9):
+def rl_optimize(sequence, iterations=1000, epsilon=0.1, alpha=0.1, gamma=0.9):
     agent = RLAgent(20)  # 20 possible actions (amino acids)
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -249,7 +249,7 @@ async def rl_optimize(sequence, iterations=1000, epsilon=0.1, alpha=0.1, gamma=0
             new_sequence[position] = 'ACDEFGHIKLMNPQRSTVWY'[action]
             new_sequence = ''.join(new_sequence)
 
-            new_score = await predict_protein_function(new_sequence)
+            new_score = predict_protein_function(new_sequence)
             reward = new_score - current_score
 
             agent.update_q_table(current_aa, action, reward, action, alpha, gamma)
@@ -275,10 +275,10 @@ async def rl_optimize(sequence, iterations=1000, epsilon=0.1, alpha=0.1, gamma=0
 
 
 # Constraint-based optimization
-async def constraint_optimize(sequence, iterations=50, min_hydrophobicity=0.3, max_charge=0.2):
+def constraint_optimize(sequence, iterations=50, min_hydrophobicity=0.3, max_charge=0.2):
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -300,7 +300,7 @@ async def constraint_optimize(sequence, iterations=50, min_hydrophobicity=0.3, m
 
             if hydrophobicity >= min_hydrophobicity and charge <= max_charge:
                 # Evaluate the mutated sequence
-                mutated_score = await predict_protein_function(mutated_sequence)
+                mutated_score = predict_protein_function(mutated_sequence)
 
                 # Decide whether to accept the new sequence
                 delta_score = mutated_score - current_score
@@ -332,8 +332,7 @@ async def constraint_optimize(sequence, iterations=50, min_hydrophobicity=0.3, m
 ## Diversity preservation
 def hamming_distance(seq1, seq2):
     return sum(c1 != c2 for c1, c2 in zip(seq1, seq2))
-
-async def diversity_optimize(sequence, population_size=50, generations=50):
+def diversity_optimize(sequence, population_size=50, generations=50):
     def create_individual():
         return ''.join(random.choice('ACDEFGHIKLMNPQRSTVWY') for _ in range(len(sequence)))
 
@@ -342,7 +341,7 @@ async def diversity_optimize(sequence, population_size=50, generations=50):
     for gen in range(generations):
         try:
             # Evaluate fitness
-            fitness_scores = await asyncio.gather(*[predict_protein_function(ind) for ind in population])
+            fitness_scores = [predict_protein_function(ind) for ind in population]
 
             # Sort population by fitness
             sorted_population = sorted(zip(population, fitness_scores), key=lambda x: x[1], reverse=True)
@@ -381,10 +380,10 @@ async def diversity_optimize(sequence, population_size=50, generations=50):
 
 
 # Constrained Monte Carlo optimization
-async def constrained_monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0, cooling_rate=0.95, min_hydrophobicity=0.3, max_charge=0.2):
+def constrained_monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0, cooling_rate=0.95, min_hydrophobicity=0.3, max_charge=0.2):
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -407,7 +406,7 @@ async def constrained_monte_carlo_optimize(sequence, iterations=100, initial_tem
 
             if hydrophobicity >= min_hydrophobicity and charge <= max_charge:
                 # Evaluate the mutated sequence
-                mutated_score = await predict_protein_function(mutated_sequence)
+                mutated_score = predict_protein_function(mutated_sequence)
 
                 # Decide whether to accept the new sequence
                 delta_score = mutated_score - current_score
@@ -434,10 +433,10 @@ async def constrained_monte_carlo_optimize(sequence, iterations=100, initial_tem
 ############################################################################################################
 
 # Adaptive Monte Carlo optimization
-async def adaptive_monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0, cooling_rate=0.95, adaptation_rate=0.1):
+def adaptive_monte_carlo_optimize(sequence, iterations=100, initial_temperature=1.0, cooling_rate=0.95, adaptation_rate=0.1):
     current_sequence = sequence
     try:
-        current_score = await predict_protein_function(current_sequence)
+        current_score = predict_protein_function(current_sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return current_sequence, 0.0
@@ -456,7 +455,7 @@ async def adaptive_monte_carlo_optimize(sequence, iterations=100, initial_temper
             mutated_sequence = ''.join(mutated_sequence)
 
             # Evaluate the mutated sequence
-            mutated_score = await predict_protein_function(mutated_sequence)
+            mutated_score = predict_protein_function(mutated_sequence)
 
             # Decide whether to accept the new sequence
             delta_score = mutated_score - current_score
@@ -495,9 +494,9 @@ async def adaptive_monte_carlo_optimize(sequence, iterations=100, initial_temper
 ############################################################################################################
 
 # Bayesian Optimization approach
-async def bayesian_optimize(sequence, iterations=30):
+def bayesian_optimize(sequence, iterations=30):
     try:
-        current_score = await predict_protein_function(sequence)
+        current_score = predict_protein_function(sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return sequence, 0.0
@@ -508,7 +507,7 @@ async def bayesian_optimize(sequence, iterations=30):
         """
         try:
             sequence_str = ''.join([ 'ACDEFGHIKLMNPQRSTVWY'[int(round(num)) % 20] for num in sequence_numeric ])
-            score = asyncio.run(predict_protein_function(sequence_str))
+            score = predict_protein_function(sequence_str)
             return score
         except Exception as e:
             logger.error(f"Error in Bayesian Optimization evaluation: {e}")
@@ -548,20 +547,20 @@ async def bayesian_optimize(sequence, iterations=30):
 
 # Particle Swarm Optimization approach
 # Particle Swarm Optimization approach
-async def pso_optimize(sequence, iterations=50):
+def pso_optimize(sequence, iterations=50):
     try:
-        current_score = await predict_protein_function(sequence)
+        current_score = predict_protein_function(sequence)
     except Exception as e:
         logger.error(f"Failed to predict protein function for the initial sequence: {e}")
         return sequence, 0.0
 
-    async def evaluate(sequence_numeric):
+    def evaluate(sequence_numeric):
         """
         Convert numerical vector back to amino acid sequence and evaluate.
         """
         try:
             sequence_str = ''.join([ 'ACDEFGHIKLMNPQRSTVWY'[int(round(num)) % 20] for num in sequence_numeric ])
-            score = await predict_protein_function(sequence_str)
+            score = predict_protein_function(sequence_str)
             return -score  # Minimize negative score
         except Exception as e:
             logger.error(f"Error in PSO evaluation: {e}")
@@ -578,7 +577,7 @@ async def pso_optimize(sequence, iterations=50):
         return sequence, current_score
 
     try:
-        best_sequence_numeric, best_score = await psopso(evaluate, lb, ub, swarmsize=30, maxiter=iterations, debug=True)
+        best_sequence_numeric, best_score = psopso(evaluate, lb, ub, swarmsize=30, maxiter=iterations, debug=True)
         best_sequence = ''.join([ 'ACDEFGHIKLMNPQRSTVWY'[int(round(num)) % 20] for num in best_sequence_numeric ])
         best_score = -best_score
         return best_sequence, best_score
@@ -590,7 +589,7 @@ async def pso_optimize(sequence, iterations=50):
 ############################################################################################################
 
 
-async def run_optimization_pipeline(sequences, iterations=50, score_threshold=0.4):
+def run_optimization_pipeline(sequences, iterations=50, score_threshold=0.4):
     optimized_results = []
     print(f"Starting optimization pipeline with sequences: {sequences}")
     for sequence in sequences:
@@ -602,19 +601,19 @@ async def run_optimization_pipeline(sequences, iterations=50, score_threshold=0.
                 continue
 
             # Run all optimization methods
-            monte_carlo_sequence, monte_carlo_score = await monte_carlo_optimize(sequence, iterations)
-            gradient_sequence, gradient_score = await gradient_optimize(sequence, iterations)
-            domain_knowledge_sequence, domain_knowledge_score = await domain_knowledge_optimize(sequence, iterations)
-            ensemble_sequence, ensemble_score = await ensemble_optimize(sequence, iterations)
-            rl_sequence, rl_score = await rl_optimize(sequence, iterations)
-            constraint_sequence, constraint_score = await constraint_optimize(sequence, iterations)
-            diversity_sequence, diversity_score = await diversity_optimize(sequence, generations=iterations)
-            constrained_mc_sequence, constrained_mc_score = await constrained_monte_carlo_optimize(sequence, iterations)
-            adaptive_mc_sequence, adaptive_mc_score = await adaptive_monte_carlo_optimize(sequence, iterations)
+            monte_carlo_sequence, monte_carlo_score = monte_carlo_optimize(sequence, iterations)
+            gradient_sequence, gradient_score = gradient_optimize(sequence, iterations)
+            domain_knowledge_sequence, domain_knowledge_score = domain_knowledge_optimize(sequence, iterations)
+            ensemble_sequence, ensemble_score = ensemble_optimize(sequence, iterations)
+            rl_sequence, rl_score = rl_optimize(sequence, iterations)
+            constraint_sequence, constraint_score = constraint_optimize(sequence, iterations)
+            diversity_sequence, diversity_score = diversity_optimize(sequence, generations=iterations)
+            constrained_mc_sequence, constrained_mc_score = constrained_monte_carlo_optimize(sequence, iterations)
+            adaptive_mc_sequence, adaptive_mc_score = adaptive_monte_carlo_optimize(sequence, iterations)
             
             # New methods
-            bayesian_sequence, bayesian_score = await bayesian_optimize(sequence, iterations=30)
-            pso_sequence, pso_score = await pso_optimize(sequence, iterations=50)
+            bayesian_sequence, bayesian_score = bayesian_optimize(sequence, iterations=30)
+            pso_sequence, pso_score = pso_optimize(sequence, iterations=50)
 
             # Choose the best result
             optimized_sequences = [
@@ -633,14 +632,14 @@ async def run_optimization_pipeline(sequences, iterations=50, score_threshold=0.
 
             if optimized_score >= score_threshold:
                 try:
-                    original_score = await predict_protein_function(sequence)
+                    original_score = predict_protein_function(sequence)
                 except Exception as e:
                     logger.error(f"Failed to predict original protein function: {e}")
                     original_score = 0.0
 
                 # Predict properties for the final optimized sequence
                 try:
-                    properties = await predict_properties(optimized_sequence)
+                    properties = predict_properties(optimized_sequence)
                 except Exception as e:
                     logger.error(f"Failed to predict properties for the optimized sequence: {e}")
                     properties = {}
@@ -668,7 +667,7 @@ async def run_optimization_pipeline(sequences, iterations=50, score_threshold=0.
     return optimized_results
 
 
-async def main():
+def main():
     # Example sequences to optimize
     sequences = [
         "HMPYHFQGTNWFGCIASVRNGMRTKWFELSFAWYERSMMYQWNKVWWTKFYWYVWFLWQKLWQQMLYWAVGWRHFHPTRHPSFHVKKFFVQKAVSFAICHPWYKWKHPQQRFIQGRISMQNPWHPMNVNTFHLDWKLIFKYQNLWIGNEWMLITWKDWRFNPYWIWKSKLGIWWWYWYTWFRHMFRNAFQHMVTQYYINNFYRLMMFVLDSFKELITYWFRFRKHGQGRCNWQTAYWFYKYTFDHERRVGPIS",
@@ -683,7 +682,7 @@ async def main():
     score_threshold = 0.8  # Increased threshold for higher optimization
 
     # Run optimization
-    optimized_results = await run_optimization_pipeline(sequences, iterations, score_threshold)
+    optimized_results = run_optimization_pipeline(sequences, iterations, score_threshold)
 
     # Print results
     for result in optimized_results:
@@ -696,6 +695,3 @@ async def main():
         for prop, value in result['properties'].items():
             print(f"  {prop}: {value}")
         print("\n")
-
-if __name__ == "__main__":
-    asyncio.run(main())

@@ -1,5 +1,4 @@
 import os
-import asyncio
 import logging
 import mdtraj as md
 import tempfile
@@ -9,7 +8,6 @@ from openmm.app import *
 from openmm import unit
 from pdbfixer import PDBFixer
 import nglview as nv
-import logging
 import tempfile
 from openmm import Platform, LangevinMiddleIntegrator, OpenMMException
 from openmm.app import PDBFile, ForceField, Modeller, Simulation, DCDReporter, StateDataReporter
@@ -20,15 +18,8 @@ from openmm.app import PDBFile
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-
-
-
-
-async def prepare_system(pdb_file):
-    """Asynchronously prepare the system for simulation."""
+def prepare_system(pdb_file):
+    """Prepare the system for simulation."""
     try:
         # Use PDBFixer to add missing atoms and hydrogens
         fixer = PDBFixer(filename=pdb_file)
@@ -50,13 +41,17 @@ async def prepare_system(pdb_file):
         modeller = Modeller(pdb.topology, pdb.positions)
 
         # Center the protein in the box
+
+        # Center the protein in the box
         protein_atoms = [atom.index for atom in modeller.topology.atoms() if atom.residue.name != 'HOH']
         protein_positions = [modeller.positions[i] for i in protein_atoms]
-        center = sum(protein_positions) / len(protein_positions)
+        
+        # Convert Quantity objects to numpy arrays for calculation
+        protein_positions_np = np.array([p.value_in_unit(unit.nanometer) for p in protein_positions])
+        center = np.mean(protein_positions_np, axis=0) * unit.nanometer
 
         for i in range(len(modeller.positions)):
             modeller.positions[i] = modeller.positions[i] - center
-
 
         # Add solvent
         modeller.addSolvent(forcefield, model='tip3p', padding=1.0 * unit.nanometer, neutralize=True)
@@ -74,7 +69,7 @@ async def prepare_system(pdb_file):
         logger.error(f"Error preparing system for {pdb_file}: {str(e)}")
         raise
 
-async def run_simulation(system, modeller, output_dir, steps=10000):
+def run_simulation(system, modeller, output_dir, steps=10000):
     try:
         integrator = LangevinMiddleIntegrator(300*unit.kelvin, 1.0/unit.picosecond, 1.0*unit.femtosecond)
         platform = Platform.getPlatformByName('CUDA')
@@ -115,22 +110,25 @@ async def run_simulation(system, modeller, output_dir, steps=10000):
     except Exception as e:
         logger.error(f"Error running simulation: {str(e)}")
         raise
-    
-    
-    
 
-def check_steric_clashes(pdb_file, cutoff=1.0):
-    pdb = PDBFile(pdb_file)
-    positions = pdb.positions
-    for i in range(len(positions)):
-        for j in range(i+1, len(positions)):
-            distance = np.linalg.norm(positions[i] - positions[j])
+def check_steric_clashes(pdb_file, cutoff=0.4*unit.nanometer):
+    structure = PDBFile(pdb_file)
+    positions = structure.getPositions()
+    num_atoms = len(positions)
+    
+    clash_count = 0
+    for i in range(num_atoms):
+        for j in range(i+1, num_atoms):
+            distance = unit.norm(positions[i] - positions[j])
             if distance < cutoff:
-                print(f"Steric clash detected between atoms {i} and {j}: distance = {distance} nm")
+                logger.warning(f"Steric clash detected between atoms {i} and {j}: distance = {distance}")
+                clash_count += 1
 
-        
-    
-async def visualize_trajectory(trajectory_file, pdb_file, output_file):
+    logger.info(f"Steric clash check completed. Total clashes detected: {clash_count}")
+    return clash_count
+
+
+def visualize_trajectory(trajectory_file, pdb_file, output_file):
     """Create an HTML visualization of the trajectory."""
     try:
         traj = md.load(trajectory_file, top=pdb_file)
@@ -142,24 +140,21 @@ async def visualize_trajectory(trajectory_file, pdb_file, output_file):
         logger.error(f"Error creating trajectory visualization: {str(e)}")
         logger.info("Skipping visualization due to error.")
         return None  # Return None instead of raising an exception
-    
-    
-async def run_simulation_pipeline(pdb_file, output_dir):
+
+def run_simulation_pipeline(pdb_file, output_dir):
     try:
         os.makedirs(output_dir, exist_ok=True)
         logger.info(f"Preparing system for {pdb_file}")
 
-        system, modeller = await prepare_system(pdb_file)
+        system, modeller = prepare_system(pdb_file)
 
         logger.info(f"Running simulation for {pdb_file}")
-        trajectory_file, final_pdb = await run_simulation(system, modeller, output_dir)
+        trajectory_file, final_pdb = run_simulation(system, modeller, output_dir)
         check_steric_clashes(final_pdb)
-
-        # Check for steric clashes
 
         # Create visualization
         visualization_file = os.path.join(output_dir, 'trajectory_visualization.png')
-        await visualize_trajectory(trajectory_file, final_pdb, visualization_file)
+        visualize_trajectory(trajectory_file, final_pdb, visualization_file)
 
         logger.info(f"Simulation results saved in: {output_dir}")
 

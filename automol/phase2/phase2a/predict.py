@@ -41,8 +41,8 @@ esm3_model:ESM3InferenceClient = ESM3.from_pretrained("esm3_sm_open_v1").to("cud
 
 
 
-async def predict_protein_function(sequence):
-    """Asynchronously predict the function score of a given protein sequence."""
+def predict_protein_function(sequence):
+    """Predict the function score of a given protein sequence."""
     try:
         print(f"Received sequence for prediction: {sequence}")
         valid_aa = set('ACDEFGHIKLMNPQRSTVWY')
@@ -80,8 +80,8 @@ async def predict_protein_function(sequence):
 
     
     
-async def predict_properties(sequence):
-    """Asynchronously predict various properties of a protein sequence."""
+def predict_properties(sequence):
+    """Predict various properties of a protein sequence."""
     try:
         analysis = ProteinAnalysis(sequence)
         properties = {
@@ -102,7 +102,7 @@ async def predict_properties(sequence):
 
 import pdb
 
-async def create_3d_model_esm3(protein_pdb, prompt_string, output_dir):
+def create_3d_model_esm3(protein_pdb, prompt_string, output_dir):
     """Create a 3D model visualization using PyMOL and provide instructions to open it."""
     print(f"Starting 3D model creation for {protein_pdb}")
     pymol.finish_launching(['pymol', '-cq'])  # '-cq' for command line only and quiet mode
@@ -136,23 +136,20 @@ async def create_3d_model_esm3(protein_pdb, prompt_string, output_dir):
         
         
         try:
-            user_input = await asyncio.wait_for(
-                aioconsole.ainput("Press Enter when you're ready to continue, or type 'skip' to move on: "),
-                timeout=30.0
-            )
+            user_input = input("Press Enter when you're ready to continue, or type 'skip' to move on: ")
             if user_input.lower() == 'skip':
                 print("User chose to skip opening PyMOL.")
             else:
                 print("User acknowledged PyMOL instructions.")
-        except asyncio.TimeoutError:
-            print("No input received within 30 seconds. Continuing.")
+        except Exception:
+            print("No input received. Continuing.")
         
     except pymol.CmdException as e:
         print(f"PyMOL command failed - {e}")
         
         
 
-async def predict_structure(sequence):
+def predict_structure(sequence):
     """Predict the structure of a protein sequence using ESM-3."""
     try:
         protein = ESMProtein(sequence=sequence)
@@ -206,7 +203,7 @@ def esm3_refinement(sequence):
     
         
 
-async def run_prediction_pipeline(sequences, output_dir):
+def run_prediction_pipeline(sequences, output_dir):
     try:
         results = []
         for i, sequence in enumerate(sequences):
@@ -215,11 +212,11 @@ async def run_prediction_pipeline(sequences, output_dir):
             logger.info(f"Processing sequence {i+1}/{len(sequences)}: {sequence}")
             
             try:
-                score = await predict_protein_function(sequence)
-                properties = await predict_properties(sequence)
+                score = predict_protein_function(sequence)
+                properties = predict_properties(sequence)
                 pdb_file = os.path.join(output_dir, f"{sequence[:10]}_structure.pdb") 
                 
-                pdb_file = await predict_structure(sequence)
+                pdb_file = predict_structure(sequence)
             except Exception as e:
                 logger.error(f"Error processing sequence {i+1}: {str(e)}")
                 score, properties, pdb_file = None, None, None

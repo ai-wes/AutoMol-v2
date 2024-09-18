@@ -1,5 +1,4 @@
 import os
-import asyncio
 import logging
 import mdtraj as md
 import numpy as np
@@ -8,18 +7,8 @@ from Bio import PDB
 
 logger = logging.getLogger(__name__)
 
-import mdtraj as md
-import numpy as np
-from Bio import PDB
-
-import mdtraj as md
-import numpy as np
-import logging
-
-logger = logging.getLogger(__name__)
-
-async def load_trajectory(trajectory_file, topology_file):
-    """Load the trajectory asynchronously."""
+def load_trajectory(trajectory_file, topology_file):
+    """Load the trajectory."""
     logger.info("Loading trajectory...")
     try:
         # Load the topology file using MDTraj
@@ -37,25 +26,23 @@ async def load_trajectory(trajectory_file, topology_file):
             logger.error(f"First few lines of topology file:\n{f.read(500)}")
         logger.error(f"Trajectory file size: {os.path.getsize(trajectory_file)} bytes")
         raise
-    
-    
-    
-async def calculate_rmsd(traj):
+
+def calculate_rmsd(traj):
     """Calculate RMSD of the trajectory."""
     logger.info("Calculating RMSD...")
     return np.sqrt(3*np.mean(np.sum(np.square(traj.xyz - traj.xyz.mean(axis=0)), axis=2), axis=1))
 
-async def calculate_rmsf(traj):
+def calculate_rmsf(traj):
     """Calculate RMSF of the trajectory."""
     logger.info("Calculating RMSF...")
     return np.sqrt(3*np.mean(np.square(traj.xyz - np.mean(traj.xyz, axis=0)), axis=0))
 
-async def calculate_radius_of_gyration(traj):
+def calculate_radius_of_gyration(traj):
     """Calculate radius of gyration of the trajectory."""
     logger.info("Calculating radius of gyration...")
     return md.compute_rg(traj)
 
-async def calculate_secondary_structure(traj):
+def calculate_secondary_structure(traj):
     """Calculate secondary structure of the trajectory."""
     logger.info("Calculating secondary structure...")
     ss = md.compute_dssp(traj)
@@ -66,7 +53,7 @@ async def calculate_secondary_structure(traj):
     
     return ss_numeric
 
-async def generate_rmsd_plot(rmsd, output_dir):
+def generate_rmsd_plot(rmsd, output_dir):
     """Generate RMSD plot."""
     plt.figure()
     plt.plot(rmsd)
@@ -75,7 +62,7 @@ async def generate_rmsd_plot(rmsd, output_dir):
     plt.savefig(os.path.join(output_dir, 'rmsd_plot.png'))
     plt.close()
 
-async def generate_rmsf_plot(rmsf, output_dir):
+def generate_rmsf_plot(rmsf, output_dir):
     """Generate RMSF plot."""
     plt.figure()
     plt.plot(rmsf)
@@ -84,7 +71,7 @@ async def generate_rmsf_plot(rmsf, output_dir):
     plt.savefig(os.path.join(output_dir, 'rmsf_plot.png'))
     plt.close()
 
-async def generate_rg_plot(rg, output_dir):
+def generate_rg_plot(rg, output_dir):
     """Generate radius of gyration plot."""
     plt.figure()
     plt.plot(rg)
@@ -93,7 +80,7 @@ async def generate_rg_plot(rg, output_dir):
     plt.savefig(os.path.join(output_dir, 'rg_plot.png'))
     plt.close()
 
-async def generate_ss_plot(ss, output_dir):
+def generate_ss_plot(ss, output_dir):
     """Generate secondary structure plot."""
     plt.figure(figsize=(10, 6))
     plt.imshow(ss.T, aspect='auto', cmap='viridis', interpolation='nearest')
@@ -110,9 +97,7 @@ async def generate_ss_plot(ss, output_dir):
     plt.savefig(os.path.join(output_dir, 'ss_plot.png'))
     plt.close()
 
-import numpy as np
-
-async def calculate_final_score(rmsd, rmsf, rg, ss):
+def calculate_final_score(rmsd, rmsf, rg, ss):
     """Calculate a final score based on the analysis results."""
     try:
         # 1. RMSD stability score (lower is better)
@@ -165,7 +150,7 @@ async def calculate_final_score(rmsd, rmsf, rg, ss):
         logger.error(f"Traceback: {traceback.format_exc()}")
         return 0  # Return 0 if there's an error
 
-async def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
+def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
     """Run the full analysis pipeline on the simulation results."""
     try:
         print(f"Starting analysis pipeline")
@@ -174,7 +159,7 @@ async def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
 
         print(f"Loading trajectory: {trajectory_file}")
         print(f"Using topology file: {final_pdb}")
-        traj = await load_trajectory(trajectory_file, final_pdb)
+        traj = load_trajectory(trajectory_file, final_pdb)
         print(f"Trajectory loaded: {traj}")
 
         if traj is None or traj.n_frames == 0:
@@ -182,26 +167,26 @@ async def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
             return None
 
         print("Calculating RMSD...")
-        rmsd = await calculate_rmsd(traj)
+        rmsd = calculate_rmsd(traj)
         print(f"RMSD calculated: {rmsd[:5]}...")
 
         print("Calculating RMSF...")
-        rmsf = await calculate_rmsf(traj)
+        rmsf = calculate_rmsf(traj)
         print(f"RMSF calculated: {rmsf[:5]}...")
 
         print("Calculating radius of gyration...")
-        radius_of_gyration = await calculate_radius_of_gyration(traj)
+        radius_of_gyration = calculate_radius_of_gyration(traj)
         print(f"Radius of gyration calculated: {radius_of_gyration[:5]}...")
 
         print("Calculating secondary structure...")
-        secondary_structure = await calculate_secondary_structure(traj)
+        secondary_structure = calculate_secondary_structure(traj)
         print(f"Secondary structure calculated: {secondary_structure[:5]}...")
 
         print("Generating plots...")
-        await generate_rmsd_plot(rmsd, output_dir)
-        await generate_rmsf_plot(rmsf, output_dir)
-        await generate_rg_plot(radius_of_gyration, output_dir)
-        await generate_ss_plot(secondary_structure, output_dir)
+        generate_rmsd_plot(rmsd, output_dir)
+        generate_rmsf_plot(rmsf, output_dir)
+        generate_rg_plot(radius_of_gyration, output_dir)
+        generate_ss_plot(secondary_structure, output_dir)
         print("Plots generated")
 
         print("Calculating final score...")
@@ -210,9 +195,8 @@ async def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
         print(f"Radius of gyration shape: {radius_of_gyration.shape}, min: {np.min(radius_of_gyration)}, max: {np.max(radius_of_gyration)}")
         print(f"Secondary structure shape: {secondary_structure.shape}, unique values: {np.unique(secondary_structure)}")
         
-        final_score = await calculate_final_score(rmsd, rmsf, radius_of_gyration, secondary_structure)
+        final_score = calculate_final_score(rmsd, rmsf, radius_of_gyration, secondary_structure)
         print(f"Final score calculated: {final_score}")
-
 
         return {
             "rmsd": rmsd.tolist(),
