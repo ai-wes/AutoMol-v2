@@ -1,170 +1,113 @@
+from multiprocessing import Pool, cpu_count
+# AutoMol-v2/automol/phase3/simulate.py
+
 import os
 import logging
-import mdtraj as md
-import tempfile
-import numpy as np
-from openmm import *
-from openmm.app import *
-from openmm import unit
+from openmm import LangevinMiddleIntegrator, System
+from openmm.app import PDBFile, Simulation, PDBReporter, StateDataReporter, PME, HBonds, ForceField, Modeller
+from openmm.unit import nanometer, kelvin, picosecond, picoseconds
 from pdbfixer import PDBFixer
-import nglview as nv
-import tempfile
-from openmm import Platform, LangevinMiddleIntegrator, OpenMMException
-from openmm.app import PDBFile, ForceField, Modeller, Simulation, DCDReporter, StateDataReporter
-from openmm.unit import nanometer, kelvin, picosecond, femtosecond
-from openmm.app import PME, HBonds
-from openmm.app import PDBFile
+import MDAnalysis as mda
+from MDAnalysis.analysis import rms
+import matplotlib.pyplot as plt
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def prepare_system(pdb_file):
-    """Prepare the system for simulation."""
+def molecular_dynamics_simulation(pdb_file, simulation_dir):
+    """
+    Perform molecular dynamics simulation on the given PDB file.
+    
+    Parameters:
+    - pdb_file: Path to the input PDB file.
+    - simulation_dir: Directory to store simulation outputs.
+    
+    Returns:
+    - Dictionary containing simulation output paths.
+    """
     try:
-        # Use PDBFixer to add missing atoms and hydrogens
+        logger.info(f"Starting MD simulation for {pdb_file}")
+        
+        # Fix the PDB file
         fixer = PDBFixer(filename=pdb_file)
         fixer.findMissingResidues()
         fixer.findNonstandardResidues()
         fixer.replaceNonstandardResidues()
+        fixer.removeHeterogens(True)
         fixer.findMissingAtoms()
         fixer.addMissingAtoms()
-        fixer.addMissingHydrogens(7.0)
-
-        # Save the fixed structure to a temporary file
-        with tempfile.NamedTemporaryFile(mode='w', suffix=".pdb", delete=False) as temp_file:
-            PDBFile.writeFile(fixer.topology, fixer.positions, temp_file)
-            tmp_filename = temp_file.name
-
-        # Now use the fixed PDB file to create the system
-        pdb = PDBFile(tmp_filename)
-        forcefield = ForceField('amber14-all.xml', 'amber14/tip3pfb.xml')
-        modeller = Modeller(pdb.topology, pdb.positions)
-
-        # Center the protein in the box
-
-        # Center the protein in the box
-        protein_atoms = [atom.index for atom in modeller.topology.atoms() if atom.residue.name != 'HOH']
-        protein_positions = [modeller.positions[i] for i in protein_atoms]
+        fixer.addMissingHydrogens(7.0)  # pH 7.0
         
-        # Convert Quantity objects to numpy arrays for calculation
-        protein_positions_np = np.array([p.value_in_unit(unit.nanometer) for p in protein_positions])
-        center = np.mean(protein_positions_np, axis=0) * unit.nanometer
-
-        for i in range(len(modeller.positions)):
-            modeller.positions[i] = modeller.positions[i] - center
-
-        # Add solvent
-        modeller.addSolvent(forcefield, model='tip3p', padding=1.0 * unit.nanometer, neutralize=True)
-
-        system = forcefield.createSystem(modeller.topology, nonbondedMethod=PME,
-                                         nonbondedCutoff=1.0 * unit.nanometer,
-                                         constraints=HBonds)
-        logger.info(f"System prepared for: {pdb_file}")
-
-        # Remove the temporary file
-        os.unlink(tmp_filename)
-
-        return system, modeller
-    except Exception as e:
-        logger.error(f"Error preparing system for {pdb_file}: {str(e)}")
-        raise
-
-def run_simulation(system, modeller, output_dir, steps=10000):
-    try:
-        integrator = LangevinMiddleIntegrator(300*unit.kelvin, 1.0/unit.picosecond, 1.0*unit.femtosecond)
-        platform = Platform.getPlatformByName('CUDA')
-        properties = {'CudaPrecision': 'mixed'}
-
-        simulation = Simulation(modeller.topology, system, integrator, platform, properties)
+        fixed_pdb = os.path.join(simulation_dir, 'fixed.pdb')
+        with open(fixed_pdb, 'w') as f:
+            PDBFile.writeFile(fixer.topology, fixer.positions, f)
+        logger.info(f"Fixed PDB written to {fixed_pdb}")
+        
+        # Create the system
+        forcefield = ForceField('amber14-all.xml', 'amber14/tip3pfb.xml')
+        pdb = PDBFile(fixed_pdb)
+        modeller = Modeller(pdb.topology, pdb.positions)
+        modeller.addHydrogens(forcefield)
+        modeller.addSolvent(forcefield, model='tip3p', padding=1.0*nanometer)
+        
+        system = forcefield.createSystem(
+            modeller.topology,
+            nonbondedMethod=PME,
+            nonbondedCutoff=1*nanometer,
+            constraints=HBonds
+        )
+        
+        integrator = LangevinMiddleIntegrator(300*kelvin, 1/picosecond, 0.004*picoseconds)
+        simulation = Simulation(modeller.topology, system, integrator)
         simulation.context.setPositions(modeller.positions)
-
+        
+        # Minimize energy
         logger.info("Minimizing energy...")
-        simulation.minimizeEnergy(maxIterations=5000)
-
-        logger.info("Heating and equilibrating...")
-        for temp in range(0, 301, 50):
-            integrator.setTemperature(temp*kelvin)
-            simulation.step(1000)
-            
+        simulation.minimizeEnergy()
+        
+        # Equilibrate
+        logger.info("Equilibrating...")
         simulation.context.setVelocitiesToTemperature(300*kelvin)
-
-        logger.info(f"Running production simulation for {steps} steps...")
-        simulation.reporters.append(DCDReporter(os.path.join(output_dir, 'trajectory.dcd'), 1000))
-        simulation.reporters.append(StateDataReporter(os.path.join(output_dir, 'output.txt'), 1000, 
-            step=True, potentialEnergy=True, temperature=True, progress=True, 
-            remainingTime=True, speed=True, totalSteps=steps, separator='\t'))
-
-        for i in range(0, steps, 1000):
-            try:
-                simulation.step(1000)
-                logger.info(f"Simulation progress: {i+1000}/{steps} steps ({(i+1000)/500:.1f} ps)")
-            except OpenMMException as e:
-                logger.warning(f"OpenMM exception at step {i}: {str(e)}. Attempting to continue...")
-                simulation.context.setVelocitiesToTemperature(300*kelvin)
-
-        positions = simulation.context.getState(getPositions=True).getPositions()
-        PDBFile.writeFile(simulation.topology, positions, open(os.path.join(output_dir, 'final.pdb'), 'w'))
-
-        logger.info("Simulation completed successfully.")
-        return os.path.join(output_dir, 'trajectory.dcd'), os.path.join(output_dir, 'final.pdb')
-    except Exception as e:
-        logger.error(f"Error running simulation: {str(e)}")
-        raise
-
-def check_steric_clashes(pdb_file, cutoff=0.4*unit.nanometer):
-    structure = PDBFile(pdb_file)
-    positions = structure.getPositions()
-    num_atoms = len(positions)
-    
-    clash_count = 0
-    for i in range(num_atoms):
-        for j in range(i+1, num_atoms):
-            distance = unit.norm(positions[i] - positions[j])
-            if distance < cutoff:
-                logger.warning(f"Steric clash detected between atoms {i} and {j}: distance = {distance}")
-                clash_count += 1
-
-    logger.info(f"Steric clash check completed. Total clashes detected: {clash_count}")
-    return clash_count
-
-
-def visualize_trajectory(trajectory_file, pdb_file, output_file):
-    """Create an HTML visualization of the trajectory."""
-    try:
-        traj = md.load(trajectory_file, top=pdb_file)
-        view = nv.show_mdtraj(traj)
-        view.render_image()
-        view.download_image(output_file)
-        logger.info(f"Trajectory visualization saved to {output_file}")
-    except Exception as e:
-        logger.error(f"Error creating trajectory visualization: {str(e)}")
-        logger.info("Skipping visualization due to error.")
-        return None  # Return None instead of raising an exception
-
-def run_simulation_pipeline(pdb_file, output_dir):
-    try:
-        os.makedirs(output_dir, exist_ok=True)
-        logger.info(f"Preparing system for {pdb_file}")
-
-        system, modeller = prepare_system(pdb_file)
-
-        logger.info(f"Running simulation for {pdb_file}")
-        trajectory_file, final_pdb = run_simulation(system, modeller, output_dir)
-        check_steric_clashes(final_pdb)
-
-        # Create visualization
-        visualization_file = os.path.join(output_dir, 'trajectory_visualization.png')
-        visualize_trajectory(trajectory_file, final_pdb, visualization_file)
-
-        logger.info(f"Simulation results saved in: {output_dir}")
-
+        simulation.step(10000)  # Equilibration steps
+        
+        # Production run
+        logger.info("Starting production run...")
+        trajectory_file = os.path.join(simulation_dir, 'trajectory.pdb')
+        simulation.reporters.append(PDBReporter(trajectory_file, 1000))
+        simulation.reporters.append(StateDataReporter(
+            os.path.join(simulation_dir, 'output.csv'),
+            1000, step=True, potentialEnergy=True, temperature=True
+        ))
+        simulation.step(1000000)  # 1 ns simulation
+        
+        logger.info("Molecular dynamics simulation completed.")
+        
         return {
-            "input_pdb": pdb_file,
-            "output_dir": output_dir,
+            "fixed_pdb": fixed_pdb,
             "trajectory_file": trajectory_file,
-            "final_pdb": final_pdb,
-            "visualization_file": visualization_file
+            "output_csv": os.path.join(simulation_dir, 'output.csv')
         }
+    
     except Exception as e:
-        logger.error(f"Error in simulation pipeline for {pdb_file}: {str(e)}")
+        logger.error(f"Error during MD simulation: {str(e)}", exc_info=True)
         raise
+
+
+def run_simulation_pipeline(protein_results, simulation_dir, device):
+
+
+    
+    logger.info(f"Running simulations on device: {device}")
+    
+    with Pool(processes=min(cpu_count(), len(protein_results))) as pool:
+        simulation_results = pool.map(simulate, protein_results)
+    
+    logger.info(f"Completed all simulations.")
+    return simulation_results
+
+
+def simulate(protein):
+    protein_id = protein.get("id")
+    pdb_file = protein.get("pdb_file")
+    protein_sim_dir = os.path.join(simulation_dir, f"protein_{protein_id}")
+    os.makedirs(protein_sim_dir, exist_ok=True)
+    return molecular_dynamics_simulation(pdb_file, protein_sim_dir)

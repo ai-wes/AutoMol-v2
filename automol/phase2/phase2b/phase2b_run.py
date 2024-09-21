@@ -15,7 +15,6 @@ init(autoreset=True)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from phase2b.optimize_ligand import optimize_ligand_smiles
 from phase2b.SMILESLigandPipeline import SMILESLigandPipeline
 
 # Set up logging
@@ -37,10 +36,8 @@ def run_Phase_2b(
         print(Fore.CYAN + "Running Phase 2b: SMILES Ligand Pipeline")
         logger.info("Running Phase 2b: SMILES Ligand Pipeline")
         
-        # Initialize the SMILESLigandPipeline
         pipeline = SMILESLigandPipeline()
         
-        # Run the full SMILES ligand pipeline
         results = pipeline.run_smiles_ligand_pipeline(
             predicted_structures_dir=predicted_structures_dir,
             results_dir=results_dir,
@@ -50,7 +47,6 @@ def run_Phase_2b(
             protein_sequences=protein_sequences
         )
         
-        # Process and save results
         processed_results = []
         for i, result in enumerate(results):
             smiles = result.get('smiles', '')
@@ -66,12 +62,10 @@ def run_Phase_2b(
             print(Fore.GREEN + f"  SMILES: {smiles}")
             print(Fore.GREEN + f"  Score: {score}")
         
-        # Create a unique filename for the results
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         results_filename = f"phase2b_results_{timestamp}.json"
         results_path = os.path.join(results_dir, results_filename)
         
-        # Save results to JSON file
         with open(results_path, "w") as f:
             json.dump(processed_results, f, indent=4)
         

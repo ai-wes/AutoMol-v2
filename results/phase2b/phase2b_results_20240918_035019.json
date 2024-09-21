@@ -1,0 +1,18 @@
+[
+    {
+        "smiles": "COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1",
+        "score": 0.5159021411168927
+    },
+    {
+        "smiles": "CCc1ccc(cc1)C(O)(C(=O)OC)c1ccc(OC)cc1",
+        "score": 0.7032159086836076
+    },
+    {
+        "smiles": "CC(=O)N1CCC(CC1)Nc1cc(nc(N)n1)-c1ccncc1",
+        "score": 0.5951218529257406
+    },
+    {
+        "smiles": "Nc1cc2n(Cc3ccc(cc3)-c3ccccc3)cnc2cc1C(F)(F)F",
+        "score": 0.6193243569366425
+    }
+]

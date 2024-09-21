@@ -1,0 +1,14 @@
+[
+    {
+        "smiles": "COC(=O)[C@H](Cc1ccc(O)c(O)c1)N(C)C(=O)[C@@H](O)CCCC(O)=O",
+        "score": 0.3318311812176959
+    },
+    {
+        "smiles": "CC(C)c1nc([nH]n1)C(C)(O)C(O)=O",
+        "score": 0.3412876892692561
+    },
+    {
+        "smiles": "COc1cc2[C@@H](N(CC(O)=O)C(=O)C(C)(C)C)[C@@H]3Oc4cc5OCOc5cc4C[C@H]3c2cc1OC",
+        "score": 0.43239116678936135
+    }
+]

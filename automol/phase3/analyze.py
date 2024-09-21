@@ -1,3 +1,4 @@
+import torch
 import os
 import logging
 import mdtraj as md
@@ -7,40 +8,87 @@ from Bio import PDB
 
 logger = logging.getLogger(__name__)
 
-def load_trajectory(trajectory_file, topology_file):
-    """Load the trajectory."""
-    logger.info("Loading trajectory...")
+last_residue_number = 0
+
+def custom_read_residue_number(pdb_line, field, read_bytes, read_code):
+    global last_residue_number
+    num_str = pdb_line[22:26].strip()
+    if not num_str:
+        last_residue_number += 1
+        logger.warning(f"Empty residue number encountered in line: {pdb_line.strip()}. Assigning number: {last_residue_number}")
+        return last_residue_number
     try:
-        # Load the topology file using MDTraj
+        residue_number = int(num_str)
+        last_residue_number = residue_number
+        return residue_number
+    except ValueError:
+        last_residue_number += 1
+        logger.warning(f"Non-numeric residue number encountered: '{num_str}' in line: {pdb_line.strip()}. Assigning number: {last_residue_number}")
+        return last_residue_number
+
+# Monkey-patch the MDTraj function
+from mdtraj.formats import pdb
+pdb.pdbstructure._read_residue_number = custom_read_residue_number
+
+def validate_pdb_file(pdb_file):
+    """Validate the PDB file and print detailed information about its structure."""
+    with open(pdb_file, 'r') as f:
+        lines = f.readlines()
+    
+    print(f"Total lines in PDB file: {len(lines)}")
+    
+    atom_lines = [line for line in lines if line.startswith('ATOM')]
+    print(f"Total ATOM lines: {len(atom_lines)}")
+    
+    residues = set()
+    for line in atom_lines:
+        residue_num = line[22:26].strip()
+        residues.add(residue_num)
+    
+    print(f"Unique residue numbers: {len(residues)}")
+    print(f"First few residue numbers: {list(residues)[:10]}")
+    
+    if '' in residues:
+        print("WARNING: Empty residue numbers detected!")
+        empty_lines = [line for line in atom_lines if line[22:26].strip() == '']
+        print(f"Number of lines with empty residue numbers: {len(empty_lines)}")
+        print("First few lines with empty residue numbers:")
+        for line in empty_lines[:5]:
+            print(line.strip())
+
+def load_trajectory(trajectory_file, topology_file):
+    """Load the trajectory using MDTraj's built-in functions."""
+    print("Loading trajectory...")
+    try:
+        # Validate the PDB file before loading
+        validate_pdb_file(topology_file)
+        
+        # Load the topology file
         topology = md.load_pdb(topology_file).topology
+        print(f"Topology loaded. Atoms: {topology.n_atoms}, Residues: {topology.n_residues}")
 
         # Load the trajectory using the topology
         traj = md.load(trajectory_file, top=topology)
-        
-        logger.info(f"Trajectory loaded successfully. Frames: {traj.n_frames}, Atoms: {traj.n_atoms}")
+        print(f"Trajectory loaded successfully. Frames: {traj.n_frames}, Atoms: {traj.n_atoms}")
         return traj
     except Exception as e:
-        logger.error(f"Error loading trajectory: {str(e)}")
-        # Print more details about the files
-        with open(topology_file, 'r') as f:
-            logger.error(f"First few lines of topology file:\n{f.read(500)}")
-        logger.error(f"Trajectory file size: {os.path.getsize(trajectory_file)} bytes")
-        raise
+        print(f"Error loading trajectory: {str(e)}")
+        print(f"Trajectory file size: {os.path.getsize(trajectory_file)} bytes")
+        return None
 
-def calculate_rmsd(traj):
-    """Calculate RMSD of the trajectory."""
-    logger.info("Calculating RMSD...")
-    return np.sqrt(3*np.mean(np.sum(np.square(traj.xyz - traj.xyz.mean(axis=0)), axis=2), axis=1))
+def calculate_rmsd(positions):
+    if isinstance(positions, torch.Tensor):
+        return torch.sqrt(3 * torch.mean(torch.sum(torch.square(positions - torch.mean(positions, dim=0)), dim=2), dim=1)).cpu().numpy()
+    else:
+        return np.sqrt(3 * np.mean(np.sum(np.square(positions - np.mean(positions, axis=0)), axis=2), axis=1))
 
-def calculate_rmsf(traj):
-    """Calculate RMSF of the trajectory."""
-    logger.info("Calculating RMSF...")
-    return np.sqrt(3*np.mean(np.square(traj.xyz - np.mean(traj.xyz, axis=0)), axis=0))
-
-def calculate_radius_of_gyration(traj):
-    """Calculate radius of gyration of the trajectory."""
-    logger.info("Calculating radius of gyration...")
-    return md.compute_rg(traj)
+def calculate_radius_of_gyration(positions):
+    if isinstance(positions, torch.Tensor):
+        center_of_mass = torch.mean(positions, dim=1, keepdim=True)
+        rg = torch.sqrt(torch.mean(torch.sum(torch.square(positions - center_of_mass), dim=2), dim=1))
+        return rg.cpu().numpy()
+    else:
+        return md.compute_rg(positions)
 
 def calculate_secondary_structure(traj):
     """Calculate secondary structure of the trajectory."""
@@ -53,12 +101,18 @@ def calculate_secondary_structure(traj):
     
     return ss_numeric
 
+def calculate_rmsf(traj):
+    """Calculate RMSF of the trajectory."""
+    logger.info("Calculating RMSF...")
+    return np.sqrt(3*np.mean(np.square(traj.xyz - np.mean(traj.xyz, axis=0)), axis=0))
+
 def generate_rmsd_plot(rmsd, output_dir):
     """Generate RMSD plot."""
     plt.figure()
     plt.plot(rmsd)
     plt.xlabel('Frame')
     plt.ylabel('RMSD (nm)')
+    plt.title('Root Mean Square Deviation')
     plt.savefig(os.path.join(output_dir, 'rmsd_plot.png'))
     plt.close()
 
@@ -68,6 +122,7 @@ def generate_rmsf_plot(rmsf, output_dir):
     plt.plot(rmsf)
     plt.xlabel('Residue')
     plt.ylabel('RMSF (nm)')
+    plt.title('Root Mean Square Fluctuation')
     plt.savefig(os.path.join(output_dir, 'rmsf_plot.png'))
     plt.close()
 
@@ -77,6 +132,7 @@ def generate_rg_plot(rg, output_dir):
     plt.plot(rg)
     plt.xlabel('Frame')
     plt.ylabel('Radius of Gyration (nm)')
+    plt.title('Radius of Gyration')
     plt.savefig(os.path.join(output_dir, 'rg_plot.png'))
     plt.close()
 
@@ -150,8 +206,7 @@ def calculate_final_score(rmsd, rmsf, rg, ss):
         logger.error(f"Traceback: {traceback.format_exc()}")
         return 0  # Return 0 if there's an error
 
-def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
-    """Run the full analysis pipeline on the simulation results."""
+def run_analysis_pipeline(trajectory_file, final_pdb, output_dir, device):
     try:
         print(f"Starting analysis pipeline")
         os.makedirs(output_dir, exist_ok=True)
@@ -159,50 +214,63 @@ def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
 
         print(f"Loading trajectory: {trajectory_file}")
         print(f"Using topology file: {final_pdb}")
-        traj = load_trajectory(trajectory_file, final_pdb)
-        print(f"Trajectory loaded: {traj}")
 
-        if traj is None or traj.n_frames == 0:
-            print("Failed to load trajectory or trajectory is empty.")
+        traj = load_trajectory(trajectory_file, final_pdb)
+        if traj is None:
+            print("Failed to load trajectory. Skipping analysis.")
             return None
 
+        print(f"Trajectory loaded successfully. Frames: {traj.n_frames}, Atoms: {traj.n_atoms}")
+
+        # Ensure trajectory contains data
+        if traj.n_frames == 0 or traj.n_atoms == 0:
+            print("Trajectory contains no frames or atoms. Exiting analysis.")
+            return None
+
+        # Calculate RMSD
         print("Calculating RMSD...")
-        rmsd = calculate_rmsd(traj)
-        print(f"RMSD calculated: {rmsd[:5]}...")
+        rmsd = md.rmsd(traj, traj, 0)
+        if rmsd.size == 0:
+            print("RMSD calculation returned empty array.")
+            return None
 
+        # Calculate RMSF
         print("Calculating RMSF...")
-        rmsf = calculate_rmsf(traj)
-        print(f"RMSF calculated: {rmsf[:5]}...")
+        rmsf = md.rmsf(traj, traj, 0)
+        if rmsf.size == 0:
+            print("RMSF calculation returned empty array.")
+            return None
 
+        # Calculate radius of gyration
         print("Calculating radius of gyration...")
-        radius_of_gyration = calculate_radius_of_gyration(traj)
-        print(f"Radius of gyration calculated: {radius_of_gyration[:5]}...")
+        rg = md.compute_rg(traj)
+        if rg.size == 0:
+            print("Radius of gyration calculation returned empty array.")
+            return None
 
+        # Calculate secondary structure
         print("Calculating secondary structure...")
-        secondary_structure = calculate_secondary_structure(traj)
-        print(f"Secondary structure calculated: {secondary_structure[:5]}...")
+        ss = md.compute_dssp(traj)
+        if ss.size == 0:
+            print("Secondary structure calculation returned empty array.")
+            return None
 
         print("Generating plots...")
         generate_rmsd_plot(rmsd, output_dir)
         generate_rmsf_plot(rmsf, output_dir)
-        generate_rg_plot(radius_of_gyration, output_dir)
-        generate_ss_plot(secondary_structure, output_dir)
+        generate_rg_plot(rg, output_dir)
+        generate_ss_plot(ss, output_dir)
         print("Plots generated")
 
         print("Calculating final score...")
-        print(f"RMSD shape: {rmsd.shape}, min: {np.min(rmsd)}, max: {np.max(rmsd)}")
-        print(f"RMSF shape: {rmsf.shape}, min: {np.min(rmsf)}, max: {np.max(rmsf)}")
-        print(f"Radius of gyration shape: {radius_of_gyration.shape}, min: {np.min(radius_of_gyration)}, max: {np.max(radius_of_gyration)}")
-        print(f"Secondary structure shape: {secondary_structure.shape}, unique values: {np.unique(secondary_structure)}")
-        
-        final_score = calculate_final_score(rmsd, rmsf, radius_of_gyration, secondary_structure)
+        final_score = calculate_final_score(rmsd, rmsf, rg, ss)
         print(f"Final score calculated: {final_score}")
 
         return {
             "rmsd": rmsd.tolist(),
             "rmsf": rmsf.tolist(),
-            "radius_of_gyration": radius_of_gyration.tolist(),
-            "secondary_structure": secondary_structure.tolist(),
+            "radius_of_gyration": rg.tolist(),
+            "secondary_structure": ss.tolist(),
             "final_score": final_score
         }
 
@@ -214,3 +282,11 @@ def run_analysis_pipeline(trajectory_file, final_pdb, output_dir):
         import traceback
         print(f"Traceback: {traceback.format_exc()}")
         return None
+
+
+if __name__ == "__main__":
+    trajectory_file = r"C:\users\wes\AutoMol-v2\results\phase3\protein_0\simulation\trajectory.dcd"
+    final_pdb = r"C:\users\wes\AutoMol-v2\results\phase3\protein_0\simulation\final.pdb"
+    output_dir = r"C:\users\wes\AutoMol-v2\results\phase3\protein_0\simulation\analysis"
+    device = "cuda"
+    run_analysis_pipeline(trajectory_file, final_pdb, output_dir, device)

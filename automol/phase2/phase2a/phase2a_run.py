@@ -1,3 +1,4 @@
+import shutil
 # AutoMol-v2/automol/phase2/phase2a/phase2a_run.py
 
 import sys
@@ -13,6 +14,17 @@ init(autoreset=True)
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+
+from phase2a.generate import generate_protein_sequence
+from phase2a.optimize_new import run_optimization_pipeline
+from phase2a.predict import run_prediction_pipeline
+from utils.save_utils import create_sequence_directories
+from phase2a.shared_state import set_protein_sequences
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 sys.path.append(parent_dir)
 
 from phase2a.generate import generate_protein_sequence
@@ -105,18 +117,21 @@ def run_Phase_2a(
                                 attempts += 1
                                 continue
 
-                            prediction_result = prediction_results[0]
-                            pdb_file = prediction_result.get('pdb_file')
-
-                            analysis_result = {
-                                'sequence': optimized_sequence,
-                                'score': optimized_score,
-                                'pdb_file': pdb_file,
-                                'analysis_dir': analysis_dir
-                            }
-                            all_analysis_results.append(analysis_result)
-                            print(Fore.GREEN + f"Analysis completed for sequence with score {optimized_score}.")
-                            logger.info(f"Analysis completed for sequence with score {optimized_score}.")
+                            if prediction_results and prediction_results[0].get('pdb_file'):
+                                pdb_file = prediction_results[0]['pdb_file']
+                                pdb_filename = os.path.basename(pdb_file)
+                                new_pdb_path = os.path.join(analysis_dir, pdb_filename)
+                                shutil.copy(pdb_file, new_pdb_path)
+                                
+                                analysis_result = {
+                                    'sequence': optimized_sequence,
+                                    'score': optimized_score,
+                                    'pdb_file': new_pdb_path,
+                                    'analysis_dir': analysis_dir
+                                }
+                                all_analysis_results.append(analysis_result)        
+                                print(Fore.GREEN + f"Analysis completed for sequence with score {optimized_score}.")
+                                logger.info(f"Analysis completed for sequence with score {optimized_score}.")
 
                 attempts += 1
 
@@ -134,33 +149,3 @@ def run_Phase_2a(
     logger.info("Phase 2a completed: All protein sequences generated and analyzed.")
 
     return all_analysis_results, all_generated_sequences
-
-# Example usage
-def main():
-    technical_descriptions = [
-        "Design a protein that can bind to glucose with high affinity",
-        "Create a thermostable enzyme for breaking down cellulose"
-    ]
-    predicted_structures_dir = "predicted_structures"
-    results_dir = "results"
-    num_sequences = 5
-    optimization_steps = 100
-    score_threshold = 0.8
-
-    try:
-        analysis_results, protein_sequences = run_Phase_2a(
-            technical_descriptions=technical_descriptions,
-            predicted_structures_dir=predicted_structures_dir,
-            results_dir=results_dir,
-            num_sequences=num_sequences,
-            optimization_steps=optimization_steps,
-            score_threshold=score_threshold
-        )
-        print(Fore.CYAN + f"Generated protein sequences: {protein_sequences}")
-        return analysis_results, protein_sequences
-    except Exception as e:
-        print(Fore.RED + f"An error occurred in Phase 2a main: {e}")
-        logger.error(f"An error occurred in Phase 2a main: {e}")
-
-if __name__ == "__main__":
-    main()

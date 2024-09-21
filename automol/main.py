@@ -63,7 +63,6 @@ def main():
     for directory in [phase1_dir, phase2a_dir, phase2b_dir, phase3_dir, phase4_dir]:
         if not os.path.exists(directory):
             os.makedirs(directory)
-
     try:
         # Phase 1: Technical Description Generation
         phase1 = Phase1()
@@ -77,6 +76,7 @@ def main():
             logging.info("Phase 1 skipped: Using input text directly.")
             save_json({"technical_descriptions": descriptions}, os.path.join(phase1_dir, "descriptions.json"))
 
+
         # Phase 2a: Protein Generation and Optimization
         logging.info("Starting Phase 2a: Protein Generation and Optimization.")
         analysis_results_phase2a, protein_sequences = run_Phase_2a(
@@ -88,12 +88,24 @@ def main():
             score_threshold=args.score_threshold
         )
         logging.info("Phase 2a completed: Proteins generated and optimized.")
-        # Save Phase 2a outputs
-        save_json({
-            "analysis_results_phase2a": analysis_results_phase2a,
-            "protein_sequences": protein_sequences
-        }, os.path.join(phase2a_dir, "phase2a_results.json"))
 
+        # Save Phase 2a outputs
+        phase2a_results = {
+            "analysis_results": [
+                {
+                    "sequence": result['sequence'],
+                    "score": result['score'],
+                    "pdb_file": os.path.relpath(result['pdb_file'], args.output_dir),
+                    "analysis_dir": os.path.relpath(result['analysis_dir'], args.output_dir)
+                } for result in analysis_results_phase2a
+            ],
+            "protein_sequences": protein_sequences
+        }
+        save_json(phase2a_results, os.path.join(phase2a_dir, "phase2a_results.json"))        
+        
+        
+        
+        logging.info("Starting Phase 2b: Ligand Generation and Optimization.")
         # Phase 2b: Ligand Generation and Optimization
         logging.info("Starting Phase 2b: Ligand Generation and Optimization.")
         ligand_results = run_Phase_2b(
@@ -110,15 +122,15 @@ def main():
             "ligand_results": ligand_results
         }, os.path.join(phase2b_dir, "phase2b_results.json"))
 
-        # Phase 3: Analysis
-        logging.info("Starting Phase 3: Analysis.")
+        # Phase 3: Simulation
+        logging.info("Starting Phase 3: Simulation.")
         phase3_results = run_Phase_3(
             protein_results=analysis_results_phase2a,
             ligand_results=ligand_results,
             input_text=args.input_text,
             output_dir=phase3_dir
         )
-        logging.info("Phase 3 completed: Analysis performed.")
+        logging.info("Phase 3 completed: Simulation performed.")
         # Save Phase 3 outputs
         save_json({
             "phase3_results": phase3_results

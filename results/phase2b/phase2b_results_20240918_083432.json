@@ -1,0 +1,10 @@
+[
+    {
+        "smiles": "CC(Cc1ccc(cc1)C(C)(C)C)C(=O)NO",
+        "score": 0.6454109195122054
+    },
+    {
+        "smiles": "COc1cc(NC(=O)\\C=C\\c2c(C)c3ccccc3oc2=O)cc(OC)c1OC",
+        "score": 0.5583247889133376
+    }
+]

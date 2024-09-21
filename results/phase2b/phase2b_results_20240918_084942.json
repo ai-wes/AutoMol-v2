@@ -1,0 +1,18 @@
+[
+    {
+        "smiles": "Cc1cc2[C@H](CCOc2cc1[C@H](Cc1cc(F)c(F)c(F)c1)C(N)=O)c1c(F)cc(F)cc1F",
+        "score": 0.422348560879157
+    },
+    {
+        "smiles": "CC(C)[C@H](NC(=O)Cc1cccc(F)c1)C(=O)N[C@@H](Cc1ccc(Br)cc1)C(N)=O",
+        "score": 0.45683427228663576
+    },
+    {
+        "smiles": "CSc1cccc(NC(=O)C(=O)\\C=C\\c2ccc(cc2)C(F)(F)F)c1",
+        "score": 0.6400024203191835
+    },
+    {
+        "smiles": "FC(F)(F)C1(CC1)NC(=O)C(\\C=C\\c1ccc(Cl)cc1)c1ccccc1",
+        "score": 0.6175827412681498
+    }
+]

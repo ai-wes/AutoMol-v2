@@ -1,0 +1,183 @@
+{
+"metabolites":[
+{
+"id":"atg_proteins_c",
+"name":"ATG Proteins",
+"compartment":"c"
+},
+{
+"id":"energy_c",
+"name":"Energy (ATP)",
+"compartment":"c"
+},
+{
+"id":"damaged_proteins_c",
+"name":"Damaged Proteins",
+"compartment":"c"
+},
+{
+"id":"amino_acids_c",
+"name":"Amino Acids",
+"compartment":"c"
+},
+{
+"id":"telomerase_rna_c",
+"name":"Telomerase RNA Component",
+"compartment":"c"
+},
+{
+"id":"telomerase_protein_c",
+"name":"Telomerase Protein Component",
+"compartment":"c"
+},
+{
+"id":"telomerase_complex_c",
+"name":"Telomerase Complex",
+"compartment":"c"
+},
+{
+"id":"nucleotides_c",
+"name":"Nucleotides",
+"compartment":"c"
+},
+{
+"id":"telomere_units_c",
+"name":"Telomere Units",
+"compartment":"c"
+},
+{
+"id":"substrate_c",
+"name":"Energy Substrate",
+"compartment":"c"
+},
+{
+"id":"biomass_c",
+"name":"Biomass",
+"compartment":"c"
+}
+],
+"reactions":[
+{
+"id":"AUTOPHAGY_FORMATION",
+"name":"Autophagosome Formation",
+"metabolites":{
+"atg_proteins_c":-1.0,
+"damaged_proteins_c":-1.0,
+"energy_c":-1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"AUTOPHAGIC_DEGRADATION",
+"name":"Autophagic Degradation",
+"metabolites":{
+"amino_acids_c":1.0,
+"atg_proteins_c":1.0,
+"damaged_proteins_c":-1.0,
+"energy_c":-1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"TELOMERASE_ASSEMBLY",
+"name":"Telomerase Assembly",
+"metabolites":{
+"energy_c":-1.0,
+"telomerase_complex_c":1.0,
+"telomerase_protein_c":-1.0,
+"telomerase_rna_c":-1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"TELOMERE_ELONGATION",
+"name":"Telomere Elongation",
+"metabolites":{
+"energy_c":-1.0,
+"nucleotides_c":-1.0,
+"telomerase_complex_c":-1.0,
+"telomere_units_c":1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"ENERGY_PRODUCTION",
+"name":"Energy Production",
+"metabolites":{
+"energy_c":1.0,
+"substrate_c":-1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"BIOMASS",
+"name":"Biomass Production",
+"metabolites":{
+"amino_acids_c":-1.0,
+"biomass_c":1.0,
+"energy_c":-30.0,
+"nucleotides_c":-1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":"",
+"objective_coefficient":1.0
+},
+{
+"id":"EX_substrate",
+"name":"Exchange Substrate",
+"metabolites":{
+"substrate_c":-1.0
+},
+"lower_bound":-1000.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"EX_amino_acids",
+"name":"Exchange Amino Acids",
+"metabolites":{
+"amino_acids_c":-1.0
+},
+"lower_bound":-1000.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"EX_nucleotides",
+"name":"Exchange Nucleotides",
+"metabolites":{
+"nucleotides_c":-1.0
+},
+"lower_bound":-1000.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+},
+{
+"id":"DM_biomass_c",
+"name":"Demand Biomass",
+"metabolites":{
+"biomass_c":-1.0
+},
+"lower_bound":0.0,
+"upper_bound":1000.0,
+"gene_reaction_rule":""
+}
+],
+"genes":[],
+"id":"aging_metabolic_model",
+"compartments":{
+"c":""
+},
+"version":"1"
+}

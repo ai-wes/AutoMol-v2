@@ -1,0 +1,166 @@
+2024-09-18 08:30:17,193 - matplotlib - DEBUG - matplotlib data path: c:\Users\wes\Miniconda3\envs\gnn\Lib\site-packages\matplotlib\mpl-data
+2024-09-18 08:30:17,196 - matplotlib - DEBUG - CONFIGDIR=C:\Users\wes\.matplotlib
+2024-09-18 08:30:17,221 - matplotlib - DEBUG - interactive is False
+2024-09-18 08:30:17,221 - matplotlib - DEBUG - platform is win32
+2024-09-18 08:30:17,257 - matplotlib - DEBUG - CACHEDIR=C:\Users\wes\.matplotlib
+2024-09-18 08:30:17,258 - matplotlib.font_manager - DEBUG - Using fontManager instance from C:\Users\wes\.matplotlib\fontlist-v390.json
+2024-09-18 08:30:18,779 - root - INFO - Starting Biomolecular Analysis Pipeline.
+2024-09-18 08:30:18,779 - root - INFO - Initialized DdTrapAssay.
+2024-09-18 08:30:18,779 - root - INFO - Initialized TelomereLength.
+2024-09-18 08:30:18,779 - root - INFO - Initialized GeneExpression.
+2024-09-18 08:30:18,779 - root - INFO - Initialized ProteinLigandInteraction.
+2024-09-18 08:30:18,779 - root - INFO - Initialized BioinformaticsAnalysis.
+2024-09-18 08:30:18,779 - root - INFO - Initialized FlowCytometryAnalysis.
+2024-09-18 08:30:18,779 - root - INFO - Initialized TelomeraseLocalization.
+2024-09-18 08:30:18,779 - root - INFO - Initialized HighThroughputScreening.
+2024-09-18 08:30:18,779 - root - INFO - Initialized StatisticalAnalysis.
+2024-09-18 08:30:18,779 - root - INFO - Initialized Visualization.
+2024-09-18 08:30:18,779 - root - INFO - Initialized DataLoading.
+2024-09-18 08:30:18,781 - root - INFO - Running ddTRAP assay...
+2024-09-18 08:30:18,781 - root - INFO - Telomerase Activity: 0.8431
+2024-09-18 08:30:18,829 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:18,829 - root - INFO - Measuring telomere length...
+2024-09-18 08:30:18,830 - root - INFO - Telomere Length: 0      18.129055
+1     139.006349
+2     148.500345
+3     121.268129
+4      32.546954
+         ...    
+95     27.186956
+96     23.422093
+97      5.258615
+98     12.854874
+99     23.152907
+Length: 100, dtype: float64
+2024-09-18 08:30:18,831 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:18,831 - root - INFO - Analyzing gene expression...
+2024-09-18 08:30:18,834 - root - INFO - Gene expression analysis completed.
+2024-09-18 08:30:18,836 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:18,836 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:18,836 - root - INFO - Analyzing protein-ligand interactions...
+2024-09-18 08:30:18,836 - root - INFO - Binding Affinity (Kd): 1e-08
+2024-09-18 08:30:18,837 - root - INFO - Retrieved SMILES: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,837 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,837 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,839 - root - INFO - Processed 1023 atoms in the PDB file
+2024-09-18 08:30:18,839 - root - INFO - 'A000' has been successfully removed from the PDB file
+2024-09-18 08:30:18,840 - root - INFO - Temporary PDB file created at: C:\Users\wes\AppData\Local\Temp\tmpp9xno7dv.pdb
+2024-09-18 08:30:18,841 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,852 - root - INFO - Temporary PDB file deleted
+2024-09-18 08:30:18,852 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,852 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,854 - root - INFO - Processed 1023 atoms in the PDB file
+2024-09-18 08:30:18,854 - root - INFO - 'A000' has been successfully removed from the PDB file
+2024-09-18 08:30:18,856 - root - INFO - Temporary PDB file created at: C:\Users\wes\AppData\Local\Temp\tmpyl6w6sph.pdb
+2024-09-18 08:30:18,856 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,864 - root - INFO - Temporary PDB file deleted
+2024-09-18 08:30:18,864 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,864 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,865 - root - INFO - Processed 1023 atoms in the PDB file
+2024-09-18 08:30:18,865 - root - INFO - 'A000' has been successfully removed from the PDB file
+2024-09-18 08:30:18,867 - root - INFO - Temporary PDB file created at: C:\Users\wes\AppData\Local\Temp\tmpu29um37o.pdb
+2024-09-18 08:30:18,867 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,874 - root - INFO - Temporary PDB file deleted
+2024-09-18 08:30:18,874 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,875 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,876 - root - INFO - Processed 1023 atoms in the PDB file
+2024-09-18 08:30:18,876 - root - INFO - 'A000' has been successfully removed from the PDB file
+2024-09-18 08:30:18,877 - root - INFO - Temporary PDB file created at: C:\Users\wes\AppData\Local\Temp\tmp_etfb1de.pdb
+2024-09-18 08:30:18,877 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,884 - root - INFO - Temporary PDB file deleted
+2024-09-18 08:30:18,884 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,884 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,885 - root - INFO - Processed 1023 atoms in the PDB file
+2024-09-18 08:30:18,885 - root - INFO - 'A000' has been successfully removed from the PDB file
+2024-09-18 08:30:18,886 - root - INFO - Temporary PDB file created at: C:\Users\wes\AppData\Local\Temp\tmpq6m0jxns.pdb
+2024-09-18 08:30:18,886 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,898 - root - INFO - Residue: (' ', 1, ' '), Resname: CYS
+2024-09-18 08:30:18,898 - root - INFO - Temporary PDB file deleted
+2024-09-18 08:30:18,898 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,898 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,900 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,909 - root - INFO - Residue: (' ', 1, ' '), Resname: CYS
+2024-09-18 08:30:18,909 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,909 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,910 - root - INFO - First 10 ATOM lines:
+ATOM      1  N   CYS A   1       8.704 -37.734  11.647  1.00  0.44           N  
+ATOM      2  CA  CYS A   1       9.154 -36.830  10.594  1.00  0.44           C  
+ATOM      3  C   CYS A   1      10.604 -36.411  10.813  1.00  0.44           C  
+ATOM      4  O   CYS A   1      11.248 -36.863  11.760  1.00  0.44           O  
+ATOM      5  N   LEU A   2      10.479 -36.330  10.640  1.00  0.52           N  
+ATOM      6  CA  LEU A   2      11.826 -35.898  10.280  1.00  0.52           C  
+ATOM      7  C   LEU A   2      11.855 -34.411   9.945  1.00  0.52           C  
+ATOM      8  O   LEU A   2      10.837 -33.839   9.554  1.00  0.52           O  
+ATOM      9  N   LEU A   3      12.170 -34.484  10.039  1.00  0.50           N  
+ATOM     10  CA  LEU A   3      12.096 -33.040   9.842  1.00  0.50           C  
+
+2024-09-18 08:30:18,910 - root - INFO - Last 10 ATOM lines:
+ATOM   1014  CA  THR A 254     -10.449   6.385  -6.379  1.00  0.37           C  
+ATOM   1015  C   THR A 254     -10.626   5.802  -7.778  1.00  0.37           C  
+ATOM   1016  O   THR A 254      -9.888   6.154  -8.698  1.00  0.37           O  
+ATOM   1017  N   TRP A 255     -11.039   5.478  -7.699  1.00  0.34           N  
+ATOM   1018  CA  TRP A 255     -11.231   4.893  -9.022  1.00  0.34           C  
+ATOM   1019  C   TRP A 255     -12.040   5.823  -9.921  1.00  0.34           C  
+ATOM   1020  O   TRP A 255     -12.862   5.364 -10.714  1.00  0.34           O  
+ATOM   1021  N   LYS A 256     -11.795   6.489  -9.740  1.00  0.36           N  
+ATOM   1022  CA  LYS A 256     -12.466   7.347 -10.710  1.00  0.36           C  
+ATOM   1023  C   LYS A 256     -11.707   8.655 -10.905  1.00  0.36           C  
+
+2024-09-18 08:30:18,910 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,917 - root - INFO - Residue: (' ', 1, ' '), Resname: CYS
+2024-09-18 08:30:18,917 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,917 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,917 - root - INFO - First 10 ATOM lines:
+ATOM      1  N   CYS A   1       8.704 -37.734  11.647  1.00  0.44           N  
+ATOM      2  CA  CYS A   1       9.154 -36.830  10.594  1.00  0.44           C  
+ATOM      3  C   CYS A   1      10.604 -36.411  10.813  1.00  0.44           C  
+ATOM      4  O   CYS A   1      11.248 -36.863  11.760  1.00  0.44           O  
+ATOM      5  N   LEU A   2      10.479 -36.330  10.640  1.00  0.52           N  
+ATOM      6  CA  LEU A   2      11.826 -35.898  10.280  1.00  0.52           C  
+ATOM      7  C   LEU A   2      11.855 -34.411   9.945  1.00  0.52           C  
+ATOM      8  O   LEU A   2      10.837 -33.839   9.554  1.00  0.52           O  
+ATOM      9  N   LEU A   3      12.170 -34.484  10.039  1.00  0.50           N  
+ATOM     10  CA  LEU A   3      12.096 -33.040   9.842  1.00  0.50           C  
+
+2024-09-18 08:30:18,917 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,924 - root - INFO - Residue: (' ', 1, ' '), Resname: CYS
+2024-09-18 08:30:18,924 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,924 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,925 - root - INFO - PDB file content (first 500 chars): ATOM      1  N   CYS A   1       8.704 -37.734  11.647  1.00  0.44           N  
+ATOM      2  CA  CYS A   1       9.154 -36.830  10.594  1.00  0.44           C  
+ATOM      3  C   CYS A   1      10.604 -36.411  10.813  1.00  0.44           C  
+ATOM      4  O   CYS A   1      11.248 -36.863  11.760  1.00  0.44           O  
+ATOM      5  N   LEU A   2      10.479 -36.330  10.640  1.00  0.52           N  
+ATOM      6  CA  LEU A   2      11.826 -35.898  10.280  1.00  0.52           C  
+ATOM      7  C
+2024-09-18 08:30:18,925 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,932 - root - INFO - Residue: (' ', 1, ' '), Resname: CYS
+2024-09-18 08:30:18,932 - root - INFO - Starting perform_docking with protein_pdb: C:\Users\wes\AutoMol-v2\results/phase3/protein_0/simulation\final.pdb
+2024-09-18 08:30:18,932 - root - INFO - ligand_smiles: COc1ccc2[nH]cc(C(O)=O)c(=O)c2c1
+2024-09-18 08:30:18,934 - root - INFO - PDB file content (first 500 chars): ATOM      1  N   CYS A   1       8.704 -37.734  11.647  1.00  0.44           N  
+ATOM      2  CA  CYS A   1       9.154 -36.830  10.594  1.00  0.44           C  
+ATOM      3  C   CYS A   1      10.604 -36.411  10.813  1.00  0.44           C  
+ATOM      4  O   CYS A   1      11.248 -36.863  11.760  1.00  0.44           O  
+ATOM      5  N   LEU A   2      10.479 -36.330  10.640  1.00  0.52           N  
+ATOM      6  CA  LEU A   2      11.826 -35.898  10.280  1.00  0.52           C  
+ATOM      7  C
+2024-09-18 08:30:18,934 - root - INFO - Performing docking simulation...
+2024-09-18 08:30:18,975 - root - INFO - Simulated Docking Score: -3.2038470644182837
+2024-09-18 08:30:18,975 - root - INFO - Docking Score: -3.2038470644182837
+2024-09-18 08:30:18,975 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:18,975 - root - INFO - Running bioinformatics analysis...
+2024-09-18 08:30:18,993 - root - INFO - PCA analysis completed.
+2024-09-18 08:30:18,993 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:18,993 - root - INFO - Analyzing flow cytometry data...
+2024-09-18 08:30:19,148 - root - INFO - Identified 503 stem cell populations.
+2024-09-18 08:30:19,150 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:19,150 - root - INFO - Performing image analysis for telomerase localization...
+2024-09-18 08:30:20,162 - root - INFO - Telomerase Localization Score: 0.6401542830767711
+2024-09-18 08:30:20,162 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:20,162 - root - INFO - Conducting high-throughput screening...
+2024-09-18 08:30:20,163 - root - INFO - Identified 444 screening hits.
+2024-09-18 08:30:20,163 - root - INFO - CUDA cache cleared.
+2024-09-18 08:30:20,163 - root - INFO - Performing statistical analysis...
+2024-09-18 08:30:20,164 - root - INFO - Statistical analysis for telomerase_activity: Mean=0.8431, Std=0.0, Median=0.8431
+2024-09-18 08:30:20,164 - root - ERROR - Error in statistical_analysis: dictionary changed size during iteration
+2024-09-18 08:30:20,164 - root - CRITICAL - Pipeline execution failed: dictionary changed size during iteration

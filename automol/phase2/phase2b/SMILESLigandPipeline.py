@@ -1,3 +1,9 @@
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from datetime import datetime
+import os
+import logging
+from colorama import Fore
 import numpy as np
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -20,7 +26,7 @@ from deap import base, creator, tools, algorithms
 from rdkit import Chem, DataStructs
 from rdkit.Chem import Descriptors, AllChem, Crippen
 from transformers import EncoderDecoderModel, RobertaTokenizer, pipeline
-
+import gc
 from transformers import T5Tokenizer, T5ForConditionalGeneration
 
 import torch
@@ -200,8 +206,11 @@ class SMILESGenerator:
             return []
 
         finally:
+            print(Fore.YELLOW + "Unloading model...")
             self.unload_model()
-
+            torch.cuda.empty_cache()
+            gc.collect()
+            print(Fore.YELLOW + "CUDA cache cleared.")
 
 class SMILESOptimizer:
     def __init__(self, population_size=50, generations=20):
@@ -412,11 +421,19 @@ class StructurePredictor:
 
             # Optimize the geometry
             for confId in confIds:
-                AllChem.MMFFOptimizeMoleculeConfs(mol, confId=confId, maxIters=500)
+                try:
+                    AllChem.MMFFOptimizeMolecule(mol, confId=confId, maxIters=500)
+                except Exception as e:
+                    logger.warning(f"Failed to optimize conformer {confId}: {e}")
 
             # Select the lowest energy conformer
-            energies = AllChem.MMFFGetMoleculeForceField(mol).CalcEnergy()
-            min_energy_conf = min(range(len(energies)), key=energies.__getitem__)
+            try:
+                ff = AllChem.MMFFGetMoleculeForceField(mol)
+                energies = [ff.CalcEnergy() for _ in range(mol.GetNumConformers())]
+                min_energy_conf = min(range(len(energies)), key=energies.__getitem__)
+            except Exception as e:
+                logger.warning(f"Failed to calculate energies: {e}")
+                min_energy_conf = 0  # Use the first conformer if energy calculation fails
 
             # Generate a unique filename
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -437,18 +454,10 @@ class StructurePredictor:
             return os.path.join(output_dir, "default_ligand.pdb")
 
     def predict_3d_structure(self, smiles):
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            return None
-        try:
-            mol = Chem.AddHs(mol)
-            AllChem.EmbedMolecule(mol, randomSeed=42)
-            AllChem.MMFFOptimizeMolecule(mol, maxIters=500)
-        except:
-            # Fallback to a simpler 3D conformation generation
-            AllChem.EmbedMolecule(mol, randomSeed=42, useRandomCoords=True)
-        return mol
+        return self.predict(smiles, ".")  # Use current directory as output_dir
     
+    
+        
 class EnsembleDocking:
     def __init__(self, vina_path: str = "vina", exhaustiveness: int = 8, num_modes: int = 9):
         self.vina_path = vina_path
