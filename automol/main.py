@@ -1,11 +1,5 @@
-# AutoMol-v2/automol/main.py
-
 import sys
 import os
-
-import os
-os.environ['PYTHONPATH'] = os.environ.get('PYTHONPATH', '') + 'C:\\Users\\wes\\AutoMol-v2'
-
 import logging
 import argparse
 from datetime import datetime
@@ -14,10 +8,8 @@ from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
 from phase3.phase3_run import run_Phase_3
 from phase4.phase4_run import run_Phase_4  # Uncomment when Phase 4 is ready
-from utils.save_utils import save_json, create_organized_directory_structure, create_phase_directory, save_results
-
-
-
+from utils.save_utils import save_json, create_organized_directory_structure, save_results
+from utils.pre_screen_compounds import pre_screen_ligand  # Import validation function
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="AutoMol-v2: Novel molecule generation and analysis pipeline")
@@ -76,7 +68,6 @@ def main():
             logging.info("Phase 1 skipped: Using input text directly.")
             save_json({"technical_descriptions": descriptions}, os.path.join(phase1_dir, "descriptions.json"))
 
-
         # Phase 2a: Protein Generation and Optimization
         logging.info("Starting Phase 2a: Protein Generation and Optimization.")
         analysis_results_phase2a, protein_sequences = run_Phase_2a(
@@ -101,13 +92,9 @@ def main():
             ],
             "protein_sequences": protein_sequences
         }
-        save_json(phase2a_results, os.path.join(phase2a_dir, "phase2a_results.json"))        
-        
-        
-        
-        logging.info("Starting Phase 2b: Ligand Generation and Optimization.")
+        save_json(phase2a_results, os.path.join(phase2a_dir, "phase2a_results.json"))
+
         # Phase 2b: Ligand Generation and Optimization
-        logging.info("Starting Phase 2b: Ligand Generation and Optimization.")
         ligand_results = run_Phase_2b(
             predicted_structures_dir=os.path.join(phase2a_dir, "predicted_structures"),
             results_dir=phase2b_dir,
@@ -117,24 +104,49 @@ def main():
             protein_sequences=protein_sequences  # Pass the generated protein sequences
         )
         logging.info("Phase 2b completed: Ligands generated and optimized.")
+
         # Save Phase 2b outputs
         save_json({
             "ligand_results": ligand_results
         }, os.path.join(phase2b_dir, "phase2b_results.json"))
 
-        # Phase 3: Simulation
-        logging.info("Starting Phase 3: Simulation.")
-        phase3_results = run_Phase_3(
-            protein_results=analysis_results_phase2a,
-            ligand_results=ligand_results,
-            input_text=args.input_text,
-            output_dir=phase3_dir
-        )
-        logging.info("Phase 3 completed: Simulation performed.")
-        # Save Phase 3 outputs
-        save_json({
-            "phase3_results": phase3_results
-        }, os.path.join(phase3_dir, "phase3_results.json"))
+        # Validation Step: Run Validation of Ligands Before Phase 3
+        logging.info("Running validation of ligand sequences before moving to Phase 3.")
+        
+        valid_ligands = []
+        for ligand in ligand_results:
+            passed, message = pre_screen_ligand(ligand['smiles'])  # Validation of ligand
+            if not passed:
+                logging.warning(f"Ligand {ligand['smiles']} failed validation: {message}")
+                print(f"WARNING: Ligand {ligand['smiles']} failed validation: {message}")
+                continue  # Skip to the next ligand without terminating
+            valid_ligands.append(ligand)
+            logging.info(f"Ligand {ligand['smiles']} passed validation: {message}")
+        
+        if not valid_ligands:
+            logging.error("No ligands passed validation. Exiting pipeline.")
+            print("ERROR: No ligands passed validation. Exiting pipeline.")
+            return  # Exit the main function gracefully
+        
+        # Proceed with Phase 3 using valid ligands
+        try:
+            # Phase 3: Simulation
+            logging.info("Starting Phase 3: Simulation.")
+            phase3_results = run_Phase_3(
+                protein_results=analysis_results_phase2a,
+                ligand_results=valid_ligands,  # Use only valid ligands
+                input_text=args.input_text,
+                output_dir=phase3_dir
+            )
+            logging.info("Phase 3 completed: Simulation performed.")
+            # Save Phase 3 outputs
+            save_json({
+                "phase3_results": phase3_results
+            }, os.path.join(phase3_dir, "phase3_results.json"))
+
+        except Exception as e:
+            logging.error(f"An error occurred in the AutoMol-v2 Pipeline: {e}", exc_info=True)
+            print(f"An error occurred: {str(e)}")
 
         # Phase 4: Virtual Lab Simulation and Automation
         # Uncomment and implement Phase 4 when ready

@@ -6,22 +6,14 @@ import sys
 import os
 
 
-import subprocess
-import platform
 import asyncio
-import aioconsole
 from esm.sdk.api import ESMProteinError
 import os
 import asyncio
 import logging
-import mdtraj as md
-import numpy as np
-import matplotlib.pyplot as plt
 from Bio.PDB import PDBParser, DSSP
 from esm.models.esm3 import ESM3
 from esm.sdk.api import ESM3InferenceClient, ESMProtein, GenerationConfig
-from pymol import cmd
-import pymol
 import os
 import asyncio
 import logging
@@ -102,51 +94,6 @@ def predict_properties(sequence):
 
 import pdb
 
-def create_3d_model_esm3(protein_pdb, prompt_string, output_dir):
-    """Create a 3D model visualization using PyMOL and provide instructions to open it."""
-    print(f"Starting 3D model creation for {protein_pdb}")
-    pymol.finish_launching(['pymol', '-cq'])  # '-cq' for command line only and quiet mode
-    
-    try:
-        print(f"Loading PDB file: {protein_pdb}")
-        cmd.load(protein_pdb)
-        
-        print("Applying visualization settings")
-        cmd.spectrum("count", "rainbow", "all")
-        cmd.show("cartoon")
-        cmd.bg_color("black")
-        
-        print("Saving image")
-        image_filename = os.path.join(output_dir, f"{prompt_string}_model.png")
-        cmd.png(image_filename)
-        print(f"Image saved as {image_filename}")
-        
-        print("Saving PyMOL session")
-        session_filename = os.path.join(output_dir, f"{prompt_string}_model.pse")
-        cmd.save(session_filename)
-        print(f"PyMOL session saved as {session_filename}")
-        
-        print("Closing PyMOL")
-        cmd.quit()
-        
-        print("\nTo view the 3D structure:")
-        print(f"1. Open PyMOL")
-        print(f"2. In PyMOL, go to File -> Open")
-        print(f"3. Navigate to and select this file: {os.path.abspath(session_filename)}")
-        
-        
-        try:
-            user_input = input("Press Enter when you're ready to continue, or type 'skip' to move on: ")
-            if user_input.lower() == 'skip':
-                print("User chose to skip opening PyMOL.")
-            else:
-                print("User acknowledged PyMOL instructions.")
-        except Exception:
-            print("No input received. Continuing.")
-        
-    except pymol.CmdException as e:
-        print(f"PyMOL command failed - {e}")
-        
         
 
 def predict_structure(sequence):

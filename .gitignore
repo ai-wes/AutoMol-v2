@@ -1,0 +1,14 @@
+results/
+automol/phase3/results/
+automol/phase3/results_test/
+model_checkpoints/
+automol/predicted_structures
+automol/processed_articles/
+automol/phase2a/results
+automol/phase2b/results
+automol/phase2b/results_test
+automol/phase2a/results_test
+automol/phase1/results
+automol/phase1/results_test
+automol/phase3/results_test
+

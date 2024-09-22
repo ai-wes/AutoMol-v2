@@ -1,0 +1,4 @@
+{
+    "smiles": "Oc1ccc2nc(nc(NCc3ccccc3)c2c1)-c1ccccc1",
+    "reason": "SMILES string matches a known compound in PubChem"
+}
