@@ -23,7 +23,7 @@ class Visualization:
             # Gene expression heatmap
             if 'gene_expression' in results:
                 sns.heatmap(results['gene_expression'], ax=axes[0, 1], cmap='viridis')
-                axes[0, 1].set_title('Telomere-related Gene Expression')
+            axes[0, 1].set_title('Telomere-related Gene Expression')
 
             # PCA plot
             if 'pca_result' in results:

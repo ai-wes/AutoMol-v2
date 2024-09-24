@@ -11,6 +11,10 @@ from datetime import datetime
 import os
 from colorama import Fore
 import logging
+from rdkit import Chem
+from rdkit.Chem import AllChem, Descriptors, Crippen
+from rdkit.Chem.MolStandardize import rdMolStandardize
+import random
 
 
 import os
@@ -27,8 +31,8 @@ from rdkit import Chem, DataStructs
 from rdkit.Chem import Descriptors, AllChem, Crippen
 from transformers import EncoderDecoderModel, RobertaTokenizer, pipeline
 import gc
-from transformers import T5Tokenizer, T5ForConditionalGeneration
 
+from utils.pre_screen_compounds import pre_screen_ligand, screen_and_store_ligand_mongo
 import torch
 from colorama import Fore, Style, init
 
@@ -63,6 +67,45 @@ def checkpoint(step_name):
                 raise
         return wrapper
     return decorator
+
+
+# Function to handle valence errors
+def handle_valence_errors(smiles: str) -> str:
+    try:
+        mol = Chem.MolFromSmiles(smiles)
+        Chem.SanitizeMol(mol)
+        return smiles
+    except Exception as e:
+        logger.warning(f"Valence error for SMILES {smiles}: {e}")
+        return None
+
+# Update the mutation functions to handle valence errors
+def mutate_smiles(smiles: str) -> str:
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return smiles
+
+    # Example mutation: Add a random atom
+    atom = Chem.Atom(random.choice([6, 7, 8, 9, 15, 16, 17]))  # C, N, O, F, P, S, Cl
+    rwmol = Chem.RWMol(mol)
+    rwmol.AddAtom(atom)
+    new_smiles = Chem.MolToSmiles(rwmol)
+    return handle_valence_errors(new_smiles)
+
+# Example usage in the pipeline
+def run_smiles_generation_pipeline(initial_smiles: str, generations: int) -> List[str]:
+    current_smiles = initial_smiles
+    all_smiles = [current_smiles]
+
+    for generation in range(generations):
+        new_smiles = mutate_smiles(current_smiles)
+        if new_smiles:
+            all_smiles.append(new_smiles)
+            current_smiles = new_smiles
+        logger.info(f"Generation {generation + 1} complete.")
+
+    return all_smiles
+
 
 
 def validate_smiles(smiles: str) -> bool:
@@ -296,6 +339,46 @@ class SMILESOptimizer:
             return (-1.0,)
         return (fitness,)
 
+
+    def validate_smiles(self, smiles: str) -> bool:
+        try:
+            mol = Chem.MolFromSmiles(smiles)
+            if mol is None:
+                return False
+
+            # Check for valid atom types
+            valid_atoms = set(['C', 'N', 'O', 'P', 'S', 'F', 'Cl', 'Br', 'I'])
+            if not all(atom.GetSymbol() in valid_atoms for atom in mol.GetAtoms()):
+                logger.debug(f"SMILES contains invalid atom types: {smiles}")
+                return False
+
+            # Check molecular weight
+            mol_weight = Descriptors.ExactMolWt(mol)
+            if mol_weight < 100 or mol_weight > 1000:
+                logger.debug(f"Molecular weight out of range ({mol_weight}): {smiles}")
+                return False
+
+            # Check number of rotatable bonds
+            n_rotatable = Descriptors.NumRotatableBonds(mol)
+            if n_rotatable > 10:
+                logger.debug(f"Too many rotatable bonds ({n_rotatable}): {smiles}")
+                return False
+
+            # Check for kekulization
+            try:
+                Chem.Kekulize(mol, clearAromaticFlags=True)
+            except:
+                logger.debug(f"Kekulization failed for SMILES: {smiles}")
+                return False
+
+            return True
+        except Exception as e:
+            logger.error(f"Validation error for SMILES {smiles}: {e}")
+            print(Fore.RED + f"Validation error for SMILES {smiles}: {e}")
+            return False
+
+
+
     def mate_molecules(self, ind1, ind2):
         # Simple crossover: swap SMILES strings
         ind1[0], ind2[0] = ind2[0], ind1[0]
@@ -344,56 +427,82 @@ class SMILESOptimizer:
         return (individual,)
     
     
-    def mutate_smiles(self, smiles):
+
+    def mutate_smiles(self, smiles: str) -> str:
         try:
             mol = Chem.MolFromSmiles(smiles)
             if mol is None:
+                logger.warning(f"Invalid SMILES string: {smiles}")
                 return smiles  # Return original SMILES if invalid
 
             mutation_type = random.choice(['add', 'remove', 'change'])
 
             if mutation_type == 'add':
                 atom = Chem.Atom(random.choice([6, 7, 8, 9, 15, 16, 17]))  # C, N, O, F, P, S, Cl
-                idx = mol.AddAtom(atom)
-                if mol.GetNumAtoms() > 1:
-                    bond_idx = random.randint(0, mol.GetNumAtoms() - 2)
-                    mol.AddBond(idx, bond_idx, Chem.BondType.SINGLE)
+                rwmol = Chem.RWMol(mol)
+                idx = rwmol.AddAtom(atom)
+                if rwmol.GetNumAtoms() > 1:
+                    bond_idx = random.randint(0, rwmol.GetNumAtoms() - 2)
+                    rwmol.AddBond(idx, bond_idx, Chem.BondType.SINGLE)
+                new_mol = rwmol.GetMol()
             elif mutation_type == 'remove':
                 if mol.GetNumAtoms() > 1:
                     idx_to_remove = random.randint(0, mol.GetNumAtoms() - 1)
-                    mol.RemoveAtom(idx_to_remove)
+                    rwmol = Chem.RWMol(mol)
+                    rwmol.RemoveAtom(idx_to_remove)
+                    new_mol = rwmol.GetMol()
+                else:
+                    return smiles
             elif mutation_type == 'change':
                 if mol.GetNumAtoms() > 0:
                     idx_to_change = random.randint(0, mol.GetNumAtoms() - 1)
                     atom = mol.GetAtomWithIdx(idx_to_change)
                     new_atomic_num = random.choice([6, 7, 8, 9, 15, 16, 17])  # C, N, O, F, P, S, Cl
                     atom.SetAtomicNum(new_atomic_num)
+                new_mol = mol
+            else:
+                return smiles
 
             try:
-                Chem.SanitizeMol(mol)
-                new_smiles = Chem.MolToSmiles(mol)
-                if validate_smiles(new_smiles):
+                Chem.SanitizeMol(new_mol)
+                new_smiles = Chem.MolToSmiles(new_mol)
+                if self.validate_smiles(new_smiles):
+                    logger.debug(f"Mutation successful. New SMILES: {new_smiles}")
+                    print(Fore.BLUE + f"Mutation successful. New SMILES: {new_smiles}")
                     return new_smiles
-            except:
-                pass
-        except Exception as e:
-            logger.warning(f"Mutation failed: {e}")
+                else:
+                    logger.debug(f"Mutation resulted in invalid SMILES: {new_smiles}")
+                    print(Fore.YELLOW + f"Mutation resulted in invalid SMILES: {new_smiles}")
+                    return smiles
+            except Exception as e:
+                logger.warning(f"Mutation failed: {e}")
+                print(Fore.YELLOW + f"Mutation failed: {e}")
+                return smiles
 
-        return smiles  # Return original SMILES if mutation fails
+        except Exception as e:
+            logger.warning(f"Mutation process encountered an error: {e}")
+            print(Fore.YELLOW + f"Mutation process encountered an error: {e}")
+            return smiles  # Return original SMILES if mutation fails
+
+
+    def mutate_molecule(self, individual):
+        smiles = individual[0]
+        new_smiles = self.mutate_smiles(smiles)
+        individual[0] = new_smiles
+        return (individual,)
 
     @checkpoint("MCTS SMILES Optimization")
     def optimize_smiles(self, smiles, iterations=50, mcts_iterations=10):
         root = MCTSNode(smiles)
         for _ in range(iterations):
             best_node = self.mcts(root, mcts_iterations)
-            if best_node.smiles != root.smiles and validate_smiles(best_node.smiles):
+            if best_node.smiles != root.smiles and self.validate_smiles(best_node.smiles):
                 root = best_node
 
         final_score = self.fitness_function(root.smiles)
         logger.info(f"Optimized SMILES: {root.smiles}")
-        logger.info(f"Final score: {final_score}")
+        print(Fore.GREEN + f"Optimized SMILES: {root.smiles}")
         return root.smiles
-
 
 
 class StructurePredictor:
@@ -453,10 +562,29 @@ class StructurePredictor:
             # Return a placeholder or default PDB file path
             return os.path.join(output_dir, "default_ligand.pdb")
 
-    def predict_3d_structure(self, smiles):
-        return self.predict(smiles, ".")  # Use current directory as output_dir
-    
-    
+    def predict_3d_structure(self, sequence):
+        return self.predict(sequence, ".")  # Use current directory as output_dir
+
+    @checkpoint("Protein Structure Prediction")
+    def predict_protein_structure(self, sequence: str, output_dir: str) -> str:
+        """
+        Predict the protein structure from the given sequence and save the PDB file.
+        Returns the path to the predicted PDB file.
+        """
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+
+            # Structure prediction logic here
+            pdb_content = self.predict_3d_structure(sequence)
+            pdb_filename = f"{sequence[:10]}_structure.pdb"
+            pdb_file_path = os.path.join(output_dir, pdb_filename)
+            with open(pdb_file_path, 'w') as pdb_file:
+                pdb_file.write(pdb_content)
+            return pdb_file_path
+        except Exception as e:
+            logger.error(f"Failed to predict structure for sequence {sequence}: {e}")
+            raise
+
         
 class EnsembleDocking:
     def __init__(self, vina_path: str = "vina", exhaustiveness: int = 8, num_modes: int = 9):
@@ -584,6 +712,9 @@ class AdditionalLigandOptimizer:
             print(Fore.YELLOW + f"Property refinement failed for SMILES {smiles}: {e}")
             return smiles  # Return original SMILES if refinement fails
 
+
+
+
     @checkpoint("Stereochemistry Correction")
     def correct_stereochemistry(self, smiles: str) -> str:
         """
@@ -605,8 +736,11 @@ class AdditionalLigandOptimizer:
             print(Fore.YELLOW + f"Stereochemistry correction failed for SMILES {smiles}: {e}")
             return smiles  # Return original SMILES if correction fails
 
+
+
+
     @checkpoint("MCTS SMILES Optimization")
-    def optimize_smiles(self, smiles, iterations=50, mcts_iterations=10):
+    def optimize_smiles_mcts(self, smiles, iterations=50, mcts_iterations=10):
         root = MCTSNode(smiles)
         for _ in range(iterations):
             best_node = self.mcts(root, mcts_iterations)
@@ -648,38 +782,6 @@ class AdditionalLigandOptimizer:
             self.backpropagate(node, reward)
         return root.best_child(c_param=0)
 
-    def mutate_smiles(self, smiles):
-        mol = Chem.MolFromSmiles(smiles)
-        if mol is None:
-            return smiles
-
-        mol = Chem.RWMol(mol)
-        mutation_type = np.random.choice(['add', 'remove', 'change'])
-
-        if mutation_type == 'add':
-            atom_symbol = np.random.choice(['C', 'N', 'O', 'F', 'Cl', 'Br'])
-            new_atom = Chem.Atom(atom_symbol)
-            idx = mol.AddAtom(new_atom)
-            if mol.GetNumAtoms() > 1:
-                bond_idx = random.randint(0, mol.GetNumAtoms() - 2)
-                mol.AddBond(idx, bond_idx, Chem.BondType.SINGLE)
-        elif mutation_type == 'remove':
-            atom_indices = list(range(mol.GetNumAtoms()))
-            if len(atom_indices) > 1:
-                idx_to_remove = int(np.random.choice(atom_indices))
-                mol.RemoveAtom(idx_to_remove)
-        elif mutation_type == 'change':
-            atom_indices = list(range(mol.GetNumAtoms()))
-            idx_to_change = int(np.random.choice(atom_indices))
-            atom = mol.GetAtomWithIdx(idx_to_change)
-            new_atomic_num = np.random.choice([6, 7, 8, 9, 15, 16, 17])  # Common elements
-            atom.SetAtomicNum(int(new_atomic_num))
-
-        try:
-            Chem.SanitizeMol(mol)
-            return Chem.MolToSmiles(mol)
-        except:
-            return smiles
 
     def fitness_function(self, smiles):
         mol = Chem.MolFromSmiles(smiles)
@@ -703,6 +805,7 @@ class AdditionalLigandOptimizer:
         return score
 
 
+
 class SMILESLigandPipeline:
     def __init__(self):
         self.generator = SMILESGenerator()
@@ -711,19 +814,21 @@ class SMILESLigandPipeline:
         self.ensemble_docker = EnsembleDocking()
         self.analyzer = DockingAnalyzer()
         self.scorer = LigandScorer()
-        self.additional_optimizer = AdditionalLigandOptimizer()  # Initialize the additional optimizer
+        self.additional_optimizer = AdditionalLigandOptimizer()
 
-    def validate_novel_smiles(self, smiles):
+    
+    
+    def validate_novel_smiles(self, smiles: str) -> bool:
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
             return False
         try:
-            Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ALL^Chem.SanitizeFlags.SANITIZE_KEKULIZE)
+            Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ALL ^ Chem.SanitizeFlags.SANITIZE_KEKULIZE)
             return True
         except:
             return False
 
-    def generate_novel_smiles(self, protein_sequence, num_sequences):
+    def generate_novel_smiles(self, protein_sequence: str, num_sequences: int) -> List[str]:
         valid_smiles = []
         attempts = 0
         max_attempts = num_sequences * 10  # Allow more attempts for novel molecules
@@ -732,8 +837,11 @@ class SMILESLigandPipeline:
             if self.validate_novel_smiles(smiles):
                 valid_smiles.append(smiles)
             attempts += 1
+            if attempts % 10 == 0:
+                logger.info(f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
+                print(Fore.YELLOW + f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
         return valid_smiles
-    
+
     def score_novel_ligand(self, ligand, protein):
         # Basic physicochemical properties
         mw = Descriptors.ExactMolWt(ligand)
@@ -757,8 +865,51 @@ class SMILESLigandPipeline:
             -1.0 * docking_score  # Lower docking score is better
         )
         return score
+
+
+
+    def adjust_logp(self, smiles, target_logp=2.5, tolerance=0.5):
         
-    @checkpoint("Run SMILES Ligand Pipeline")
+        
+        """
+        Adjust the LogP of the compound by adding hydrophilic or lipophilic groups.
+        """
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return smiles
+
+        current_logp = Crippen.MolLogP(mol)
+        
+        while abs(current_logp - target_logp) > tolerance:
+            if current_logp < target_logp:
+                # Add a lipophilic group (e.g., methyl)
+                mol = AllChem.ReplaceSubstructs(mol, Chem.MolFromSmiles('[H]'), 
+                                                Chem.MolFromSmiles('C'), 
+                                                replacementType='random')[0]
+            else:
+                # Add a hydrophilic group (e.g., hydroxyl)
+                mol = AllChem.ReplaceSubstructs(mol, Chem.MolFromSmiles('[H]'), 
+                                                Chem.MolFromSmiles('O'), 
+                                                replacementType='random')[0]
+
+            current_logp = Crippen.MolLogP(mol)
+
+        return Chem.MolToSmiles(mol)
+
+
+
+    def optimize_smiles(self, smiles):
+        """
+        Apply a series of optimization steps to the SMILES.
+        """
+        smiles = self.standardize_molecule(smiles)
+        smiles = self.fragment_based_optimization(smiles)
+        smiles = self.bioisostere_replacement(smiles)
+        smiles = self.adjust_molecular_weight(smiles)
+        smiles = self.adjust_logp(smiles)
+        return smiles
+
+
     @checkpoint("Run SMILES Ligand Pipeline")
     def run_smiles_ligand_pipeline(
         self,
@@ -769,121 +920,217 @@ class SMILESLigandPipeline:
         score_threshold: float,
         protein_sequences: List[str]
     ) -> List[Dict[str, Any]]:
-        os.makedirs(results_dir, exist_ok=True)
-        os.makedirs(predicted_structures_dir, exist_ok=True)
         all_results = []
 
         for protein_sequence in protein_sequences:
             try:
-                # SMILES Generation using provided protein_sequences as context
                 smiles_list = self.generator.generate(protein_sequence, num_sequences)
                 logger.info(f"Generated SMILES: {smiles_list}")
-                print(Fore.GREEN + f"Generated SMILES: {smiles_list}")
-                
+                print(Fore.CYAN + f"Generated SMILES: {smiles_list}")
+
                 for smiles in smiles_list:
-                    result = {
-                        'smiles': smiles,  # Changed from 'original_smiles' to 'smiles'
-                        'protein_sequence': protein_sequence,
-                        'score': None,
-                    }
-
-                    try:
-                        # 1. Chemical Property Refinement
-                        refined_smiles = self.additional_optimizer.refine_properties(smiles)
-                        logger.info(f"Chemical Property Refinement completed: {refined_smiles}")
-                        print(Fore.BLUE + f"Chemical Property Refinement completed: {refined_smiles}")
-
-                        # 2. Stereochemistry Correction
-                        stereochem_corrected_smiles = self.additional_optimizer.correct_stereochemistry(refined_smiles)
-                        logger.info(f"Stereochemistry Correction completed: {stereochem_corrected_smiles}")
-                        print(Fore.BLUE + f"Stereochemistry Correction completed: {stereochem_corrected_smiles}")
-
-                        # 3. MCTS Optimization
-                        optimized_smiles = self.additional_optimizer.optimize_smiles(stereochem_corrected_smiles)
-                        logger.info(f"MCTS Optimization completed: {optimized_smiles}")
-                        print(Fore.BLUE + f"MCTS Optimization completed: {optimized_smiles}")
-
-                        result['optimized_smiles'] = optimized_smiles
-
-                        # 4. Calculate Score for the Optimized SMILES
-                        try:
-                            mol = Chem.MolFromSmiles(optimized_smiles)
-                            if mol is not None:
-                                current_score = self.scorer.calculate_smiles_score(optimized_smiles)
-                                result['score'] = current_score
-                                logger.info(f"Calculated score for SMILES: {current_score}")
-                                print(Fore.GREEN + f"Calculated score for SMILES: {current_score}")
-                            else:
-                                logger.warning(f"Invalid SMILES after optimization: {optimized_smiles}")
-                        except Exception as e:
-                            logger.warning(f"Error in scoring SMILES: {e}")
-
-                        # 5. 3D Structure Prediction
-                        try:
-                            ligand_pdb = self.predictor.predict(optimized_smiles, predicted_structures_dir)
-                            result['ligand_pdb'] = ligand_pdb
-                            logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
-                            print(Fore.GREEN + f"3D Structure Prediction completed: {ligand_pdb}")
-                        except Exception as e:
-                            logger.warning(f"Error in 3D structure prediction: {e}")
-
-                        # 6. Generate Protein Structures
-                        try:
-                            protein_ensemble = self.generate_protein_structures([protein_sequence], predicted_structures_dir)
-                            logger.info(f"Generated {len(protein_ensemble)} protein structures")
-                            print(Fore.GREEN + f"Generated {len(protein_ensemble)} protein structures")
-                        except Exception as e:
-                            logger.warning(f"Error in protein structure generation: {e}")
-                            protein_ensemble = []
-
-                        # 7. Ensemble Docking
-                        if ligand_pdb and protein_ensemble:
-                            try:
-                                docking_results = self.ensemble_docker.dock_ensemble(ligand_pdb, protein_ensemble, results_dir)
-                                result['docking_results'] = docking_results
-                                logger.info("Ensemble Docking completed")
-                                print(Fore.GREEN + "Ensemble Docking completed")
-                            except Exception as e:
-                                logger.warning(f"Error in ensemble docking: {e}")
-
-                        # 8. Docked Ligands Analysis
-                        if result.get('docking_results'):
-                            try:
-                                analysis_results = []
-                                for docking_result in result['docking_results']:
-                                    if 'docked_ligand' in docking_result:
-                                        analysis_result = self.analyzer.analyze(
-                                            docking_result['docked_ligand'],
-                                            docking_result['protein_pdb'],
-                                            results_dir
-                                        )
-                                        analysis_results.append(analysis_result)
-                                result['analysis_results'] = analysis_results
-                                logger.info("Docked Ligands Analysis completed")
-                                print(Fore.GREEN + "Docked Ligands Analysis completed")
-                            except Exception as e:
-                                logger.warning(f"Error in docked ligands analysis: {e}")
-                    except Exception as e:
-                        logger.error(f"Error processing optimized SMILES: {e}")
-                        print(Fore.RED + f"Error processing optimized SMILES: {e}")
-
-                    try:
-                        # Calculate Score for the original SMILES
-                        current_score = self.scorer.calculate_smiles_score(smiles)
-                        result['score'] = current_score
-                        logger.info(f"Calculated score for original SMILES: {current_score}")
-                        print(Fore.GREEN + f"Calculated score for original SMILES: {current_score}")
-                    except Exception as e:
-                        logger.error(f"Error processing original SMILES {smiles}: {e}")
-                        print(Fore.RED + f"Error processing original SMILES {smiles}: {e}")
-
-                    # Add the result to all_results regardless of any failures
-                    all_results.append(result)
+                    result = self.process_single_smiles(smiles, protein_sequence, predicted_structures_dir, results_dir, score_threshold)
+                    if result:
+                        all_results.append(result)
 
             except Exception as e:
-                logger.error(f"Error in processing protein sequence: {str(e)}")
-                print(Fore.RED + f"Error in processing protein sequence: {str(e)}")
+                logger.error(f"Error processing protein sequence {protein_sequence}: {e}", exc_info=True)
+                print(Fore.RED + f"Error processing protein sequence {protein_sequence}: {e}")
 
         logger.info("Pipeline completed")
-        print(Fore.GREEN + "Pipeline completed")
+        print(Fore.CYAN + "Pipeline completed")
+
         return all_results
+    
+    
+
+    def process_single_smiles(self, smiles: str, protein_sequence: str, predicted_structures_dir: str, results_dir: str, score_threshold: float) -> Dict[str, Any]:
+        result = {"smiles": smiles}
+        
+        # 1. Optimize SMILES
+        try:
+            optimized_smiles = self.optimizer.optimize_smiles(smiles)
+            result['optimized_smiles'] = optimized_smiles
+            logger.info(f"Optimized SMILES: {optimized_smiles}")
+            print(Fore.GREEN + f"Optimized SMILES: {optimized_smiles}")
+        except Exception as e:
+            logger.warning(f"Error during SMILES optimization: {e}")
+            print(Fore.YELLOW + f"Error during SMILES optimization: {e}")
+            return None
+        
+        # 2. Validate and Adjust LogP
+        try:
+            adjusted_smiles = self.adjust_logp(optimized_smiles)
+            result['adjusted_smiles'] = adjusted_smiles
+            logger.info(f"Adjusted SMILES: {adjusted_smiles}")
+            print(Fore.GREEN + f"Adjusted SMILES: {adjusted_smiles}")
+        except Exception as e:
+            logger.warning(f"Error during LogP adjustment: {e}")
+            print(Fore.YELLOW + f"Error during LogP adjustment: {e}")
+            return None
+        
+        # 3. 3D Structure Prediction
+        try:
+            ligand_pdb = self.predictor.predict(adjusted_smiles, predicted_structures_dir)
+            result['ligand_pdb'] = ligand_pdb
+            logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
+            print(Fore.GREEN + f"3D Structure Prediction completed: {ligand_pdb}")
+        except Exception as e:
+            logger.warning(f"Error in 3D structure prediction: {e}")
+            print(Fore.YELLOW + f"Error in 3D structure prediction: {e}")
+            return None
+
+        # 4. Generate Protein Structures
+        try:
+            protein_ensemble = self.generate_protein_structures([protein_sequence], predicted_structures_dir)
+            logger.info(f"Generated {len(protein_ensemble)} protein structures")
+            print(Fore.GREEN + f"Generated {len(protein_ensemble)} protein structures")
+        except Exception as e:
+            logger.warning(f"Error in protein structure generation: {e}")
+            print(Fore.YELLOW + f"Error in protein structure generation: {e}")
+            return None
+
+        # 5. Ensemble Docking
+        if result.get('ligand_pdb') and protein_ensemble:
+            try:
+                docking_results = self.ensemble_docker.dock_ensemble(result['ligand_pdb'], protein_ensemble, results_dir)
+                result['docking_results'] = docking_results
+                logger.info("Ensemble Docking completed")
+                print(Fore.GREEN + "Ensemble Docking completed")
+            except Exception as e:
+                logger.warning(f"Error in ensemble docking: {e}")
+                print(Fore.YELLOW + f"Error in ensemble docking: {e}")
+                return None
+
+        # 6. Analyze Docking Results
+        if result.get('docking_results'):
+            try:
+                analysis = self.analyzer.analyze(docking_results)
+                result['analysis'] = analysis
+                logger.info("Docking Analysis completed")
+                print(Fore.GREEN + "Docking Analysis completed")
+            except Exception as e:
+                logger.warning(f"Error in docking analysis: {e}")
+                print(Fore.YELLOW + f"Error in docking analysis: {e}")
+                return None
+
+        # 7. Scoring
+        try:
+            score = self.score_novel_ligand(result['docking_results'], protein_ensemble)
+            result['score'] = score
+            logger.info(f"Ligand scored: {score}")
+            print(Fore.GREEN + f"Ligand scored: {score}")
+        except Exception as e:
+            logger.warning(f"Error in scoring: {e}")
+            print(Fore.YELLOW + f"Error in scoring: {e}")
+            return None
+
+        # 8. Filter based on score
+        if score >= score_threshold:
+            logger.info(f"Ligand {smiles} passed with score {score}")
+            print(Fore.GREEN + f"Ligand {smiles} passed with score {score}")
+            return result
+        else:
+            logger.info(f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
+            print(Fore.YELLOW + f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
+            return None
+        
+        
+        
+        
+    @checkpoint("Iterative Optimization")
+    def iterative_optimization(self, smiles, max_iterations=10):
+        """
+        Iteratively apply optimizations until pre-screening criteria are met or max iterations reached.
+        """
+        for i in range(max_iterations):
+            try:
+                optimized_smiles = self.optimizer.optimize(smiles)
+                iterative_optimized_smiles = self.additional_optimizer.optimize_smiles(optimized_smiles)
+                passed, message = pre_screen_ligand(iterative_optimized_smiles)
+                if passed:
+                    logging.info(f"SMILES passed pre-screening after {i+1} iterations: {iterative_optimized_smiles}")
+                    print(Fore.GREEN + f"SMILES passed pre-screening after {i+1} iterations: {iterative_optimized_smiles}")
+                    return iterative_optimized_smiles
+                smiles = iterative_optimized_smiles
+            except Exception as e:
+                logging.warning(f"Error during optimization iteration {i+1}: {e}")
+                print(Fore.YELLOW + f"Error during optimization iteration {i+1}: {e}")
+                # If an error occurs, continue with the original SMILES
+                continue
+
+        logging.warning(f"SMILES failed to pass pre-screening after {max_iterations} iterations: {smiles}")
+        print(Fore.YELLOW + f"SMILES failed to pass pre-screening after {max_iterations} iterations: {smiles}")
+        return smiles  # Return the last optimized version even if it didn't pass
+    
+    
+    
+    
+    def standardize_molecule(self, smiles):
+        """
+        Standardize the molecule using RDKit's MolStandardize if available.
+        """
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            logger.warning(f"Invalid SMILES for standardization: {smiles}")
+            return smiles
+
+        try:
+            from rdkit.Chem.MolStandardize import rdMolStandardize
+            standardizer = rdMolStandardize.Standardizer()
+            mol = standardizer.standardize(mol)
+            standardized_smiles = Chem.MolToSmiles(mol, isomericSmiles=True)
+            return standardized_smiles
+        except AttributeError:
+            logger.warning("RDKit's Standardizer not available. Using a simple standardization approach.")
+            # Simple standardization: remove hydrogens and regenerate SMILES
+            mol = Chem.RemoveHs(mol)
+            mol = Chem.AddHs(mol)
+            standardized_smiles = Chem.MolToSmiles(mol, isomericSmiles=True)
+            return standardized_smiles
+
+
+
+    @checkpoint("Fragment-Based Optimization")
+    def fragment_based_optimization(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return smiles
+
+        drug_like_fragments = ['c1ccccc1', 'C(=O)N', 'C(=O)O', 'CN', 'CF', 'CCl']
+
+        num_atoms = mol.GetNumAtoms()
+        atoms_to_replace = random.sample(range(num_atoms), k=min(3, num_atoms))
+
+        for atom_idx in atoms_to_replace:
+            fragment = Chem.MolFromSmiles(random.choice(drug_like_fragments))
+            if fragment is not None:
+                atom = mol.GetAtomWithIdx(atom_idx)
+                rwmol = Chem.RWMol(mol)
+                rwmol.ReplaceAtom(atom_idx, fragment.GetAtomWithIdx(0))
+                mol = rwmol.GetMol()
+
+        return Chem.MolToSmiles(mol)
+
+
+
+    @checkpoint("Bioisostere Replacement")
+    def bioisostere_replacement(self, smiles):
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return smiles
+
+        bioisosteres = {
+            'C(=O)OH': 'C(=O)NH2',
+            'c1ccccc1': 'c1ccncc1',
+            'CF': 'CCl',
+            'S': 'O',
+        }
+
+        for original, replacement in bioisosteres.items():
+            pattern = Chem.MolFromSmiles(original)
+            replace = Chem.MolFromSmiles(replacement)
+            if pattern is not None and replace is not None:
+                mol = AllChem.ReplaceSubstructs(mol, pattern, replace, replaceAll=True)[0]
+
+        return Chem.MolToSmiles(mol)

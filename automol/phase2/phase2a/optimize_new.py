@@ -11,7 +11,7 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
 # Now import predict from the same directory
-from phase2a.predict import predict_protein_function
+from phase2a.predict import predict_protein_function, predict_properties
 
 import logging
 from Bio.SeqUtils.ProtParam import ProteinAnalysis

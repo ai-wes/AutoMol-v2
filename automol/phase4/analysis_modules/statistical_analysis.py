@@ -15,6 +15,10 @@ class StatisticalAnalysis:
                         mean_val = value.mean().mean()
                         std_val = value.std().mean()
                         median_val = value.median().median()
+                    elif isinstance(value, pd.Series):
+                        mean_val = value.mean()
+                        std_val = value.std()
+                        median_val = value.median()
                     else:
                         mean_val = np.mean(value)
                         std_val = np.std(value)

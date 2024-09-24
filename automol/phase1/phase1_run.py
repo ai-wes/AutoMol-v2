@@ -1,7 +1,3 @@
-
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
-
 from bs4 import BeautifulSoup
 import os
 import sys
@@ -19,26 +15,25 @@ from nltk.stem import WordNetLemmatizer
 import string
 from typing import Dict, Any, List
 
-
 from openai import OpenAI
 from colorama import Fore, Style, init
 
-import os
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+from utils.save_utils import save_json
+
 import logging
 from langchain_community.vectorstores import DeepLake
 from langchain_huggingface import HuggingFaceEmbeddings
 
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize colorama
 init(autoreset=True)
-
-
-
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # SSL Context for NLTK download
 try:
@@ -47,11 +42,9 @@ except AttributeError:
     pass
 else:
     ssl._create_default_https_context = _create_unverified_https_context
-    
-    
+
 client = OpenAI(base_url="http://localhost:11434/v1", api_key="lm-studio")
 llm_model = "minicpm-v:8b-2.6-q6_K"
-# SSL Context for NLTK download
 
 # Download necessary NLTK data
 nltk.download('punkt', quiet=True)
@@ -65,8 +58,6 @@ lemmatizer = WordNetLemmatizer()
 # Constants for rate limiting
 RATE_LIMIT = 2  # requests per second
 RATE_LIMIT_PERIOD = 1  # second
-
-
 
 class DatabaseQuerier:
     def __init__(self, dataset_path):
@@ -103,27 +94,83 @@ class DatabaseQuerier:
         return self.retrieve_from_db(query)
 
 class Phase1:
-    def __init__(self):
-        logger.info("Initializing ComprehensiveHypothesisSystem...")
-        self.documents = []
-        self.vectorizer = TfidfVectorizer()
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
-        self.stop_words = set(stopwords.words('english'))
-        self.dataset_path = r"C:\Users\wes\AutoProtGenerationSystem\Phase_1\technical_description_molecular_database"
-        self.querier = DatabaseQuerier(self.dataset_path)
-        self.db = self.querier.db
-        self.rate_limit = RATE_LIMIT
-        self.rate_limit_period = RATE_LIMIT_PERIOD
-        self.client = client
-        self.llm_model = llm_model
+    def __init__(self, config: Dict[str, Any]):
+        self.config = config
+        self.base_url = config['phase1']['base_url']
+        self.api_key = config['phase1']['api_key']
+        self.llm_model = config['phase1']['llm_model']
+        self.max_articles = config['phase1']['max_articles']
+        self.max_attempts = config['phase1'].get('max_attempts', 3)
+        self.querier = DatabaseQuerier(config['mongodb']['uri'])  # Updated to use 'uri' from config
+        logger.info("Phase 1 initialized with configuration.")
+
+    def run(self, user_input: str) -> Dict[str, Any]:
+        logger.info(f"Starting Phase 1 with user input: {user_input}")
         
-        logger.info("System initialized.")
+        for attempt in range(1, self.max_attempts + 1):
+            try:
+                logger.info(f"Attempt {attempt} of {self.max_attempts}")
+                
+                initial_hypothesis = self.generate_initial_hypothesis(user_input)
+                logger.debug(f"Initial Hypothesis: {initial_hypothesis}")
+                
+                keywords = self.extract_keywords(initial_hypothesis)
+                logger.debug(f"Extracted Keywords: {keywords}")
+                
+                articles = self.search_academic_sources(keywords, max_results=self.max_articles)
+                if not articles:
+                    logger.warning("No relevant articles found to refine hypotheses.")
+                    continue  # Try again
+                logger.debug(f"Found {len(articles)} articles")
+                
+                summarized_articles = self.process_articles(articles)
+                logger.debug(f"Processed {len(summarized_articles)} articles")
+                
+                db_results = self.querier.query_database(user_input)
+                logger.debug(f"Retrieved {len(db_results)} database results")
+                
+                research_descriptions = self.prepare_technical_description(initial_hypothesis, research_data=summarized_articles)
+                logger.debug(f"Prepared Research Descriptions: {research_descriptions[:200]}...")
+                
+                technical_description = self.generate_technical_descriptions(research_descriptions)
+                logger.info("Generated final technical description")
+                
+                # Save the technical description
+                output_dir = os.path.join(self.config['base_output_dir'], "phase1")
+                os.makedirs(output_dir, exist_ok=True)
+                file_path = os.path.join(output_dir, "technical_description.json")
+                
+                with open(file_path, "w") as f:
+                    json.dump(technical_description, f, indent=4)
+                logger.info(f"Saved technical description to {file_path}")
+                
+                if os.path.exists(file_path):
+                    logger.info(f"File {file_path} was successfully created.")
+                    return {
+                        "technical_description": technical_description,
+                        "summarized_articles": summarized_articles,
+                        "db_results": db_results
+                    }
+                else:
+                    raise FileNotFoundError(f"Failed to create file {file_path}")
+
+            except Exception as e:
+                logger.error(f"An error occurred during attempt {attempt}: {str(e)}", exc_info=True)
+                if attempt < self.max_attempts:
+                    wait_time = random.uniform(1, 5)
+                    logger.info(f"Retrying in {wait_time:.2f} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    logger.error("Max attempts reached. Phase 1 failed.")
+                    return None
+
+        logger.warning("Phase 1 completed all attempts without success.")
+        return None
 
     def generate_initial_hypothesis(self, user_input: str) -> str:
         """Generate an initial hypothesis based on the user-defined topic."""
         logger.info(f"Generating initial hypothesis for input: {user_input}")
         # Placeholder for hypothesis generation logic
-        # Replace with actual implementation if necessary
         initial_hypothesis = f"Initial hypothesis based on '{user_input}'."
         logger.info(f"Initial hypothesis generated: {initial_hypothesis}")
         return initial_hypothesis
@@ -134,7 +181,7 @@ class Phase1:
         # Tokenize and lowercase
         tokens = word_tokenize(text.lower())
         # Remove punctuation and stopwords
-        tokens = [token for token in tokens if token not in string.punctuation and token not in self.stop_words]
+        tokens = [token for token in tokens if token not in string.punctuation and token not in stop_words]
         # Lemmatize tokens
         lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
         # Join tokens back into a string
@@ -157,9 +204,9 @@ class Phase1:
         """Search multiple academic sources based on keywords."""
         logger.info(f"Searching academic sources for keywords: {keywords}")
         pubmed_articles = self.search_pubmed(keywords, max_results)
-        time.sleep(self.rate_limit_period)
+        time.sleep(RATE_LIMIT_PERIOD)
         arxiv_articles = self.search_arxiv(keywords, max_results)
-        time.sleep(self.rate_limit_period)
+        time.sleep(RATE_LIMIT_PERIOD)
         # Combine and return all articles
         all_articles = pubmed_articles + arxiv_articles
         logger.info(f"Total articles found: {len(all_articles)}")
@@ -205,7 +252,7 @@ class Phase1:
                         "keyword": keyword
                     }
                     all_articles.append(metadata)
-                time.sleep(1 / self.rate_limit)
+                time.sleep(1 / RATE_LIMIT)
             except requests.RequestException as e:
                 logger.error(f"Error fetching PubMed articles for keyword '{keyword}': {e}")
         logger.info(f"Total PubMed articles found: {len(all_articles)}")
@@ -235,7 +282,7 @@ class Phase1:
                     "source": "arXiv"
                 }
                 articles.append(metadata)
-            time.sleep(1 / self.rate_limit)
+            time.sleep(1 / RATE_LIMIT)
             logger.info(f"Total arXiv articles found: {len(articles)}")
             return articles
         except requests.RequestException as e:
@@ -300,9 +347,9 @@ class Phase1:
 
     def process_articles(self, articles: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Process and summarize articles."""
+        logger = logging.getLogger(__name__)
         logger.info("Processing articles.")
         summarized_articles = []
-        os.makedirs("automol/phase1/processed_articles", exist_ok=True)  # Ensure the directory exists
         for article in articles:
             abstract = article.get('abstract', '')
             if not abstract:
@@ -326,10 +373,7 @@ class Phase1:
                 }
             }
             summarized_articles.append(summarized_article)
-            # Save the summarized article to a file
-            article_id = article.get('id', f"article_{len(summarized_articles)}")
-            with open(f"processed_articles/{article_id}.json", 'w') as f:
-                json.dump(summarized_article, f, indent=2)
+            # Removed individual file saving
         logger.info(f"Processed {len(summarized_articles)} articles.")
         return summarized_articles
 
@@ -366,25 +410,24 @@ class Phase1:
             logger.error(f"DEBUG: Error extracting descriptions: {str(e)}")
             print(f"DEBUG: Content causing error: {content}")
             return None
-        
-        
+
     def generate_technical_descriptions(self, research_descriptions):
         model = "deepseek-coder-v2:16b-lite-instruct-q6_K"
-        description_system_prompt = f"""You are an expert in molecular biology and chemistry, tasked with generating technical descriptions for molecule generation.Take the excerpt of text  and from it create a very technical, concise technical description that will be used to generate the molecule you describe. Generate a protein and ligand pair that are designed to interact with each other based on the user prompt.
-        Please format y our response exactly as follows:
+        description_system_prompt = f"""You are an expert in molecular biology and chemistry, tasked with generating technical descriptions for molecule generation. Take the excerpt of text and from it create a very technical, concise technical description that will be used to generate the molecule you describe. Generate a protein and ligand pair that are designed to interact with each other based on the user prompt.
+Please format your response exactly as follows:
 
-        <technical_description_protein>
-        [Your detailed technical instruction for protein generation goes here]
-        </technical_description_protein>
+<technical_description_protein>
+[Your detailed technical instruction for protein generation goes here]
+</technical_description_protein>
 
-        <technical_description_ligand>
-        [Your matching description for ligand generation designed to interact with the generated protein goes here]
-        </technical_description_ligand>
+<technical_description_ligand>
+[Your matching description for ligand generation designed to interact with the generated protein goes here]
+</technical_description_ligand>
 
-        Make sure to replace the text in square brackets with your actual descriptions, and do not include the square brackets in your response.
+Make sure to replace the text in square brackets with your actual descriptions, and do not include the square brackets in your response.
 
-        ONLY GENERATE ONE AT A TIME OTHERWISE SMALL BABY TINY INNOCENT KITTENS WILL DIE DO NOT RESPOND WITH ANY OTHER TEXT
-        RESEARCH DATA:"""
+ONLY GENERATE ONE AT A TIME OTHERWISE SMALL BABY TINY INNOCENT KITTENS WILL DIE DO NOT RESPOND WITH ANY OTHER TEXT
+RESEARCH DATA:"""
         
         messages = [
             {"role": "system", "content": description_system_prompt},
@@ -406,7 +449,7 @@ class Phase1:
         print(f"DEBUG: Final JSON output: {json_output}")
         
         return json_output
-    
+
     def prepare_technical_description(self, refined_hypothesis: str, research_data: List[Dict[str, Any]]) -> str:
         """Prepare the final technical description."""
         logger.info("Preparing technical description.")
@@ -425,81 +468,13 @@ class Phase1:
 import time
 import random
 
-def run_pipeline(self, user_input: str, max_attempts=5):
-    """Run the entire pipeline with a user input."""
-    logger.info("Starting the pipeline.")
+def run_Phase_1(config: Dict[str, Any]) -> Dict[str, Any]:
+    phase1 = Phase1(config)
+    results = phase1.run(config['input_text'])  # Changed to 'input_text' based on config.json
     
-    for attempt in range(1, max_attempts + 1):
-        try:
-            logger.info(f"Attempt {attempt} of {max_attempts}")
-            
-            # Generate Initial Hypothesis
-            initial_hypothesis = self.generate_initial_hypothesis(user_input)
-            print(f"DEBUG: Initial Hypothesis: {initial_hypothesis}")
-            
-            # Extract Keywords
-            keywords = self.extract_keywords(initial_hypothesis)
-            print(f"DEBUG: Extracted Keywords: {keywords}")
-            
-            # Research Articles
-            articles = self.search_academic_sources(keywords, max_results=1)
-            if not articles:
-                logger.warning("No relevant articles found to refine hypotheses.")
-                continue  # Try again
-            print(f"DEBUG: Found Articles: {len(articles)}")
-            
-            # Process Articles
-            summarized_articles = self.process_articles(articles)
-            print(f"DEBUG: Processed Articles: {len(summarized_articles)}")
-            
-            # Query Database
-            db_results = self.querier.query_database(user_input)
-            print(f"DEBUG: Database Query Results: {len(db_results)}")
-            
-            # Prepare Technical Description
-            research_descriptions = self.prepare_technical_description(initial_hypothesis, research_data=summarized_articles)
-            print(f"DEBUG: Prepared Research Descriptions: {research_descriptions[:200]}...")  # Print first 200 chars
-            
-            # Output Technical Description
-            technical_description = self.generate_technical_descriptions(research_descriptions)
-            print(Fore.CYAN + "\nDEBUG: Final Technical Description for Sequence Generation:")
-            print(Fore.GREEN + json.dumps(technical_description, indent=2))  # Convert dict to JSON string for printing
-            
-            # Create the directory if it doesn't exist
-            directory = "technical_descriptions"
-            os.makedirs(directory, exist_ok=True)
-
-            # Save the final technical description to a json file
-            file_path = os.path.join(directory, "technical_description.json")
-            with open(file_path, "w") as f:
-                json.dump(technical_description, f, indent=4)
-            print(f"DEBUG: Saved technical description to {file_path}")
-
-            # Verify if the file was created
-            if os.path.exists(file_path):
-                print(f"DEBUG: File {file_path} was successfully created.")
-                
-                # Print Database Results
-                print(Fore.CYAN + "\nDEBUG: Database Results:")
-                for i, result in enumerate(db_results, 1):
-                    print(Fore.YELLOW + f"\nDEBUG: Result {i}:")
-                    print(Fore.WHITE + f"Content: {result.page_content[:200]}...")  # Print first 200 characters
-                    print(Fore.MAGENTA + f"Metadata: {result.metadata}")
-                
-                return technical_description  # Successfully completed, exit the function
-            else:
-                print(f"ERROR: Failed to create file {file_path}.")
-                raise Exception("File creation failed")
-
-        except Exception as e:
-            print(f"ERROR: An error occurred during attempt {attempt}: {str(e)}")
-            if attempt < max_attempts:
-                wait_time = random.uniform(1, 5)  # Random wait between 1 and 5 seconds
-                print(f"Retrying in {wait_time:.2f} seconds...")
-                time.sleep(wait_time)
-            else:
-                print("Max attempts reached. Pipeline failed.")
-                return None
-
-    print("Pipeline completed all attempts without success.")
-    return None
+    if results:
+        logger.info("Phase 1 completed successfully.")
+        return results
+    else:
+        logger.error("Phase 1 failed to complete successfully.")
+        return None

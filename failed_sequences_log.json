@@ -2,3 +2,675 @@
     "smiles": "Oc1ccc2nc(nc(NCc3ccccc3)c2c1)-c1ccccc1",
     "reason": "SMILES string matches a known compound in PubChem"
 }
+{
+    "smiles": "CCc1c(CC(=O)N2CCCC2)c2cc(C)c(O)cc2n1-c1ccc(C(N)=O)c(NC2CCCCC2)c1",
+    "reason": "Molecular weight 502.65900000000033 out of range"
+}
+{
+    "smiles": "COc1c(C)cnc(Cn2cnc(c2)-c2cc(C(C)C)c(O)cc2O)c1C",
+    "reason": "SMILES string matches a known compound in PubChem"
+}
+{
+    "smiles": "Clc1c(Cl)cc(NC(=O)\\C=C\\c2ccccc2)cc1Cl",
+    "reason": "LogP 5.298700000000003 out of range"
+}
+{
+    "smiles": "OC(=O)CCc1ccccc1CC(O)=O",
+    "reason": "SMILES string matches a known compound in PubChem"
+}
+{
+    "smiles": "C[C@H](NC(=O)\\C=C\\c1ccc(Cl)cc1)C(=O)NCCC(c1ccccc1)c1ccccc1",
+    "reason": "LogP 5.196300000000004 out of range"
+}
+{
+    "smiles": "Clc1cccc(\\C=C\\C(=O)N[C@@H](Cc2ccc(cc2)-c2cnco2)C(=O)N[C@@H](Cc2ccccc2)[C@@H](O)C=Cc2ccccc2)c1",
+    "reason": "Molecular weight 632.1600000000002 out of range"
+}
+{
+    "smiles": "CCCCc1ccc(NC(=O)C[C@@H]2C[C@@H](O)CN2C(=O)c2cccc(OC)c2)cc1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "COc1ccc(cc1OC)-n1nnnc1-c1ccc(cc1)N(CC(C)C)C(C)=O",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "Nc1cc(-c2cccnc2)c(cc1C#N)[N+]([O-])=O",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "N.O=[N+]([O-])c1c(-c2cnc(Br)c(Cl)c2)cc(NCCCl)c(Br)c1Br",
+    "reason": "Molecular weight 565.8750000000001 out of range"
+}
+{
+    "smiles": "Oc1ccc(\\C=C\\c2ccccc2Br)cc1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "Fc1cc(OBr)cc(Cl)c1/C=C(\\Br)c1c(Br)cc(Br)cc1Br",
+    "reason": "Molecular weight 643.164 out of range"
+}
+{
+    "smiles": "Cc1cccc(\\C=C\\C(=O)N[C@@H]2C[C@H](N(C2)C(=O)C(O)C(O)=O)c2ccccc2)c1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "OC(=O)CCC(=O)N(CCCC(O)=O)c1ccc(Cl)cc1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "C.CC.CCC(C)(C)CC(=O)O.Clc1ccc(Cl)cc1",
+    "reason": "LogP 6.553000000000006 out of range"
+}
+{
+    "smiles": "C.C.C.CCBr.CCCl.CCOBr.Clc1ccc(Cl)c(Br)c1Cl",
+    "reason": "Molecular weight 606.9199999999998 out of range"
+}
+{
+    "smiles": "BrCCOBr.C.CBr.CC.CC(Cl)Cl.CCl.Oc1cc(Br)cc(Br)c1Cl",
+    "reason": "Molecular weight 780.711 out of range"
+}
+{
+    "smiles": "BrBr.C.CBr.CC.CC(Br)Br.CC(Cl)(Cl)Cl.CCl.Cc1c(Br)ccc(Cl)c1Br",
+    "reason": "Molecular weight 956.9929999999997 out of range"
+}
+{
+    "smiles": "BrBr.CC.CC.CC(Br)Br.CC(Br)Br.ClC(Cl)(Cl)CBr.ClCBr.Oc1ccc(Br)c(CBr)c1Br",
+    "reason": "Molecular weight 1282.1849999999997 out of range"
+}
+{
+    "smiles": "BrBr.C.CC.CC(Br)Br.CCC.ClC(Cl)(Cl)CBr.ClCBr.ClCC(Br)Br.FC(Br)c1c(Br)cc(Br)cc1Br",
+    "reason": "Molecular weight 1427.5869999999998 out of range"
+}
+{
+    "smiles": "Br.C.CC.CC(Br)(Br)C(Cl)(Cl)Cl.CC(Br)Br.CC[SH](C)Cl.ClCCl.FC(Br)c1c(Br)cc(Br)cc1Br.FC(Cl)C(Br)Br",
+    "reason": "Molecular weight 1483.6809999999996 out of range"
+}
+{
+    "smiles": "Br.C.CC(Br)(Br)C(Cl)(Cl)Cl.CC(Cl)Cl.CCC.CCC(Br)(Br)Br.CC[SH](F)(Cl)CBr.FC(Br)c1c(Br)cc(Br)cc1Br.FC(Cl)C(Br)Br",
+    "reason": "Molecular weight 1702.5519999999995 out of range"
+}
+{
+    "smiles": "Br.C.CC(Br)(Br)C(Cl)(Cl)Cl.CC(Cl)(Cl)CCl.CCC(Br)(Br)Br.CCCC.CC[SH](F)(Cl)C(Cl)Br.FC(Br)c1c(Br)cc(Br)cc1Br.FC(Cl)C(Cl)(Br)Br",
+    "reason": "Molecular weight 1833.9409999999993 out of range"
+}
+{
+    "smiles": "BrBr.C.CC(Br)(Br)C(S)(Cl)Cl.CC(Cl)(Cl)CCl.CCCC.CC[SH](C)(F)(Cl)C(Cl)Br.ClC(Br)CC(Br)(Br)Br.FC(Br)c1c(Br)cc(Br)cc1Br.FC(Cl)(Cl)C(Cl)(Br)Br",
+    "reason": "Molecular weight 2073.2799999999997 out of range"
+}
+{
+    "smiles": "CCCCN(CCCC)C(=O)c1cccc(OC[C@H]2C[C@@H]2c2ccccc2OC)c1",
+    "reason": "LogP 5.920100000000006 out of range"
+}
+{
+    "smiles": "CCCCBr.CCCCCl.COc1ccc(Br)cc1[C@@H]1[CH]C1.O=Cc1ccc(Br)c(OCl)c1",
+    "reason": "Molecular weight 691.1460000000001 out of range"
+}
+{
+    "smiles": "CCc1c(C)cc(O)c(Cl)c1C.ClC(Br)CCCBr.Clc1cc(Br)cc([C@@H]2[CH]C2)c1OCBr.PCCCBr",
+    "reason": "Molecular weight 929.4359999999997 out of range"
+}
+{
+    "smiles": "C.Cc1c(Cl)c(Cl)c(Br)c(C)c1C(C)F.ClC(Cl)(Br)CCCBr.Clc1c(Br)c(Br)cc([C@@H]2[CH]C2)c1OCBr.PC(Br)CCBr",
+    "reason": "Molecular weight 1253.048 out of range"
+}
+{
+    "smiles": "Br.C.CCCBr.Cc1c(Cl)c(Cl)c(Br)c(C)c1C(C)(F)Br.Cl.ClP(Br)C(Br)(Br)CCBr.FCOc1c(Cl)c(Br)c(Br)c(Cl)c1[C@H]1CC1F",
+    "reason": "Molecular weight 1472.278 out of range"
+}
+{
+    "smiles": "Br.C.CC(F)(Br)c1c(CBr)c(Cl)c(Cl)c(Br)c1C(F)Cl.CC(N)CBr.CCF.Cl.Cl.ClP(Br)C(Br)Br.FC(Cl)Br.FCOc1cc(Cl)c(Br)c(Br)c1Cl",
+    "reason": "Molecular weight 1685.514 out of range"
+}
+{
+    "smiles": "BrBr.C.C.CC(C)F.CC(F)(Br)c1c(CBr)c(Cl)cc(Br)c1C(F)Cl.CCC(C)(S)Br.Cl.Cl.ClP(Br)CBr.Clc1ccc(Cl)c(Br)c1Br.FC(Cl)Br",
+    "reason": "Molecular weight 1664.2019999999998 out of range"
+}
+{
+    "smiles": "BrBr.C.CC.CC(C)F.CCC(F)(Br)c1c(CBr)c(Cl)cc(Br)c1C(F)Cl.CCCC(C)(S)Br.Cl.ClBr.ClC(Br)P(Cl)Br.Clc1ccc(Cl)c(Br)c1Br.FC(Cl)(Cl)Br",
+    "reason": "Molecular weight 1854.0689999999995 out of range"
+}
+{
+    "smiles": "BrBr.C.CC.CC(C)(F)Cl.CCC(C)C(C)(S)Br.CCCC(F)(Br)c1c(CBr)c(Cl)cc(Br)c1C(F)Cl.ClBr.ClBr.ClC(Br)P(Cl)Br.Clc1cc(Br)c(Cl)c(Br)c1Br.FC(Cl)(Cl)Br",
+    "reason": "Molecular weight 2074.3599999999997 out of range"
+}
+{
+    "smiles": "BrBr.CC.CC(C)(F)Cl.CC(CBr)CC(F)(Br)c1c(CBr)c(Cl)cc(Br)c1C(F)Cl.CCC.CCC(C)C(C)(Br)SF.ClBr.ClBr.ClC(Br)[PH](Cl)(Br)Br.Clc1cc(Br)c(Cl)c(Br)c1Br.FC(Cl)(Cl)Br",
+    "reason": "Molecular weight 2294.238999999999 out of range"
+}
+{
+    "smiles": "BrBr.CC(C)(F)Cl.CC(CC(F)(Br)c1c(C(F)Cl)c(Br)cc(Cl)c1C(Br)Br)C(Cl)Br.CC(Cl)(Br)[PH](Cl)(Br)Br.CCBr.CCC.CCC(C)C(Br)(CCl)SF.Cl.ClBr.Clc1cc(Br)c(Cl)c(Br)c1Br.FC(Cl)(Cl)Br",
+    "reason": "Molecular weight 2456.051999999999 out of range"
+}
+{
+    "smiles": "CN(C)c1ccc(CN=C(N)NC(=O)c2cc(ccc2C)C(=O)NS(=O)(=O)c2cccc(c2)C(F)(F)F)cc1",
+    "reason": "Molecular weight 561.5860000000002 out of range"
+}
+{
+    "smiles": "C.C=NCc1ccccc1Cl.CCl.Cc1c(C(=O)NS(=O)(=O)c2cccc(C(F)(F)F)c2)ccc(C(Br)CBr)c1C",
+    "reason": "Molecular weight 763.342 out of range"
+}
+{
+    "smiles": "C.CCl.Cc1c(C(=O)NS(=O)c2c(Br)ccc(C(F)(F)F)c2C)ccc(C(Br)C(Br)Br)c1C.ClC=NCc1cc(Cl)c(Cl)cc1Cl",
+    "reason": "Molecular weight 1022.4969999999997 out of range"
+}
+{
+    "smiles": "C.CCl.Cc1c(C(Br)C(Br)Br)ccc(C(=O)NSc2c(Br)cc(Cl)c(C(F)F)c2C)c1CBr.ClCCl.Clc1cc(Cl)c(CBr)cc1Cl",
+    "reason": "Molecular weight 1204.2069999999997 out of range"
+}
+{
+    "smiles": "C.CCl.Cc1c(S)c(Br)cc(Cl)c1C(F)F.Cc1ccc(C(Br)C(Br)Br)c(C)c1CBr.ClCCl.Clc1cc(C(Cl)Br)c(Cl)c(Br)c1Cl",
+    "reason": "Molecular weight 1290.5659999999996 out of range"
+}
+{
+    "smiles": "CBr.CC(Cl)Cl.CCl.Cc1c(Br)cc(C(Br)C(Br)Br)c(CBr)c1C(Cl)Br.Cc1c(S)c(Br)c(Cl)c(Cl)c1C(F)(F)Cl.Clc1cc(Br)c(Cl)c(C(Cl)Br)c1",
+    "reason": "Molecular weight 1610.1709999999996 out of range"
+}
+{
+    "smiles": "CCl.Cc1c(Br)cc(C(Br)C(Br)Br)c(CBr)c1C(Cl)(Cl)Br.Cc1c(C(F)(F)Cl)cc(Cl)c(Br)c1SBr.ClC(Cl)CBr.Clc1cc(Br)c(Cl)c(C(Cl)Br)c1Br.FC(Cl)Br",
+    "reason": "Molecular weight 1899.2939999999996 out of range"
+}
+{
+    "smiles": "CCl.Cc1c(C(F)(F)Cl)cc(Cl)c(Br)c1SBr.ClC(Cl)CBr.Clc1cc(Br)c(Cl)c(C(Cl)(Cl)Br)c1Br.FC(Br)c1c(Br)c(Br)c(C(Br)C(Br)Br)c(CBr)c1C(Cl)(Cl)Br.FC(Cl)(Br)Br",
+    "reason": "Molecular weight 2188.4169999999995 out of range"
+}
+{
+    "smiles": "CCc1c([SH](Br)Br)c(Br)c(Cl)c(Cl)c1C(F)(F)Cl.ClC(Cl)CBr.ClCCl.Clc1cc(Br)c(Cl)c(C(Cl)(Cl)Br)c1Br.FC(Br)c1c(Br)c(Br)c(C(Br)(Br)C(Br)Br)c(CBr)c1C(Cl)(Cl)Br.FC(Cl)(Br)Br",
+    "reason": "Molecular weight 2431.1419999999994 out of range"
+}
+{
+    "smiles": "CC(Br)c1c(C(Cl)(Cl)Br)c(C(F)Br)c(Br)c(Br)c1C(Br)(Br)C(Br)Br.ClC(Cl)CBr.ClCCl.Clc1cc(Br)c(Cl)c(C(Cl)(Cl)Br)c1Br.FC(Cl)(Br)Br.FC(F)(Cl)c1c(Cl)c(Cl)c(Br)c([SH](Cl)(Br)Br)c1CCCl",
+    "reason": "Molecular weight 2515.0669999999996 out of range"
+}
+{
+    "smiles": "CC(Br)c1c(C(Cl)(Cl)Br)c(C(F)Br)c(Br)c(Br)c1C(Br)(Br)C(Br)(Br)Br.CCl.ClC(Cl)CBr.ClCCl.Clc1cc(Br)c(Cl)c(C(Cl)(Cl)Br)c1Br.FC(Cl)(Br)Br.FC(F)(Cl)c1cc([SH](Cl)(Cl)(Br)Br)c(Br)c(Cl)c1Cl",
+    "reason": "Molecular weight 2617.404999999999 out of range"
+}
+{
+    "smiles": "COC(=O)c1ccc(CN(C(=O)CN(C)C)c2cccc(c2)C(F)(F)F)c(c1)C(O)=O",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "C.C.C.CC(=O)N(c1cccc(C(F)(F)F)c1Br)C(Br)c1ccc(C)c(C)c1C(=O)O",
+    "reason": "Molecular weight 571.272 out of range"
+}
+{
+    "smiles": "C.C.CC.CCCBr.Cc1c(C)c(C=O)c(C(Cl)Br)c(C)c1N.FC(F)(F)c1ccccc1Br",
+    "reason": "Molecular weight 700.7440000000001 out of range"
+}
+{
+    "smiles": "C.CC.CC.CCC(Cl)Br.Cc1c(CBr)c(C=O)c(C(Cl)Br)c(CCl)c1NCl.FC(F)(F)c1ccc(Cl)c(Br)c1Br",
+    "reason": "Molecular weight 1010.3429999999998 out of range"
+}
+{
+    "smiles": "CC.CCC.CCC(Cl)Br.CCc1c(C(C)Br)c(C)c(NCl)c(C(Cl)Cl)c1C(Cl)Br.FC(F)(F)c1ccc(Cl)c(Br)c1.PC(Cl)Br",
+    "reason": "Molecular weight 1139.313 out of range"
+}
+{
+    "smiles": "CC.CC(Br)c1c(CCl)c(NCl)c(C(Cl)Cl)c(C(Cl)Br)c1C(Cl)CCl.CCC.CCC(Cl)Br.FC(F)(F)c1ccc(Cl)c(Br)c1Cl.FPC(Cl)Br",
+    "reason": "Molecular weight 1295.0829999999996 out of range"
+}
+{
+    "smiles": "CC.CC(Br)c1c(C(Cl)Cl)c(NCl)c(C(Cl)Cl)c(C(Cl)(Br)Br)c1C(Cl)CCl.CCC.CCC(Cl)Br.FC(F)(F)c1ccc(Cl)c(Br)c1Cl.FPC(Cl)(Br)Br",
+    "reason": "Molecular weight 1487.3199999999995 out of range"
+}
+{
+    "smiles": "CC(Br)c1c(C(Cl)CCl)c(C(Cl)(Br)Br)c(CCl)c(N(Cl)Cl)c1C(Cl)(Cl)Cl.CCC(Br)Br.CCCCl.CCN.ClC(Br)(Br)PBr.FC(F)(F)c1ccc(Cl)c(Br)c1Cl",
+    "reason": "Molecular weight 1676.5819999999994 out of range"
+}
+{
+    "smiles": "CC.CC(Br)c1c(C(Cl)C(Cl)Cl)c(C(Cl)(Br)Br)c(CCl)c(N(Cl)Cl)c1C(Cl)(Cl)Cl.CC(C)CCl.CCC(Br)Br.ClP(Br)C(Cl)(Br)Br.FC(F)(F)c1cc(Cl)c(Cl)c(Br)c1Cl.N",
+    "reason": "Molecular weight 1795.9599999999991 out of range"
+}
+{
+    "smiles": "CC.CC(C)C(Cl)C(C)Cl.CCC(Br)Br.CCC(Br)c1c(C(Cl)C(Cl)(Cl)Cl)c(C(Cl)(Br)Br)c(CCl)c(N(Cl)Cl)c1C(Cl)(Cl)Cl.ClP(Br)C(Cl)(Br)Br.FC(F)(F)c1c(Cl)c(Cl)c(Cl)c(Br)c1Cl.N",
+    "reason": "Molecular weight 1941.375999999999 out of range"
+}
+{
+    "smiles": "CC(Br)C(Br)c1c(C(Cl)(Cl)Cl)c(N(Cl)Cl)c(C(F)Cl)c(C(Cl)(Br)Br)c1C(Cl)(Cl)C(O)(Cl)Cl.CC(Cl)C(Cl)(Br)C(C)CBr.CCBr.CCC(Br)Br.FC(F)(F)c1c(Cl)c(Cl)c(Cl)c(Br)c1Cl.N.NP(Cl)C(Cl)(Br)Br",
+    "reason": "Molecular weight 2227.0679999999993 out of range"
+}
+{
+    "smiles": "NS(=O)(=O)c1ccc(NNC(=O)c2ccc3ccccc3c2)cc1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "ClN(Br)Sc1ccc(NBr)cc1.Nc1c(Br)c(C=O)cc2c(CF)cccc12",
+    "reason": "Molecular weight 614.5600000000001 out of range"
+}
+{
+    "smiles": "Cc1cc2c(CF)ccc(Cl)c2c(NCl)c1Br.ClN(Br)[SH](Br)(Br)c1ccc(NBr)cc1Br",
+    "reason": "Molecular weight 909.1789999999999 out of range"
+}
+{
+    "smiles": "FC(F)c1ccc(Cl)c2c(N(Cl)Br)cc(CCl)c(Br)c12.FCc1c(NBr)ccc([SH](Cl)(Br)(Br)N(Cl)Br)c1Br",
+    "reason": "Molecular weight 1107.98 out of range"
+}
+{
+    "smiles": "FC(Br)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1NBr.Fc1c(Br)c(C(F)F)c2c(Br)c(CCl)cc(N(Cl)Br)c2c1Cl",
+    "reason": "Molecular weight 1352.6519999999998 out of range"
+}
+{
+    "smiles": "FC(Br)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1NBr.Fc1c(Br)c(C(F)(F)F)c2c(Br)c(CCl)cc(N(Cl)Br)c2c1Cl",
+    "reason": "Molecular weight 1370.6419999999996 out of range"
+}
+{
+    "smiles": "FC(Br)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1NBr.Fc1c(Br)c(C(F)(F)F)c2c(Br)c(CCl)c(Cl)c(N(Cl)Br)c2c1Cl",
+    "reason": "Molecular weight 1405.0869999999995 out of range"
+}
+{
+    "smiles": "CC(F)(Br)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1N(Cl)Br.Fc1c(Br)c(C(F)(F)F)c2c(Br)c(CCl)c(Cl)c(N(Cl)Br)c2c1Cl",
+    "reason": "Molecular weight 1453.5589999999995 out of range"
+}
+{
+    "smiles": "CC(Cl)c1c(Cl)c(N(Cl)Br)c2c(Cl)c(F)c(Br)c(C(F)(F)F)c2c1Br.FC(Br)(CBr)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1N(Cl)Br",
+    "reason": "Molecular weight 1546.4819999999997 out of range"
+}
+{
+    "smiles": "FC(Br)(CBr)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1N(Cl)Br.Fc1c(Br)c(C(F)(F)F)c2c(Br)c(C(Cl)(Cl)CCl)c(Cl)c(N(Cl)Br)c2c1Cl",
+    "reason": "Molecular weight 1615.3719999999994 out of range"
+}
+{
+    "smiles": "FC(Br)(CBr)c1c(Br)c([SH](Cl)(Br)(Br)N(Cl)Br)c(Cl)c(Cl)c1N(Cl)Br.Fc1c(Br)c(C(F)(F)F)c2c(Br)c(C(Cl)(Cl)C(Cl)(Cl)Br)c(Cl)c(N(Cl)Br)c2c1Cl",
+    "reason": "Molecular weight 1728.7129999999993 out of range"
+}
+{
+    "smiles": "[O-]C(=O)c1ccc(cc1)S(=O)(=O)Nc1ccccc1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "Cc1c(Cl)cccc1N[SH](Br)(Br)c1cccc(Br)c1.[O-]",
+    "reason": "Molecular weight 505.4770000000001 out of range"
+}
+{
+    "smiles": "Cc1cc(Br)c([SH](Cl)(Br)(Br)N(Br)c2ccc(C)c(Cl)c2C)cc1Br.[O-]",
+    "reason": "Molecular weight 726.7759999999998 out of range"
+}
+{
+    "smiles": "Br.CCc1c(Cl)cc(Br)c(C)c1Cl.Cc1c(Br)cc([SH](Cl)(Br)(Br)Br)c(Br)c1Br.[O-]",
+    "reason": "Molecular weight 1000.9530000000001 out of range"
+}
+{
+    "smiles": "Br.Cc1c(Br)cc(Cl)c(C(C)Cl)c1Cl.ClC(Br)c1c(Br)c(Br)c([SH](Cl)(Br)(Br)Br)c(Br)c1Br",
+    "reason": "Molecular weight 1211.636 out of range"
+}
+{
+    "smiles": "BrBr.CC(Cl)(Br)c1c(Br)c(Br)c([SH](Cl)(Br)(Br)Br)c(Br)c1Br.CC(Cl)c1c(Cl)cc(Br)c(C(F)Br)c1Cl",
+    "reason": "Molecular weight 1401.445 out of range"
+}
+{
+    "smiles": "BrBr.CC(Cl)(Br)c1c(Br)c(Br)c([SH](Cl)(Br)(Br)Br)c(Br)c1Br.CCC(C)(Cl)c1c(Cl)c(Cl)c(Br)c(C(F)Br)c1Cl",
+    "reason": "Molecular weight 1463.9439999999997 out of range"
+}
+{
+    "smiles": "C.CC(Cl)c1c(Cl)c(Cl)cc(C(F)Br)c1Cl.Cl.F.N[SH]1([SH](Cl)(Br)(Br)Br)=C(Br)C(Br)=C(C(Cl)(Br)C(Cl)Br)C(O)=C1Br",
+    "reason": "Molecular weight 1357.2269999999999 out of range"
+}
+{
+    "smiles": "C.CC(Cl)c1c(Cl)c(Cl)cc(C(F)P)c1Cl.ClBr.Cl[SH](Br)(Br)(Br)Br.F.N.OC(=C(Br)Br)C(=C(Br)CBr)C(Cl)(Br)C(Cl)Br",
+    "reason": "Molecular weight 1518.966 out of range"
+}
+{
+    "smiles": "Br.Br.BrOC=C(Br)Br.CC(Cl)c1c(Cl)c(Cl)cc(C(P)(Br)Br)c1Cl.ClBr.ClC(Br)C(Cl)Br.F.N.NBr.NN.P[SH](Cl)(Br)(Br)Br",
+    "reason": "Molecular weight 1768.6630000000002 out of range"
+}
+{
+    "smiles": "Br.BrBr.BrOC=C(Br)Br.ClBr.ClC(Br)C(Cl)Br.Cl[SH](Br)(Br)(Br)PBr.FBr.N.N.NBr.PC(Br)(Br)c1cc(Cl)c(Cl)c(C(Cl)CBr)c1Cl",
+    "reason": "Molecular weight 2069.232 out of range"
+}
+{
+    "smiles": "CCCC[C@H](NC(=O)OC(C)(C)C)C(=O)N[C@H](C(=O)NCC(C)C)C(C)(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "C.C.CC.CCC.C[CH]N(Cl)C(F)(Cl)[C@H](CC(Br)CC)NC(=O)OC(C)(C)C",
+    "reason": "Molecular weight 515.4000000000002 out of range"
+}
+{
+    "smiles": "C.C.C.CC.CC.CC(Br)NCl.CC(Cl)C(Br)(Br)C[CH]N(S)C(=O)OF.CCC(C)C.CO.Cl.F",
+    "reason": "Molecular weight 799.816 out of range"
+}
+{
+    "smiles": "C.C.C.CBr.CC.CCC.CCO.FF.FOCBr.O=C(OF)C(S)[CH]CC(Br)(Br)CF.PC(Br)(CCl)NCl.S",
+    "reason": "Molecular weight 1030.1549999999997 out of range"
+}
+{
+    "smiles": "C.C.CBr.CC.CC(S)([CH]CC(Br)(Br)CF)C(=O)OF.CCC.CCCBr.ClCBr.FF.FOCBr.PC(Br)(NCl)C(Cl)Cl.SBr",
+    "reason": "Molecular weight 1347.7879999999998 out of range"
+}
+{
+    "smiles": "C.C.CBr.CC(Br)C(O)Br.CC(Br)OF.CC(C)([CH]CC(Br)(Br)CF)SCl.CCC.CF.CP.ClCBr.FC(Cl)(Cl)C(P)(Br)NCl.FF.SBr",
+    "reason": "Molecular weight 1513.1609999999998 out of range"
+}
+{
+    "smiles": "C.C.C.CBr.CC(Br)OF.CCC.CCl.COC(Br)C(C)Br.CP.CP(Br)C(Br)(NCl)C(F)(Cl)Cl.ClC(Cl)(Br)Br.FCBr.FF.F[CH]CC(Br)(Br)CF.SBr.SCl",
+    "reason": "Molecular weight 1856.8040000000003 out of range"
+}
+{
+    "smiles": "Br.C.C.C.CBr.CCC.CCl.COC(Br)C(C)Br.CP(Br)C(Br)(NCl)C(F)(Cl)Cl.ClC(Cl)(Br)Br.ClCCSCl.F.FCCl.FF.FOC(P)Br.FSBr.F[CH]CC(Br)Br.PCCl",
+    "reason": "Molecular weight 2014.1430000000003 out of range"
+}
+{
+    "smiles": "Br.C.C.C.C.CBr.CC(Br)C(Br)Br.CCCBr.CCl.CF.CP(Br)C(Br)C(F)(Cl)Cl.Cl.ClC(Cl)(Br)Br.ClCCSCl.FCCl.FF.FOC(P)Br.F[CH]CC(Cl)(Br)Br.F[SH](Cl)Br.PCCl",
+    "reason": "Molecular weight 2229.8860000000004 out of range"
+}
+{
+    "smiles": "Br.Br.BrCBr.C.C.C.C.CBr.CBr.CCCBr.CCl.CF.CP(Br)C(Br)C(F)(Cl)Cl.ClC(Cl)(Br)Br.ClCCSCl.ClCl.FC(Cl)Cl.FCCl.FF.FOC(Br)PBr.F[CH]CC(Cl)(Br)Br.F[SH](Cl)Br",
+    "reason": "Molecular weight 2432.581 out of range"
+}
+{
+    "smiles": "Br.BrBr.BrCBr.C.C.C.CBr.CBr.CC(Br)Br.CCCBr.CF.CP(Br)C(Br)(Br)C(F)(Cl)Cl.ClC(Br)Br.ClC(Cl)(Br)Br.ClCCSCl.ClCCl.ClCl.FC(Cl)Cl.FCCl.FF.FOC(Br)PBr.F[SH](Cl)Br.[CH]F",
+    "reason": "Molecular weight 2783.617999999999 out of range"
+}
+{
+    "smiles": "ONC(=O)C1(CC(C(=O)Nc2ccc(Cl)cc2)c2ccc(O)cc2)COC1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "C.C.CC(CNc1ccc(Cl)cc1)c1cc(Br)ccc1Br.CCNOBr",
+    "reason": "Molecular weight 575.6110000000001 out of range"
+}
+{
+    "smiles": "C.CC.CC.CC(C)(F)c1cc(Br)cc(Br)c1Br.Cl.ClOBr.Fc1cccc(Cl)c1",
+    "reason": "Molecular weight 749.422 out of range"
+}
+{
+    "smiles": "BrCBr.Brc1ccc(Br)c(Br)c1.C.CBr.CC.CC.CF.Cl.ClOBr.Fc1cc(Br)c(Br)c(Cl)c1Cl",
+    "reason": "Molecular weight 1184.3949999999998 out of range"
+}
+{
+    "smiles": "BrCBr.C.C.CC.CCCl.Cl.ClOBr.Clc1c(Br)c(Br)c(Br)c(Br)c1Br.FCBr.Fc1cc(Br)c(Br)c(Cl)c1Cl",
+    "reason": "Molecular weight 1411.0769999999995 out of range"
+}
+{
+    "smiles": "BrCBr.C.CC.CCCl.ClCBr.ClCl.ClOBr.Clc1c(Br)c(Br)c(Br)c(Br)c1Br.FC(Cl)(Br)Br.Fc1cc(Br)c(Br)c(Cl)c1Cl",
+    "reason": "Molecular weight 1672.2039999999995 out of range"
+}
+{
+    "smiles": "C.CC(Cl)CCl.CCCl.ClC(Br)(Br)Br.ClC(Cl)Br.ClCl.ClOBr.Clc1c(Br)c(Br)c(Br)c(Br)c1Br.FC(Cl)(Br)Br.Fc1cc(Br)c(Br)c(F)c1Cl",
+    "reason": "Molecular weight 1886.4519999999995 out of range"
+}
+{
+    "smiles": "CC.CCCCl.CCCl.Cc1c(S)c(Br)c(Cl)c(Br)c1Cl.Cl.Cl.ClC(Br)Br.ClC(Cl)Br.ClCl.ClOBr.FC(Cl)(Br)Br.Fc1c(F)c(Br)c(Br)c(F)c1S",
+    "reason": "Molecular weight 1719.523 out of range"
+}
+{
+    "smiles": "CC(C)Cl.CCCC.CCCCl.Cc1c(Cl)ccc(Br)c1S.Cl.Cl.ClC(Br)Br.ClC(Cl)Br.ClCl.ClSBr.FC(Cl)(Br)Br.Fc1c(S)c(F)c(Br)c(Br)c1Cl",
+    "reason": "Molecular weight 1680.7859999999998 out of range"
+}
+{
+    "smiles": "CC(C)Cl.CC(Cl)(Br)Br.CCCCC.CCCCCl.Cc1c(Cl)cc(F)c(Br)c1S.Cl.Cl.ClC(Cl)Br.ClCl.ClSBr.FC(Cl)(Br)Br.Fc1c(Cl)c(Br)c(Br)c(F)c1SCl",
+    "reason": "Molecular weight 1775.3020000000001 out of range"
+}
+{
+    "smiles": "C.C.CC(Cl)(Br)Br.CCCC(C)Br.CCCCCl.Cc1c(S)c(Br)c(F)c(Br)c1Cl.Cl.ClBr.ClC(Cl)Br.ClCl.ClSBr.FC(Cl)(Br)Br.FCl.Fc1c(Cl)c(Br)c(Br)c(F)c1SCl",
+    "reason": "Molecular weight 2019.985 out of range"
+}
+{
+    "smiles": "N#Cc1cccc(c1)C(O)(N=O)c1cccc(c1)-c1ccccc1",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CC(C)c1cccc(c1)-n1nc(cc1NC(=O)Nc1cccc(c1)C(F)(F)F)C(C)(C)CN(C)C",
+    "reason": "LogP 6.497700000000005 out of range"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "CCC(C)Nc1nc(nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@](C)(O)C1(C)C)C(C)C",
+    "reason": "ADMET screening failed"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "COc1ccc(cn1)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@H]1[C@H](O)[C@H](O[C@H]2[C@H](O)C[C@H](O[C@@H]12)C(O)=O)C(=O)NCc1cccc(c1)-c1ccc(s1)C(F)(F)F",
+    "reason": "Molecular weight 780.7310000000001 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "CCc1cc(C(C)C)c(Nc2ccc(cc2)C(=O)N[C@H]2CC[C@H](CC2)C(O)=O)c(c1)C1CC1",
+    "reason": "LogP 6.366600000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "COc1cc(NC(=O)c2ccc(cc2)C(C)C)c(cc1OC)C(=O)N1CCN(CC1)c1ccccc1",
+    "reason": "LogP 5.041900000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}
+{
+    "smiles": "Cc1ccc2nc(Nc3cc(Cl)c(Cl)cc3O[C@@H]3C[C@@H]4CCC[C@@H](C3)N4Cc3ccccc3)oc2c1",
+    "reason": "Molecular weight 522.4760000000005 out of range"
+}

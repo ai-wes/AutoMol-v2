@@ -7,7 +7,8 @@ from pathlib import Path
 from typing import List, Dict, Any
 from datetime import datetime
 from colorama import Fore, Style, init
-
+import torch
+from utils.pre_screen_compounds import pre_screen_ligand
 # Initialize colorama
 init(autoreset=True)
 
@@ -31,78 +32,89 @@ def run_Phase_2b(
     optimization_steps: int,
     score_threshold: float,
     protein_sequences: List[str]
-) -> List[Dict[str, Any]]:
-    try:
-        print(Fore.CYAN + "Running Phase 2b: SMILES Ligand Pipeline")
-        logger.info("Running Phase 2b: SMILES Ligand Pipeline")
+) -> Dict[str, Any]:
+    logger.info("Starting Phase 2b: Generate and Optimize Ligands")
+    
+    pipeline = SMILESLigandPipeline()
+    phase2b_results = []
+    
+    for protein_sequence in protein_sequences:
+        logger.info(f"Processing protein sequence: {protein_sequence}")
+        print(Fore.CYAN + f"Processing protein sequence: {protein_sequence}")
         
-        pipeline = SMILESLigandPipeline()
-        
-        results = pipeline.run_smiles_ligand_pipeline(
-            predicted_structures_dir=predicted_structures_dir,
-            results_dir=results_dir,
-            num_sequences=num_sequences,
-            optimization_steps=optimization_steps,
-            score_threshold=score_threshold,
-            protein_sequences=protein_sequences
-        )
-        
-        processed_results = []
-        for i, result in enumerate(results):
-            smiles = result.get('smiles', '')
-            score = result.get('score', 0)
+        # Generate novel SMILES
+        try:
+            novel_smiles = pipeline.generate_novel_smiles(protein_sequence, num_sequences)
+            logger.info(f"Generated {len(novel_smiles)} novel SMILES.")
+            print(Fore.GREEN + f"Generated {len(novel_smiles)} novel SMILES.")
+        except Exception as e:
+            logger.error(f"Error generating novel SMILES: {e}")
+            print(Fore.RED + f"Error generating novel SMILES: {e}")
+            continue
+        valid_ligands = []
+        max_optimization_attempts = 10  # Maximum number of optimization attempts
+
+        for ligand in results:
+            # Check if 'smiles' key exists
+            if 'smiles' not in ligand:
+                logging.warning(f"Ligand entry missing 'smiles' key: {ligand}")
+                print(f"WARNING: Ligand entry missing 'smiles' key: {ligand}")
+                continue  # Skip this entry
+
+            smiles = ligand['smiles']
+            passed, message = pre_screen_ligand(smiles)  # Validation of ligand
+            attempts = 0
+
+            while not passed and attempts < max_optimization_attempts:
+                logging.warning(f"Ligand {smiles} failed validation: {message}. Attempting optimization. Attempt {attempts + 1}/{max_optimization_attempts}")
+                print(f"WARNING: Ligand {smiles} failed validation: {message}. Attempting optimization. Attempt {attempts + 1}/{max_optimization_attempts}")
+                smiles = pipeline.iterative_optimization(smiles)  # Corrected argument count
+                passed, message = pre_screen_ligand(smiles)
+                attempts += 1
+                logging.info(f"Attempt {attempts}: Ligand {smiles} validation status: {passed}, message: {message}")
+                print(f"Attempt {attempts}: Ligand {smiles} validation status: {passed}, message: {message}")
+
+            if passed:
+                ligand['smiles'] = smiles
+                valid_ligands.append(ligand)
+                logging.info(f"Ligand {smiles} passed validation after {attempts} attempts: {message}")
+                print(f"Ligand {smiles} passed validation after {attempts} attempts: {message}")
+            else:
+                logging.warning(f"Ligand {smiles} failed validation after {attempts} attempts: {message}")
+                print(f"WARNING: Ligand {smiles} failed validation after {attempts} attempts: {message}")
+
+        if not valid_ligands:
+            logging.error("No ligands passed validation. Exiting pipeline.")
+            print("ERROR: No ligands passed validation. Exiting pipeline.")
+            return []  # Return an empty list instead of None        
+
+        for smiles in novel_smiles:
+            # Pre-screen and store ligand
+            try:
+                storage_message = pre_screen_ligand(smiles)
+                logger.info(storage_message)
+                print(Fore.GREEN + storage_message)
+            except Exception as e:
+                logger.error(f"Error during pre-screening: {e}")
+                print(Fore.RED + f"Error during pre-screening: {e}")
+                continue
             
-            processed_result = {
-                'smiles': smiles,
-                'score': score
-            }
-            processed_results.append(processed_result)
-            
-            print(Fore.GREEN + f"Processed result {i+1}:")
-            print(Fore.GREEN + f"  SMILES: {smiles}")
-            print(Fore.GREEN + f"  Score: {score}")
-        
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        results_filename = f"phase2b_results_{timestamp}.json"
-        results_path = os.path.join(results_dir, results_filename)
-        
-        with open(results_path, "w") as f:
-            json.dump(processed_results, f, indent=4)
-        
-        print(Fore.GREEN + f"Phase 2b completed successfully with {len(processed_results)} results.")
-        print(Fore.GREEN + f"Results saved to: {results_path}")
-        logger.info(f"Phase 2b completed successfully with {len(processed_results)} results.")
-        logger.info(f"Results saved to: {results_path}")
-        return processed_results
-    except Exception as e:
-        print(Fore.RED + f"An error occurred in run_Phase_2b: {e}")
-        logger.error(f"An error occurred in run_Phase_2b: {e}")
-        raise
-
-def main():
-    predicted_structures_dir = "predicted_structures"
-    results_dir = "results/phase2b"
-    num_sequences = 2
-    optimization_steps = 100
-    score_threshold = 0.8
-
-    # Ensure output directories exist
-    Path(predicted_structures_dir).mkdir(parents=True, exist_ok=True)
-    Path(results_dir).mkdir(parents=True, exist_ok=True)
-
-    try:
-        ligand_sequences = run_Phase_2b(
-            predicted_structures_dir=predicted_structures_dir,
-            results_dir=results_dir,
-            num_sequences=num_sequences,
-            optimization_steps=optimization_steps,
-            score_threshold=score_threshold,
-            protein_sequences=[]  # This should be populated from Phase 2a
-        )
-        print(Fore.CYAN + f"Generated ligand sequences: {ligand_sequences}")
-    except Exception as e:
-        print(Fore.RED + f"An error occurred: {str(e)}")
-        logger.error(f"An error occurred: {str(e)}")
-
-if __name__ == "__main__":
-        main()
+            # Process docking
+            try:
+                docking_result = pipeline.process_single_smiles(
+                    smiles=smiles,
+                    protein_sequence=protein_sequence,
+                    predicted_structures_dir=predicted_structures_dir,
+                    results_dir=results_dir,
+                    score_threshold=score_threshold
+                )
+                if docking_result:
+                    phase2b_results.append(docking_result)
+            except Exception as e:
+                logger.error(f"Error during docking process: {e}")
+                print(Fore.RED + f"Error during docking process: {e}")
+                continue
+    
+    logger.info("Phase 2b completed successfully.")
+    print(Fore.GREEN + "Phase 2b completed successfully.")
+    return {"phase2b_results": phase2b_results}

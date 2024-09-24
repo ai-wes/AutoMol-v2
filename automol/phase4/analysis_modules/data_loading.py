@@ -51,6 +51,7 @@ class DataLoading:
             logging.info(f"Loading trajectory file from {traj_file}...")
             if not os.path.exists(traj_file):
                 raise FileNotFoundError(f"Trajectory file {traj_file} does not exist.")
+            # Replace with actual loading logic
             trajectory_data = np.random.rand(1000, 3)  # Simulated data
             logging.info("Trajectory file loaded successfully.")
             return trajectory_data

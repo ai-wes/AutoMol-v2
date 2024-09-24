@@ -1,15 +1,33 @@
+import json
 import sys
-import os
 import logging
-import argparse
-from datetime import datetime
-from phase1.phase1_run import Phase1
+from pathlib import Path
+import os
+from phase1.phase1_run import run_Phase_1
 from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
 from phase3.phase3_run import run_Phase_3
-from phase4.phase4_run import run_Phase_4  # Uncomment when Phase 4 is ready
-from utils.save_utils import save_json, create_organized_directory_structure, save_results
-from utils.pre_screen_compounds import pre_screen_ligand  # Import validation function
+from phase4.phase4_run import run_Phase_4
+from utils.save_utils import save_json, create_organized_directory_structure
+import argparse
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler("main_run.log")
+    ]
+)
+logger = logging.getLogger(__name__)
+
+def merge_config_with_args(config, args):
+    """Merge command-line arguments into the configuration dictionary."""
+    for key, value in vars(args).items():
+        if value is not None:
+            config[key] = value
+    return config
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="AutoMol-v2: Novel molecule generation and analysis pipeline")
@@ -23,155 +41,142 @@ def parse_arguments():
     parser.add_argument("--skip_description_gen", action="store_true", help="Skip technical description generation and use input text directly")
     return parser.parse_args()
 
-def setup_logging(log_dir="logs"):
-    create_organized_directory_structure(log_dir)
-    log_file = os.path.join(log_dir, "autonomol.log")
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler()
-        ]
-    )
-    logging.info("Logging is set up.")
-
 def main():
+    # Load configuration
     args = parse_arguments()
-    setup_logging()
-
-    logging.info("Starting AutoMol-v2 Pipeline")
-
-    # Create base output directories if they don't exist
-    if not os.path.exists(args.output_dir):
-        create_organized_directory_structure(args.output_dir)
-    
-    phase1_dir = os.path.join(args.output_dir, "phase1")
-    phase2a_dir = os.path.join(args.output_dir, "phase2a")
-    phase2b_dir = os.path.join(args.output_dir, "phase2b")
-    phase3_dir = os.path.join(args.output_dir, "phase3")
-    phase4_dir = os.path.join(args.output_dir, "phase4")
-    
-    for directory in [phase1_dir, phase2a_dir, phase2b_dir, phase3_dir, phase4_dir]:
-        if not os.path.exists(directory):
-            os.makedirs(directory)
     try:
-        # Phase 1: Technical Description Generation
-        phase1 = Phase1()
-        if not args.skip_description_gen:
-            descriptions = phase1.run_pipeline(args.input_text)
-            logging.info("Phase 1 completed: Technical descriptions generated.")
-            # Save Phase 1 outputs
-            save_json({"technical_descriptions": descriptions}, os.path.join(phase1_dir, "descriptions.json"))
-        else:
-            descriptions = [args.input_text]
-            logging.info("Phase 1 skipped: Using input text directly.")
-            save_json({"technical_descriptions": descriptions}, os.path.join(phase1_dir, "descriptions.json"))
+        with open('config.json', 'r') as config_file:
+            config = json.load(config_file)
+        logger.info("Configuration loaded successfully.")
+    except FileNotFoundError:
+        logger.error("config.json file not found.")
+        sys.exit(1)
+    except json.JSONDecodeError:
+        logger.error("Invalid JSON in config.json.")
+        sys.exit(1)
 
-        # Phase 2a: Protein Generation and Optimization
-        logging.info("Starting Phase 2a: Protein Generation and Optimization.")
-        analysis_results_phase2a, protein_sequences = run_Phase_2a(
-            technical_descriptions=descriptions,
-            predicted_structures_dir=os.path.join(phase2a_dir, "predicted_structures"),
-            results_dir=phase2a_dir,
-            num_sequences=args.num_sequences,
-            optimization_steps=args.optimization_steps,
-            score_threshold=args.score_threshold
-        )
-        logging.info("Phase 2a completed: Proteins generated and optimized.")
+    # Merge config with arguments
+    config = merge_config_with_args(config, args)
+    logger.info("Configuration merged with command-line arguments.")
 
-        # Save Phase 2a outputs
-        phase2a_results = {
-            "analysis_results": [
-                {
-                    "sequence": result['sequence'],
-                    "score": result['score'],
-                    "pdb_file": os.path.relpath(result['pdb_file'], args.output_dir),
-                    "analysis_dir": os.path.relpath(result['analysis_dir'], args.output_dir)
-                } for result in analysis_results_phase2a
-            ],
-            "protein_sequences": protein_sequences
-        }
-        save_json(phase2a_results, os.path.join(phase2a_dir, "phase2a_results.json"))
+    config_overrides = {k: v for k, v in vars(args).items() if v is not None}
+    config.update(config_overrides)
+    logger.info(f"Configuration overridden with command-line arguments: {config_overrides}")
 
-        # Phase 2b: Ligand Generation and Optimization
-        ligand_results = run_Phase_2b(
-            predicted_structures_dir=os.path.join(phase2a_dir, "predicted_structures"),
-            results_dir=phase2b_dir,
-            num_sequences=args.num_sequences,
-            optimization_steps=args.optimization_steps,
-            score_threshold=args.score_threshold,
-            protein_sequences=protein_sequences  # Pass the generated protein sequences
-        )
-        logging.info("Phase 2b completed: Ligands generated and optimized.")
-
-        # Save Phase 2b outputs
-        save_json({
-            "ligand_results": ligand_results
-        }, os.path.join(phase2b_dir, "phase2b_results.json"))
-
-        # Validation Step: Run Validation of Ligands Before Phase 3
-        logging.info("Running validation of ligand sequences before moving to Phase 3.")
-        
-        valid_ligands = []
-        for ligand in ligand_results:
-            passed, message = pre_screen_ligand(ligand['smiles'])  # Validation of ligand
-            if not passed:
-                logging.warning(f"Ligand {ligand['smiles']} failed validation: {message}")
-                print(f"WARNING: Ligand {ligand['smiles']} failed validation: {message}")
-                continue  # Skip to the next ligand without terminating
-            valid_ligands.append(ligand)
-            logging.info(f"Ligand {ligand['smiles']} passed validation: {message}")
-        
-        if not valid_ligands:
-            logging.error("No ligands passed validation. Exiting pipeline.")
-            print("ERROR: No ligands passed validation. Exiting pipeline.")
-            return  # Exit the main function gracefully
-        
-        # Proceed with Phase 3 using valid ligands
-        try:
-            # Phase 3: Simulation
-            logging.info("Starting Phase 3: Simulation.")
-            phase3_results = run_Phase_3(
-                protein_results=analysis_results_phase2a,
-                ligand_results=valid_ligands,  # Use only valid ligands
-                input_text=args.input_text,
-                output_dir=phase3_dir
-            )
-            logging.info("Phase 3 completed: Simulation performed.")
-            # Save Phase 3 outputs
-            save_json({
-                "phase3_results": phase3_results
-            }, os.path.join(phase3_dir, "phase3_results.json"))
-
-        except Exception as e:
-            logging.error(f"An error occurred in the AutoMol-v2 Pipeline: {e}", exc_info=True)
-            print(f"An error occurred: {str(e)}")
-
-        # Phase 4: Virtual Lab Simulation and Automation
-        # Uncomment and implement Phase 4 when ready
-        logging.info("Starting Phase 4: Virtual Lab Simulation and Automation.")
-        simulation_results = run_Phase_4(phase3_results)
-        logging.info("Phase 4 completed: Virtual lab simulation and automation done.")
-        save_json({
-            "simulation_results": simulation_results
-        }, os.path.join(phase4_dir, "phase4_results.json"))
-
-        # Save final results
-        logging.info("Saving final results.")
-        final_results = {
-            "phase1": os.path.join(phase1_dir, "descriptions.json"),
-            "phase2a": os.path.join(phase2a_dir, "phase2a_results.json"),
-            "phase2b": os.path.join(phase2b_dir, "phase2b_results.json"),
-            "phase3": os.path.join(phase3_dir, "phase3_results.json"),
-            # "phase4": os.path.join(phase4_dir, "phase4_results.json")
-        }
-        save_results(final_results, args.output_dir)
-        logging.info("AutoMol-v2 Pipeline completed successfully.")
-
+    # Create organized directory structure
+    base_output_dir = config.get('base_output_dir', 'results')
+    try:
+        run_dir, phase_dirs = create_organized_directory_structure(base_output_dir)
+        if not run_dir or not phase_dirs:
+            raise ValueError("Failed to create directory structure")
+        logger.info(f"Organized directory structure created at {run_dir}.")
     except Exception as e:
-        logging.error(f"An error occurred in the AutoMol-v2 Pipeline: {e}", exc_info=True)
-        print(f"An error occurred: {str(e)}")
+        logger.error(f"Failed to create directory structure: {str(e)}")
+        sys.exit(1)
+
+    # Update config with run_dir
+    config['run_dir'] = run_dir
+
+    # Phase 1: Generate Hypothesis
+    if not config.get('skip_description_gen', False):
+        logger.info("Starting Phase 1: Generate Hypothesis")
+        phase1_results = run_Phase_1(config)
+        save_json(phase1_results, Path(run_dir) / "phase1_results.json")
+        logger.info("Phase 1 results saved successfully.")
+    else:
+        logger.info("Skipping Phase 1: Generate Hypothesis as per command-line flag.")
+        # Optionally, set default values or handle accordingly
+        phase1_results = {
+            'technical_description': config.get('input_text', ''),
+            'initial_hypothesis': config.get('input_text', '')
+        }
+    print("phase1_results", phase1_results)
+
+    # Phase 2a: Generate and Optimize Proteins
+    logger.info("Starting Phase 2a: Generate and Optimize Proteins")
+    phase2a_config = config['phase2a']
+    phase2a_config.update({
+        'technical_descriptions': [phase1_results['technical_description']],  # Ensure it's a list
+        'predicted_structures_dir': os.path.join(run_dir, "phase2a", "generated_sequences"),
+        'results_dir': os.path.join(run_dir, "phase2a", "results"),
+        'num_sequences': config.get('num_sequences', 2),
+        'optimization_steps': config.get('optimization_steps', 15),
+        'score_threshold': config.get('score_threshold', 0.55)
+    })
+
+    # Filter out unexpected keys
+    expected_keys = ['technical_descriptions', 'predicted_structures_dir', 'results_dir', 'num_sequences', 'optimization_steps', 'score_threshold']
+    filtered_phase2a_config = {k: v for k, v in phase2a_config.items() if k in expected_keys}
+
+    # Unpack the filtered configuration dictionary when calling run_Phase_2a
+    phase2a_results, all_generated_sequences = run_Phase_2a(**filtered_phase2a_config)
+    save_json(phase2a_results, Path(run_dir) / "phase2a_results.json")
+    logger.info("Phase 2a results saved successfully.")
+
+    # Extract protein sequences from phase2a_results
+    protein_sequences = [result['sequence'] for result in phase2a_results]
+
+    # Phase 2b: Generate and Optimize Ligands
+    # Phase 2b: Generate and Optimize Ligands
+    logger.info("Starting Phase 2b: Generate and Optimize Ligands")
+    phase2b_config = config['phase2b']
+    phase2b_config.update({
+        'predicted_structures_dir': os.path.join(run_dir, "phase2b", "ligands"),  # Corrected path
+        'results_dir': os.path.join(run_dir, "phase2b", "results"),
+        'num_sequences': config.get('num_sequences', 2),
+        'optimization_steps': config.get('optimization_steps', 15),
+        'score_threshold': config.get('score_threshold', 0.55),
+        'protein_sequences': protein_sequences
+    })
+
+    # Filter out unexpected keys
+    expected_keys_phase2b = ['predicted_structures_dir', 'results_dir', 'num_sequences', 'optimization_steps', 'score_threshold', 'protein_sequences']
+    filtered_phase2b_config = {k: v for k, v in phase2b_config.items() if k in expected_keys_phase2b}
+
+    phase2b_results = run_Phase_2b(**filtered_phase2b_config)
+    save_json(phase2b_results, Path(run_dir) / "phase2b_results.json")
+    logger.info("Phase 2b results saved successfully.")
+
+
+        # Phase 3: Simulation
+    logger.info("Starting Phase 3: Simulation")
+    phase3_config = config['phase3']
+    phase3_config.update({
+        'protein_results': phase2a_results,
+        'simulation_dir': os.path.join(run_dir, "phase3", "simulations"),
+        'device': config.get('device', 'cpu')
+    })
+
+    # Optionally, filter out unexpected keys for Phase 3
+    expected_keys_phase3 = ['protein_results', 'simulation_dir', 'device']
+    filtered_phase3_config = {k: v for k, v in phase3_config.items() if k in expected_keys_phase3}
+
+    # Unpack the filtered configuration dictionary when calling run_Phase_3
+    simulation_results = run_Phase_3(**filtered_phase3_config)
+    save_json(simulation_results, Path(run_dir) / "phase3_results.json")
+    logger.info("Phase 3 results saved successfully.")
+
+    # Phase 4: Final Analysis and Reporting
+    logger.info("Starting Phase 4: Final Analysis and Reporting")
+    phase4_config = config['phase4']
+    phase4_config.update({
+        'simulation_results': simulation_results,
+        'output_dir': os.path.join(run_dir, "phase4")
+    })
+    phase4_results = run_Phase_4(phase4_config)
+    save_json(phase4_results, Path(run_dir) / "phase4_results.json")
+    logger.info("Phase 4 results saved successfully.")
+
+    # Save All Results Consolidated
+    all_results = {
+        'phase1': phase1_results,
+        'phase2a': phase2a_results,
+        'phase2b': phase2b_results,
+        'phase3': simulation_results,
+        'phase4': phase4_results
+    }
+    save_json(all_results, Path(run_dir) / "final_results.json")
+    logger.info("All phase results saved successfully.")
 
 if __name__ == "__main__":
     main()

@@ -54,12 +54,35 @@ import torch  # Import PyTorch for CUDA management
 # Initialize colorama
 init(autoreset=True)
 
+import gc
+import psutil
+
+def log_memory_usage():
+    process = psutil.Process()
+    memory_info = process.memory_info()
+    memory_usage = memory_info.rss / (1024 * 1024)  # in MB
+    logging.info(f"Current memory usage: {memory_usage:.2f} MB")
+    print(f"{Fore.CYAN}Current memory usage: {memory_usage:.2f} MB")
+
+# Call this function at key points in your pipeline
+
+def clear_memory():
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+    print(f"{Fore.GREEN}Memory cleared.")
+    logging.info("Memory cleared.")
+
+
 def clear_cuda_cache():
     """
     Clears the CUDA cache to preserve memory.
     """
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
+        log_memory_usage()
+        clear_memory()
+        
         print(f"{Fore.GREEN}CUDA cache cleared.")
         logging.info("CUDA cache cleared.")
     else:

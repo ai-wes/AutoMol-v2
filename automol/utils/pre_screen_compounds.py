@@ -1,21 +1,26 @@
-import pymongo
 from pymongo import MongoClient
 from rdkit import Chem
 from rdkit.Chem import Descriptors
-from Bio.SeqUtils import molecular_weight, ProtParam
-from Bio.Blast import NCBIWWW, NCBIXML
 import requests
 import json
+import logging
+import os
+from datetime import datetime
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Initialize MongoDB connection
 client = MongoClient('mongodb://localhost:27017/')
 db = client['screening_pipeline']
 results_collection = db['screening_results']
 
-# Minimum score threshold for passing pre-screening
-MINIMUM_SCORE_THRESHOLD = 7.0
+# Minimum score thresholds
+MINIMUM_SCORE_THRESHOLD = 6.0
+MINIMAL_VIABILITY_THRESHOLD = 4.0  # New threshold for minimal viability
 
-# Step 1: Physicochemical Properties Filtering
+# Physicochemical Properties Filtering
 def filter_ligand_physicochemical(smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
@@ -38,72 +43,136 @@ def filter_ligand_physicochemical(smiles):
 
     return True, "Ligand passes physicochemical filters"
 
-# Step 2: Novelty Check for Ligands (PubChem Search)
-def check_ligand_novelty(smiles):
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/{smiles}/cids/JSON"
-    response = requests.get(url)
-    if response.status_code == 200 and "IdentifierList" in response.json():
-        return False, "SMILES string matches a known compound in PubChem"
-    return True, "Ligand is novel"
-
-# Step 3: Predictive Toxicity and ADMET Screening (Mock API Call)
+# Predictive Toxicity and ADMET Screening (Mock API Call)
 def admet_screening(smiles):
     url = "https://biosig.lab.uq.edu.au/pkcsm/prediction"
     headers = {'Content-Type': 'application/json'}
     data = {"smiles": smiles, "admet": "toxicity"}
-    response = requests.post(url, json=data, headers=headers)
-    if response.status_code == 200:
+    try:
+        response = requests.post(url, json=data, headers=headers, timeout=10)
+        response.raise_for_status()
         results = response.json()
         if results['toxicity']['alert']:
             return False, "Toxicity alert detected"
         return True, "No toxicity alerts"
-    else:
-        return False, "ADMET screening failed"
+    except requests.exceptions.RequestException as e:
+        logging.error(f"ADMET screening API request failed: {e}")
+        return False, "ADMET screening failed due to API error"
 
-# Pre-Screening Function (Runs Validation Steps 1-3)
-def pre_screen_ligand(smiles):
-    # Step 1: Physicochemical Properties Filtering
-    pass_physico, physico_message = filter_ligand_physicochemical(smiles)
-    if not pass_physico:
-        log_failed_sequence(smiles, physico_message)
-        return False, physico_message
+# Minimal Viability Screening
+def minimal_viability_screening(smiles: str) -> (bool, str):
+    """
+    Apply minimal criteria to allow novel compounds to pass.
+    These criteria are less stringent than the main pre-screening.
+    """
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return False, "Invalid SMILES for minimal viability"
 
-    # Step 2: Novelty Check
-    pass_novelty, novelty_message = check_ligand_novelty(smiles)
-    if not pass_novelty:
-        log_failed_sequence(smiles, novelty_message)
-        return False, novelty_message
+    mol_weight = Descriptors.MolWt(mol)
+    logp = Descriptors.MolLogP(mol)
 
-    # Step 3: ADMET Screening
+    # Less stringent criteria
+    weight_range = (100, 600)
+    logp_range = (-3, 6)
+
+    if not (weight_range[0] <= mol_weight <= weight_range[1]):
+        return False, f"MW {mol_weight} out of minimal range"
+    if not (logp_range[0] <= logp <= logp_range[1]):
+        return False, f"LogP {logp} out of minimal range"
+
+    return True, "Ligand passes minimal viability screening"
+
+def store_ligand_result_mongo(smiles: str, status: str = "Passed Pre-Screening"):
+    """
+    Store ligand screening results in MongoDB.
+    """
+    details = {"smiles_or_sequence": smiles, "status": status, "timestamp": datetime.now()}
+    try:
+        results_collection.insert_one(details)
+        logger.info(f"Ligand {smiles} stored in MongoDB with status: {status}.")
+    except Exception as e:
+        logger.error(f"Failed to store ligand {smiles} in MongoDB: {e}")
+
+def log_failed_sequence(smiles: str, reason: str):
+    """
+    Log failed sequences to a file for analysis.
+    """
+    log_path = "failed_sequences_log.json"
+    log_entry = {"smiles": smiles, "reason": reason, "timestamp": datetime.now().isoformat()}
+    try:
+        with open(log_path, "a") as log_file:
+            log_file.write(json.dumps(log_entry, indent=4) + "\n")
+        logger.warning(f"Ligand {smiles} failed pre-screening: {reason}")
+    except Exception as e:
+        logger.error(f"Failed to log failed sequence {smiles}: {e}")
+
+def log_minimal_passed_sequence(smiles: str, reason: str):
+    """
+    Log minimal passed sequences to a separate file.
+    """
+    log_path = "minimal_passed_sequences_log.json"
+    log_entry = {"smiles": smiles, "reason": reason, "timestamp": datetime.now().isoformat()}
+    try:
+        with open(log_path, "a") as log_file:
+            log_file.write(json.dumps(log_entry, indent=4) + "\n")
+        logger.info(f"Ligand {smiles} passed minimal viability screening: {reason}")
+    except Exception as e:
+        logger.error(f"Failed to log minimal passed sequence {smiles}: {e}")
+
+def log_passed_sequence(smiles: str, reason: str):
+    """
+    Log passed sequences to a separate file.
+    """
+    log_path = "passed_sequences_log.json"
+    log_entry = {"smiles": smiles, "reason": reason, "timestamp": datetime.now().isoformat()}
+    try:
+        with open(log_path, "a") as log_file:
+            log_file.write(json.dumps(log_entry, indent=4) + "\n")
+        logger.info(f"Ligand {smiles} passed pre-screening: {reason}")
+    except Exception as e:
+        logger.error(f"Failed to log passed sequence {smiles}: {e}")
+
+def pre_screen_ligand(smiles: str) -> (bool, str):
+    """
+    Pre-screen ligand based on physicochemical and ADMET properties.
+    """
+    # Step 1: Physicochemical Filtering
+    if not filter_ligand_physicochemical(smiles):
+        return False, "Failed physicochemical filtering"
+    
+    # Step 2: ADMET Screening
     pass_admet, admet_message = admet_screening(smiles)
     if not pass_admet:
-        log_failed_sequence(smiles, admet_message)
-        return False, admet_message
+        # Attempt Minimal Viability Screening
+        pass_minimal, minimal_message = minimal_viability_screening(smiles)
+        if pass_minimal:
+            return True, "Passed Minimal Viability Screening"
+        else:
+            return False, admet_message
+    else:
+        return True, "Passed Pre-Screening"
 
-    return True, "Ligand passed pre-screening"
+def screen_and_store_ligand_mongo(smiles: str) -> str:
+    """
+    Screen ligand and store results in MongoDB.
+    """
+    # Ensure 'smiles' is valid
+    if not smiles or not isinstance(smiles, str):
+        logger.error(f"Invalid SMILES input: {smiles}")
+        return f"Ligand {smiles} has invalid SMILES."
 
-# Store result in MongoDB (only if passed pre-screening)
-def store_ligand_result_mongo(smiles):
-    details = {"smiles_or_sequence": smiles, "status": "Passed Pre-Screening"}
-    results_collection.insert_one(details)
-    print(f"Ligand {smiles} stored in MongoDB.")
-
-# Log failed sequences to a file for analysis
-def log_failed_sequence(smiles, reason):
-    with open("failed_sequences_log.json", "a") as log_file:
-        log_file.write(json.dumps({"smiles": smiles, "reason": reason}, indent=4) + "\n")
-    print(f"Ligand {smiles} failed pre-screening: {reason}")
-
-# Main function execution with pre-screening
-def screen_and_store_ligand_mongo(smiles):
     passed, message = pre_screen_ligand(smiles)
     if passed:
-        store_ligand_result_mongo(smiles)
-        return f"Ligand {smiles} passed pre-screening and was stored."
+        # Determine status based on the message
+        if "Minimal Viability" in message:
+            status = "Passed Minimal Viability Screening"
+            log_minimal_passed_sequence(smiles, message)
+        else:
+            status = "Passed Pre-Screening"
+            log_passed_sequence(smiles, message)
+        store_ligand_result_mongo(smiles, status=status)
+        return f"Ligand {smiles} {message} and was stored."
     else:
+        log_failed_sequence(smiles, message)
         return f"Ligand {smiles} failed pre-screening: {message}"
-
-if __name__ == "__main__":
-    # Example input SMILES
-    smiles_input = "CCO"
-    print(screen_and_store_ligand_mongo(smiles_input))

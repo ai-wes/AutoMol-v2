@@ -8,6 +8,21 @@ class BioinformaticsAnalysis:
     def __init__(self):
         logging.info("Initialized BioinformaticsAnalysis.")
 
+    def analyze_protein_structure(self, protein_pdb: str):
+        try:
+            logging.info(f"Analyzing protein structure from PDB file: {protein_pdb}")
+            # Implement actual structural analysis here
+            # Placeholder: Return dummy structure analysis result
+            structure_analysis = {
+                'secondary_structure': 'Alpha helices and beta sheets detected',
+                'active_sites': ['Site1', 'Site2']
+            }
+            logging.info("Protein structure analysis completed.")
+            return structure_analysis
+        except Exception as e:
+            logging.error(f"Error in analyze_protein_structure: {e}")
+            raise
+
     def run_bioinformatics_analysis(self, sequencing_data: pd.DataFrame) -> np.ndarray:
         try:
             logging.info("Running bioinformatics analysis...")
