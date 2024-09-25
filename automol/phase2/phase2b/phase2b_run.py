@@ -44,7 +44,7 @@ def run_Phase_2b(
     
     for protein_sequence in protein_sequences:
         logger.info(f"Processing protein sequence: {protein_sequence}")
-        novel_smiles = pipeline.generate_novel_smiles(protein_sequence, num_sequences)
+        novel_smiles = pipeline.generate_valid_novel_smiles(protein_sequence, num_sequences)
         valid_ligands = []
         max_optimization_attempts = 10  # Maximum number of optimization attempts
 
@@ -55,7 +55,7 @@ def run_Phase_2b(
             while not passed and attempts < max_optimization_attempts:
                 logger.warning(f"Ligand {smiles} failed validation: {message}. Attempting optimization. Attempt {attempts + 1}/{max_optimization_attempts}")
                 print(f"WARNING: Ligand {smiles} failed validation: {message}. Attempting optimization. Attempt {attempts + 1}/{max_optimization_attempts}")
-                smiles = pipeline.iterative_optimization(smiles)
+                smiles = pipeline.optimizer.optimize_smiles(smiles)
                 passed, message = pre_screen_ligand(smiles)
                 attempts += 1
                 logger.info(f"Attempt {attempts}: Ligand {smiles} validation status: {passed}, message: {message}")

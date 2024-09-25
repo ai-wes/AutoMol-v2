@@ -6,7 +6,6 @@ from multiprocessing import Pool, cpu_count
 from openbabel import openbabel
 from rdkit import Chem
 from typing import List, Dict, Any
-from automol.phase2.phase2b.pre_screen_compounds import pre_screen_ligand
 from typing import List, Tuple
 logger = logging.getLogger(__name__)
 
