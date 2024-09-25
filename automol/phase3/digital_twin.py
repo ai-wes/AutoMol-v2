@@ -42,6 +42,7 @@ class DigitalTwinSimulator:
                 "Model could not be loaded. Please check the model path and format."
             )
 
+
     def reset_model(self):
 
         if self.model is None:
@@ -164,6 +165,122 @@ class DigitalTwinSimulator:
                 )
                 raise
 
+
+
+
+    def analyze_hallmarks_of_aging(self, solution: cobra.Solution) -> Dict[str, float]:
+        """
+        Analyze the hallmarks of aging based on the current metabolic state.
+        """
+        hallmarks = {
+            "genomic_instability": self._analyze_genomic_instability(solution),
+            "telomere_attrition": self._analyze_telomere_attrition(solution),
+            "epigenetic_alterations": self._analyze_epigenetic_alterations(solution),
+            "loss_of_proteostasis": self._analyze_loss_of_proteostasis(solution),
+            "deregulated_nutrient_sensing": self._analyze_deregulated_nutrient_sensing(solution),
+            "mitochondrial_dysfunction": self._analyze_mitochondrial_dysfunction(solution),
+            "cellular_senescence": self._analyze_cellular_senescence(solution),
+            "stem_cell_exhaustion": self._analyze_stem_cell_exhaustion(solution),
+            "altered_intercellular_communication": self._analyze_altered_intercellular_communication(solution)
+        }
+        return hallmarks
+
+    def _analyze_genomic_instability(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through DNA repair pathways
+        dna_repair_reactions = ["DNA_repair_1", "DNA_repair_2"]  # Replace with actual reaction IDs
+        repair_flux = sum(abs(solution.fluxes[rxn]) for rxn in dna_repair_reactions if rxn in solution.fluxes)
+        return 1 - min(repair_flux / 10, 1)  # Normalize and invert (higher value = more instability)
+
+    def _analyze_telomere_attrition(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through telomerase reaction
+        telomerase_reaction = "TELOMERASE"  # Replace with actual reaction ID
+        telomerase_flux = abs(solution.fluxes.get(telomerase_reaction, 0))
+        return 1 - min(telomerase_flux / 5, 1)  # Normalize and invert
+
+    def _analyze_epigenetic_alterations(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through methylation and acetylation reactions
+        epigenetic_reactions = ["METHYLATION", "ACETYLATION"]  # Replace with actual reaction IDs
+        epigenetic_flux = sum(abs(solution.fluxes[rxn]) for rxn in epigenetic_reactions if rxn in solution.fluxes)
+        return 1 - min(epigenetic_flux / 15, 1)  # Normalize and invert
+
+    def _analyze_loss_of_proteostasis(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through protein degradation and synthesis pathways
+        proteostasis_reactions = ["PROTEIN_SYNTH", "PROTEIN_DEGRAD"]  # Replace with actual reaction IDs
+        proteostasis_flux = sum(abs(solution.fluxes[rxn]) for rxn in proteostasis_reactions if rxn in solution.fluxes)
+        return 1 - min(proteostasis_flux / 20, 1)  # Normalize and invert
+
+    def _analyze_deregulated_nutrient_sensing(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through nutrient uptake reactions
+        nutrient_reactions = ["GLUCOSE_UPTAKE", "AMINO_ACID_UPTAKE"]  # Replace with actual reaction IDs
+        nutrient_flux = sum(abs(solution.fluxes[rxn]) for rxn in nutrient_reactions if rxn in solution.fluxes)
+        return abs(nutrient_flux - 10) / 10  # Deviation from optimal flux
+
+    def _analyze_mitochondrial_dysfunction(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through electron transport chain reactions
+        etc_reactions = ["NADH_DH", "CYTOCHROME_C_OXID"]  # Replace with actual reaction IDs
+        etc_flux = sum(abs(solution.fluxes[rxn]) for rxn in etc_reactions if rxn in solution.fluxes)
+        return 1 - min(etc_flux / 30, 1)  # Normalize and invert
+
+    def _analyze_cellular_senescence(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through senescence-associated secretory phenotype (SASP) pathways
+        sasp_reactions = ["SASP_1", "SASP_2"]  # Replace with actual reaction IDs
+        sasp_flux = sum(abs(solution.fluxes[rxn]) for rxn in sasp_reactions if rxn in solution.fluxes)
+        return min(sasp_flux / 5, 1)  # Normalize
+
+    def _analyze_stem_cell_exhaustion(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through stem cell proliferation pathways
+        stem_cell_reactions = ["STEM_CELL_PROLIF", "STEM_CELL_DIFF"]  # Replace with actual reaction IDs
+        stem_cell_flux = sum(abs(solution.fluxes[rxn]) for rxn in stem_cell_reactions if rxn in solution.fluxes)
+        return 1 - min(stem_cell_flux / 10, 1)  # Normalize and invert
+
+    def _analyze_altered_intercellular_communication(self, solution: cobra.Solution) -> float:
+        # Example: Check flux through signaling pathways
+        signaling_reactions = ["CYTOKINE_PROD", "GROWTH_FACTOR_SIGNAL"]  # Replace with actual reaction IDs
+        signaling_flux = sum(abs(solution.fluxes[rxn]) for rxn in signaling_reactions if rxn in solution.fluxes)
+        return abs(signaling_flux - 15) / 15  # Deviation from optimal flux
+
+    def visualize_hallmarks_of_aging(self, hallmarks: Dict[str, float]):
+        """
+        Visualize the hallmarks of aging using a radar chart.
+        """
+        labels = list(hallmarks.keys())
+        values = list(hallmarks.values())
+
+        angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False)
+        values = np.concatenate((values, [values[0]]))  # Repeat the first value to close the polygon
+        angles = np.concatenate((angles, [angles[0]]))  # Repeat the first angle to close the polygon
+
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(projection='polar'))
+        ax.plot(angles, values)
+        ax.fill(angles, values, alpha=0.25)
+        ax.set_thetagrids(angles[:-1] * 180/np.pi, labels)
+        ax.set_title("Hallmarks of Aging")
+        ax.set_ylim(0, 1)
+        plt.show()
+
+    def simulate_aging(self, time_points: List[float], perturbations: Optional[List[Dict]] = None) -> Dict[float, Dict]:
+        """
+        Simulate aging over time and analyze hallmarks at each time point.
+        """
+        aging_results = {}
+        for t in time_points:
+            if perturbations:
+                self.apply_perturbations(perturbations[t])
+            
+            solution = self.model.optimize()
+            hallmarks = self.analyze_hallmarks_of_aging(solution)
+            
+            aging_results[t] = {
+                "growth_rate": solution.objective_value,
+                "hallmarks": hallmarks
+            }
+        
+        return aging_results
+
+
+
+
+
     def analyze_pathways(self, solution: Solution, threshold: float = 0.1) -> Dict[str, bool]:
 
         pathway_activities = {}
@@ -275,6 +392,9 @@ class DigitalTwinSimulator:
                         parameter_sensitivities.append(None)
             sensitivities[parameter] = parameter_sensitivities
         return sensitivities
+
+
+
 
     def train_ml_model(self, simulation_results: List[Dict]) -> RandomForestRegressor:
         X = []  # Features (e.g., perturbations, conditions)
@@ -406,6 +526,25 @@ if __name__ == "__main__":
         {"conditions": {"RXN_ID_1": 0.8, "RXN_ID_2": 0.2}, "growth_rate": 0.9},
         # Add more simulated data...
     ]
+
+    # Analyze hallmarks of aging
+    solution = simulator.model.optimize()
+    hallmarks = simulator.analyze_hallmarks_of_aging(solution)
+    simulator.visualize_hallmarks_of_aging(hallmarks)
+
+    # Simulate aging over time
+    time_points = list(range(0, 100, 10))  # 0 to 90, step 10
+    aging_results = simulator.simulate_aging(time_points)
+
+    # Visualize aging progression
+    for t, result in aging_results.items():
+        print(f"Time: {t}")
+        print(f"Growth Rate: {result['growth_rate']}")
+        simulator.visualize_hallmarks_of_aging(result['hallmarks'])
+
+    print("Aging simulation completed successfully!")
+
+
 
     # Train the ML model
     trained_model = simulator.train_ml_model(simulation_data)

@@ -15,7 +15,6 @@ from openmm import *
 from openmm.app import *
 from openmm.unit import *
 from pdbfixer import PDBFixer
-from simtk.openmm.app import PDBFile
 import matplotlib.pyplot as plt
 from openmm.app import PDBFile, Modeller, ForceField
 
@@ -66,38 +65,16 @@ def molecular_dynamics_simulation(pdb_file):
     simulation.context.setVelocitiesToTemperature(300*kelvin)
     
     print("Equilibrating...")
-    simulation.step(10000)  # equilibration
+    simulation.step(5000)  # equilibration
 
     # Production run
-    logger.info("Starting production run...")
-    trajectory_file = os.path.join(output_dir, 'trajectory.pdb')
-    
-    def valid_coords(simulation, state):
-        positions = state.getPositions(asNumpy=True).value_in_unit(unit.nanometers)
-        return all(isinstance(coord, (int, float)) for pos in positions for coord in pos)
+    print("Starting production run...")
+    simulation.reporters.append(PDBReporter('trajectory.pdb', 1000))
+    simulation.reporters.append(StateDataReporter('output.csv', 1000, step=True, 
+                                potentialEnergy=True, temperature=True))
+    simulation.step(20000)  # 1 ns simulation
 
-    simulation.reporters.append(PDBReporter(trajectory_file, 1000, enforcePeriodicBox=False, checkForErrors=True))
-    simulation.reporters.append(StateDataReporter(
-        os.path.join(output_dir, 'output.csv'),
-        1000,
-        step=True,
-        potentialEnergy=True,
-        temperature=True,
-        progress=True,
-        remainingTime=True,
-        speed=True,
-        totalSteps=num_steps,
-        separator='\t'))
-
-    try:
-        for step in range(0, num_steps, step_size):
-            if not valid_coords(simulation, simulation.context.getState(getPositions=True)):
-                logger.error(f"Invalid coordinates detected at step {step}")
-                break
-            simulation.step(step_size)
-    except Exception as e:
-        logger.error(f"Error during molecular dynamics simulation: {str(e)}")
-        raise
+    print("Simulation completed.")
 
 
 def calculate_rmsd(structure_file, trajectory_file):
@@ -119,7 +96,7 @@ def calculate_rmsd(structure_file, trajectory_file):
     
     
 if __name__ == "__main__":
-    pdb_file = "./em3_predictions/generation.pdb"
+    pdb_file = r"C:\Users\wes\AutoMol-v2\results\run_20240924_210700\phase2a\results\structure_0\analysis\NWCAGTYEVQ_structure.pdb"
     
     # Load the PDB file
     pdb = PDBFile(pdb_file)

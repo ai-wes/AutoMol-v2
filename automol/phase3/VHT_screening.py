@@ -1,17 +1,24 @@
 import os
+import logging
+import json
 import multiprocessing
-from subprocess import run
+import requests
+import urllib.parse
 
+from typing import Dict, Any, List
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 
+from Bio.SeqUtils import molecular_weight, ProtParam
+from Bio.Blast import NCBIWWW, NCBIXML
+
+logger = logging.getLogger(__name__)
 
 
 
 
 
-# Step 1: Physicochemical Properties Filtering -Ligands
-def filter_ligand_physicochemical(smiles):
+def filter_ligand_physicochemical(smiles: str) -> (bool, str):
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return False, "Invalid SMILES"
@@ -23,8 +30,8 @@ def filter_ligand_physicochemical(smiles):
 
     # Define acceptable ranges
     weight_range = (150, 500)  # molecular weight in g/mol
-    logp_range = (-2, 5)  # LogP value for hydrophobicity
-    tpsa_limit = 140  # Topological polar surface area in Å²
+    logp_range = (-2, 5)       # LogP value for hydrophobicity
+    tpsa_limit = 140           # Topological polar surface area in Å²
 
     # Filter based on ranges
     if not (weight_range[0] <= mol_weight <= weight_range[1]):
@@ -37,11 +44,10 @@ def filter_ligand_physicochemical(smiles):
     return True, "Ligand passes physicochemical filters"
 
 
-# Step 1: Physicochemical Properties Filtering -Proteins
 
-from Bio.SeqUtils import molecular_weight, ProtParam
 
-def filter_protein_physicochemical(sequence):
+
+def filter_protein_physicochemical(sequence: str) -> (bool, str):
     # Calculate molecular weight
     mol_weight = molecular_weight(sequence, seq_type="protein")
 
@@ -51,8 +57,8 @@ def filter_protein_physicochemical(sequence):
     iso_point = prot_param.isoelectric_point()
 
     # Define acceptable ranges
-    weight_limit = 150000  # Max molecular weight in Da
-    instability_limit = 40  # Instability index threshold
+    weight_limit = 150000       # Max molecular weight in Da
+    instability_limit = 40      # Instability index threshold
     iso_point_range = (4.0, 9.0)  # Acceptable range for isoelectric point
 
     # Filter based on properties
@@ -67,12 +73,15 @@ def filter_protein_physicochemical(sequence):
 
 
 
-#Step 2: Sequence Similarity and Novelty Check -Proteins
-from Bio.Blast import NCBIWWW, NCBIXML
 
-def check_protein_similarity(sequence):
-    result_handle = NCBIWWW.qblast("blastp", "nr", sequence)
-    blast_record = NCBIXML.read(result_handle)
+
+def check_protein_similarity(sequence: str) -> (bool, str):
+    try:
+        result_handle = NCBIWWW.qblast("blastp", "nr", sequence)
+        blast_record = NCBIXML.read(result_handle)
+    except Exception as e:
+        logger.error(f"Error during BLAST search: {e}")
+        return False, f"BLAST search failed: {e}"
 
     # Check if there is a significant match (E-value < 0.05)
     for alignment in blast_record.alignments:
@@ -84,57 +93,88 @@ def check_protein_similarity(sequence):
 
 
 
-#Step 2: Novelty Check -Ligands
+def check_ligand_novelty(smiles: str) -> (bool, str):
+    encoded_smiles = urllib.parse.quote(smiles)
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/{encoded_smiles}/cids/JSON"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        if "IdentifierList" in response.json():
+            return False, "SMILES string matches a known compound in PubChem"
+        return True, "Ligand is novel"
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error checking ligand novelty: {e}")
+        return False, f"Failed to check ligand novelty: {e}"
 
-import requests
-def check_ligand_novelty(smiles):
-    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/{smiles}/cids/JSON"
-    response = requests.get(url)
-    if response.status_code == 200 and "IdentifierList" in response.json():
-        return False, "SMILES string matches a known compound in PubChem"
-    return True, "Ligand is novel"
 
 
 
 
-#Step 3: Predictive Toxicity and ADMET Screening
-def admet_screening(smiles):
+def admet_screening(smiles: str) -> (bool, str):
+    # Note: The pkCSM API endpoint may not be publicly accessible.
+    # For robustness, we'll handle potential errors.
     url = "https://biosig.lab.uq.edu.au/pkcsm/prediction"
-    headers = {
-        'Content-Type': 'application/json',
-    }
-    data = {
-        "smiles": smiles,
-        "admet": "toxicity"
-    }
-    response = requests.post(url, json=data, headers=headers)
-    if response.status_code == 200:
+    headers = {'Content-Type': 'application/json'}
+    data = {"smiles": [smiles], "admet": "toxicity"}
+
+    try:
+        response = requests.post(url, json=data, headers=headers)
+        response.raise_for_status()
         results = response.json()
-        if results['toxicity']['alert']:
+        # Assuming the API returns a specific structure (modify as per actual API)
+        if 'toxicity' in results and results['toxicity'][0]['alert']:
             return False, "Toxicity alert detected"
         return True, "No toxicity alerts"
-    else:
-        return False, "ADMET screening failed"
+    except requests.exceptions.RequestException as e:
+        logger.error(f"ADMET screening failed: {e}")
+        return False, f"ADMET screening failed: {e}"
+    except KeyError as e:
+        logger.error(f"Unexpected response structure: {e}")
+        return False, "ADMET screening failed due to unexpected response"
 
 
-#Step 3: SwissADME Screening
-def swiss_adme_screen(smiles):
-    url = f"http://www.swissadme.ch/index.php?{smiles}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        # Parse results (this is simplified and may require more handling)
+
+
+def swiss_adme_screen(smiles: str) -> (bool, str):
+    # Note: SwissADME does not provide a public API for programmatic access.
+    # The following is a placeholder to illustrate exception handling.
+    try:
+        # Placeholder for actual API call or method
+        response = requests.get(f"http://www.swissadme.ch/index.php?{urllib.parse.quote(smiles)}")
+        response.raise_for_status()
         if "No toxic" in response.text:
             return True, "No toxicity predicted by SwissADME"
         else:
             return False, "SwissADME predicts potential toxicity"
-    return False, "Failed to screen with SwissADME"
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to screen with SwissADME: {e}")
+        return False, f"Failed to screen with SwissADME: {e}"
 
 
+def calculate_ligand_rating(smiles: str) -> (float, Dict[str, Any]):
+    # Initialize scores and messages
+    physico_score = 0
+    novelty_score = 0
+    admet_score = 0
+    total_score = 0
 
-def calculate_ligand_rating(smiles):
     # Step 1: Physicochemical filtering
     pass_physico, physico_message = filter_ligand_physicochemical(smiles)
-    physico_score = 8 if pass_physico else 0
+    if not pass_physico:
+        return 0, {
+            "smiles": smiles,
+            "physicochemical_score": physico_score,
+            "novelty_score": novelty_score,
+            "admet_score": admet_score,
+            "total_score": total_score,
+            "comments": {
+                "physicochemical_message": physico_message,
+                "novelty_message": "",
+                "admet_message": ""
+            }
+        }
+    else:
+        physico_score = 8
 
     # Step 2: Novelty check
     pass_novelty, novelty_message = check_ligand_novelty(smiles)
@@ -159,148 +199,118 @@ def calculate_ligand_rating(smiles):
         }
     }
 
-import json
 
-def store_ligand_result(smiles, rating_details):
+
+def store_ligand_result(result: Dict[str, Any]):
     results = []
+    results_file = os.path.join(RESULTS_DIR, "ligand_screening_results.json")
     try:
-        with open("ligand_screening_results.json", "r") as file:
+        with open(results_file, "r") as file:
             results = json.load(file)
     except FileNotFoundError:
         pass  # No results file yet, start with an empty list
-    results.append(rating_details)
-    with open("ligand_screening_results.json", "w") as file:
+    except json.JSONDecodeError as e:
+        logger.error(f"Error decoding JSON file: {e}")
+        return
+
+    results.append(result)
+    with open(results_file, "w") as file:
         json.dump(results, file, indent=4)
 
-def screen_and_store_ligand(smiles):
-    # Perform the screening and calculate the rating
-    score, details = calculate_ligand_rating(smiles)
-
-    # Store the result
-    store_ligand_result(smiles, details)
-    return f"Ligand {smiles} has been screened and stored with a score of {score}/10."
 
 
 
 
-def get_top_ligand_results():
-    try:
-        with open("ligand_screening_results.json", "r") as file:
-            results = json.load(file)
-            # Sort by total score, descending
-            sorted_results = sorted(results, key=lambda x: x['total_score'], reverse=True)
-            return sorted_results[:10]  # Return top 10 results
-    except FileNotFoundError:
-        return "No results found."
-
-
-## RUN THE PIPELINE
-
-
-def screen_ligand_pipeline(smiles):
-    # Step 1: Physicochemical filtering
-    pass_physico, physico_message = filter_ligand_physicochemical(smiles)
-    if not pass_physico:
-        return f"Failed Physicochemical Filtering: {physico_message}"
-
-    # Step 2: Novelty check
-    pass_novelty, novelty_message = check_ligand_novelty(smiles)
-    if not pass_novelty:
-        return f"Failed Novelty Check: {novelty_message}"
-
-    # Step 3: ADMET Screening
-    pass_admet, admet_message = admet_screening(smiles)
-    if not pass_admet:
-        return f"Failed ADMET Screening: {admet_message}"
-
-    return "Ligand passed all screenings and is a candidate for further inspection."
-
-
-def screen_protein_pipeline(sequence):
-    # Step 1: Physicochemical filtering
-    pass_physico, physico_message = filter_protein_physicochemical(sequence)
-    if not pass_physico:
-        return f"Failed Physicochemical Filtering: {physico_message}"
-
-    # Step 2: Novelty check (BLAST)
-    pass_novelty, novelty_message = check_protein_similarity(sequence)
-    if not pass_novelty:
-        return f"Failed Novelty Check: {novelty_message}"
-
-    return "Protein passed all screenings and is a candidate for further inspection."
-
-
-import os
-import multiprocessing
-import json
-from rdkit import Chem
-
-import os
-import multiprocessing
-import json
-from rdkit import Chem
-
-# Use raw strings for Windows paths
-SMILES_DIR = r'C:\Users\wes\AutoMol-v2\results\phase2a\predicted_structures'
-RESULTS_DIR = r'C:\Users\wes\AutoMol-v2\automol\results'
-
-def process_ligand(smiles_file):
+def process_ligand(smiles_file: str) -> Dict[str, Any]:
     with open(os.path.join(SMILES_DIR, smiles_file), 'r') as f:
         smiles = f.read().strip()
-    
-    result = screen_ligand_pipeline(smiles)
-    
-    # Store the result
+
+    total_score, details = calculate_ligand_rating(smiles)
+
     ligand_name = os.path.splitext(smiles_file)[0]
+    result = {
+        "ligand_name": ligand_name,
+        "smiles": smiles,
+        "total_score": total_score,
+        "details": details
+    }
+
+    # Store the result
     with open(os.path.join(RESULTS_DIR, f'{ligand_name}_result.json'), 'w') as f:
         json.dump(result, f, indent=4)
-    
+
     return result
 
+
+
+
+
+
+
+
+
 def high_throughput_screening():
+    logger.info("Starting high-throughput screening pipeline...")
+
     # Ensure the results directory exists
     os.makedirs(RESULTS_DIR, exist_ok=True)
-    
+
     # Get all SMILES files
     smiles_files = [f for f in os.listdir(SMILES_DIR) if f.endswith('.smi')]
-    
+
     # Use multiprocessing to screen ligands in parallel
     with multiprocessing.Pool() as pool:
         results = pool.map(process_ligand, smiles_files)
-    
-    # Process and store overall results
-    all_results = []
-    for smiles_file, result in zip(smiles_files, results):
-        ligand_name = os.path.splitext(smiles_file)[0]
-        all_results.append({
-            "ligand_name": ligand_name,
-            "result": result
-        })
-    
-    # Store all results in a single JSON file
-    with open(os.path.join(RESULTS_DIR, 'all_screening_results.json'), 'w') as f:
-        json.dump(all_results, f, indent=4)
-    
-    print(f"High-throughput screening completed. Results stored in {RESULTS_DIR}")
 
-def get_top_ligand_results():
+    # Store all results in a single JSON file
+    all_results_file = os.path.join(RESULTS_DIR, 'all_screening_results.json')
     try:
-        with open(os.path.join(RESULTS_DIR, "all_screening_results.json"), "r") as file:
-            results = json.load(file)
-            # Assuming the structure is a list of dictionaries with 'result' key
-            sorted_results = sorted(results, key=lambda x: x['result']['total_score'] if isinstance(x['result'], dict) and 'total_score' in x['result'] else -1, reverse=True)
-            return sorted_results[:10]  # Return top 10 results
-    except FileNotFoundError:
-        return []  # Return an empty list if file not found
-    except json.JSONDecodeError:
-        print("Error decoding JSON file. It may be empty or incorrectly formatted.")
+        with open(all_results_file, 'w') as f:
+            json.dump(results, f, indent=4)
+    except Exception as e:
+        logger.error(f"Error writing all results to JSON file: {e}")
+
+    logger.info(f"High-throughput screening completed. Processed {len(smiles_files)} ligands.")
+    logger.info(f"Results stored in {RESULTS_DIR}")
+
+
+
+
+def get_top_ligand_results() -> List[Dict[str, Any]]:
+    try:
+        with open(os.path.join(RESULTS_DIR, 'all_screening_results.json'), 'r') as f:
+            all_results = json.load(f)
+        # Sort the results by total_score
+        sorted_results = sorted(all_results, key=lambda x: x['total_score'], reverse=True)
+        return sorted_results[:10]
+    except Exception as e:
+        logger.error(f"Error getting top ligand results: {e}")
         return []
 
+
+
+
+
 if __name__ == "__main__":
+    # Use raw strings for Windows paths
+    SMILES_DIR = r'C:\Users\wes\AutoMol-v2\results\phase2a\predicted_structures'
+    RESULTS_DIR = r'C:\Users\wes\AutoMol-v2\automol\results'
+
     high_throughput_screening()
     top_results = get_top_ligand_results()
+    print("Top 10 Ligands:")
     for result in top_results:
-        if isinstance(result['result'], dict) and 'smiles' in result['result'] and 'total_score' in result['result']:
-            print(f"SMILES: {result['result']['smiles']}, Score: {result['result']['total_score']}")
-        else:
-            print(f"Unexpected result structure: {result}")
+        print(f"Name: {result['ligand_name']}, SMILES: {result['smiles']}, Score: {result['total_score']:.2f}")
+
+
+
+
+
+
+
+
+
+
+
+
+
