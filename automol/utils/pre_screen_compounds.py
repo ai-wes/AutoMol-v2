@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from pymongo import MongoClient
 from rdkit import Chem
 from rdkit.Chem import Descriptors
@@ -43,7 +45,6 @@ def filter_ligand_physicochemical(smiles):
 
     return True, "Ligand passes physicochemical filters"
 
-# Predictive Toxicity and ADMET Screening (Mock API Call)
 def admet_screening(smiles):
     url = "https://biosig.lab.uq.edu.au/pkcsm/prediction"
     headers = {'Content-Type': 'application/json'}
@@ -55,12 +56,22 @@ def admet_screening(smiles):
         if results['toxicity']['alert']:
             return False, "Toxicity alert detected"
         return True, "No toxicity alerts"
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 405:
+            logger.warning(f"ADMET screening API request failed with 405 Method Not Allowed. Falling back to minimal viability screening.")
+            return minimal_viability_screening(smiles)
+        else:
+            logger.error(f"ADMET screening API request failed: {e}")
+            return False, "ADMET screening failed due to API error"
     except requests.exceptions.RequestException as e:
-        logging.error(f"ADMET screening API request failed: {e}")
+        logger.error(f"ADMET screening API request failed: {e}")
         return False, "ADMET screening failed due to API error"
 
+
+
+
 # Minimal Viability Screening
-def minimal_viability_screening(smiles: str) -> (bool, str):
+def minimal_viability_screening(smiles: str) -> Tuple[bool, str]:
     """
     Apply minimal criteria to allow novel compounds to pass.
     These criteria are less stringent than the main pre-screening.
@@ -133,7 +144,7 @@ def log_passed_sequence(smiles: str, reason: str):
     except Exception as e:
         logger.error(f"Failed to log passed sequence {smiles}: {e}")
 
-def pre_screen_ligand(smiles: str) -> (bool, str):
+def pre_screen_ligand(smiles: str) -> Tuple[bool, str]:
     """
     Pre-screen ligand based on physicochemical and ADMET properties.
     """

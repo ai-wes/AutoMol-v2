@@ -1,0 +1,1 @@
+Protein: predicted_structures\protein_20240925_014422.pdb, Score: -9.49940720528047

@@ -4,13 +4,10 @@ import os
 import logging
 from multiprocessing import Pool, cpu_count
 from openbabel import openbabel
-from typing import List, Dict, Any
-from utils.pre_screen_compounds import pre_screen_ligand
-# Import run_single_docking function
-from docking import run_single_docking  # Ensure this is correctly implemented
 from rdkit import Chem
-from rdkit.Chem import Descriptors
-
+from typing import List, Dict, Any
+from automol.phase2.phase2b.pre_screen_compounds import pre_screen_ligand
+from typing import List, Tuple
 logger = logging.getLogger(__name__)
 
 def convert_pdb_to_pdbqt(input_pdb: str, output_pdbqt: str) -> None:
@@ -31,7 +28,7 @@ def convert_pdb_to_pdbqt(input_pdb: str, output_pdbqt: str) -> None:
         logger.error(f"Error converting {input_pdb} to PDBQT: {str(e)}", exc_info=True)
         raise
 
-def calculate_grid_parameters(receptor_pdbqt: str, buffer: float = 10.0) -> (List[float], List[float]):
+def calculate_grid_parameters(receptor_pdbqt: str, buffer: float = 10.0) -> Tuple[List[float], List[float]]:
     """
     Calculate grid center and size based on the receptor's active site.
     """
@@ -71,7 +68,58 @@ def calculate_grid_parameters(receptor_pdbqt: str, buffer: float = 10.0) -> (Lis
         logger.error(f"Error calculating grid parameters: {e}", exc_info=True)
         raise
 
-def run_docking_pipeline(protein_results: List[Dict[str, Any]], ligand_results: List[Dict[str, Any]], docking_dir: str) -> List[Dict[str, Any]]:
+def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, config_file: str) -> Dict[str, Any]:
+    """
+    Run a single docking simulation using LeDock.
+    """
+    try:
+        logger.info(f"Running docking for ligand: {ligand_pdbqt}")
+        
+        # Ensure output directory exists
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        
+        # Construct the command for LeDock
+        command = f"LeDock {config_file} {receptor_pdbqt} {ligand_pdbqt} -o {output_dir}"
+        logger.info(f"Docking command: {command}")
+        
+        # Execute the command
+        result = os.system(command)
+        if result != 0:
+            raise RuntimeError(f"Docking failed with exit code {result}")
+        
+        # Parse the docking results
+        output_file = os.path.join(output_dir, "docked.pdbqt")
+        if not os.path.exists(output_file):
+            raise FileNotFoundError(f"Docking output file not found: {output_file}")
+        
+        # Extract the best score from the output file
+        best_score = None
+        with open(output_file, 'r') as f:
+            for line in f:
+                if line.startswith("REMARK VINA RESULT:"):
+                    best_score = float(line.split()[3])
+                    break
+        
+        if best_score is None:
+            raise ValueError("Best score not found in docking output")
+        
+        logger.info(f"Docking completed successfully for ligand: {ligand_pdbqt} with score: {best_score}")
+        return {
+            "ligand": ligand_pdbqt,
+            "docked_pose": output_file,
+            "best_score": best_score
+        }
+    except Exception as e:
+        logger.error(f"Error during docking: {e}", exc_info=True)
+        return {
+            "ligand": ligand_pdbqt,
+            "docked_pose": None,
+            "best_score": None,
+            "error": str(e)
+        }
+
+def run_docking_pipeline(protein_results: List[Dict[str, Any]], ligand_results: List[Dict[str, Any]], output_dir: str) -> List[Dict[str, Any]]:
     logger.info("Starting Docking Pipeline...")
 
     # Ensure protein_results is not empty
@@ -79,18 +127,10 @@ def run_docking_pipeline(protein_results: List[Dict[str, Any]], ligand_results: 
         logger.error("No protein results provided for docking.")
         return []
 
-    receptor_pdb = protein_results[0].get("pdb_file")
-    if not receptor_pdb:
-        logger.error("No receptor PDB file found in protein results.")
-        return []
-
-    # Convert receptor to PDBQT
-    try:
-        receptor_pdbqt = os.path.splitext(receptor_pdb)[0] + ".pdbqt"
-        convert_pdb_to_pdbqt(receptor_pdb, receptor_pdbqt)
-        logger.info(f"Converted receptor to PDBQT: {receptor_pdbqt}")
-    except Exception as e:
-        logger.error(f"Failed to convert receptor to PDBQT: {str(e)}")
+    # Use the first protein result for docking
+    receptor_pdbqt = protein_results[0].get('pdbqt_file')
+    if not receptor_pdbqt:
+        logger.error("No PDBQT file found for receptor.")
         return []
 
     # Calculate grid parameters
@@ -143,7 +183,7 @@ def run_docking_pipeline(protein_results: List[Dict[str, Any]], ligand_results: 
             docking_result = run_single_docking(
                 receptor_pdbqt=receptor_pdbqt,
                 ligand_pdbqt=ligand_pdbqt,
-                output_dir=docking_dir,
+                output_dir=output_dir,
                 config_file='path/to/config.txt'  # Update this path accordingly
             )
             return docking_result

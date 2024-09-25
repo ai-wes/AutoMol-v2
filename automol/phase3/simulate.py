@@ -15,21 +15,16 @@ import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
-def molecular_dynamics_simulation(pdb_file: str, protein_sim_dir: str) -> Dict[str, Any]:
+
+def molecular_dynamics_simulation(pdb_file: str, output_dir: str) -> Dict[str, Any]:
     try:
-        logger.info(f"Starting MD simulation for {pdb_file}")
-        
-        # Fix the PDB file
         fixer = PDBFixer(filename=pdb_file)
         fixer.findMissingResidues()
-        fixer.findNonstandardResidues()
-        fixer.replaceNonstandardResidues()
-        fixer.removeHeterogens(True)
         fixer.findMissingAtoms()
         fixer.addMissingAtoms()
         fixer.addMissingHydrogens(7.0)  # pH 7.0
         
-        fixed_pdb = os.path.join(protein_sim_dir, 'fixed.pdb')
+        fixed_pdb = os.path.join(output_dir, 'fixed.pdb')
         with open(fixed_pdb, 'w') as f:
             PDBFile.writeFile(fixer.topology, fixer.positions, f)
         logger.info(f"Fixed PDB written to {fixed_pdb}")
@@ -72,10 +67,10 @@ def molecular_dynamics_simulation(pdb_file: str, protein_sim_dir: str) -> Dict[s
         
         # Production run
         logger.info("Starting production run...")
-        trajectory_file = os.path.join(protein_sim_dir, 'trajectory.pdb')
+        trajectory_file = os.path.join(output_dir, 'trajectory.pdb')
         simulation.reporters.append(PDBReporter(trajectory_file, 1000))
         simulation.reporters.append(StateDataReporter(
-            os.path.join(protein_sim_dir, 'output.csv'),
+            os.path.join(output_dir, 'output.csv'),
             1000, step=True, potentialEnergy=True, temperature=True
         ))
         simulation.step(20000)  # 1 ns simulation
@@ -83,7 +78,7 @@ def molecular_dynamics_simulation(pdb_file: str, protein_sim_dir: str) -> Dict[s
         logger.info("Molecular dynamics simulation completed.")
         
         logger.info(f"Starting molecular dynamics simulation for {pdb_file}")
-        trajectory_file = os.path.join(protein_sim_dir, "trajectory.dcd")
+        trajectory_file = os.path.join(output_dir, "trajectory.dcd")
         simulation_output = {
             "pdb_file": pdb_file,
             "trajectory_file": trajectory_file,

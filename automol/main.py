@@ -138,23 +138,24 @@ def main():
     logger.info("Phase 2b results saved successfully.")
 
 
-        # Phase 3: Simulation
+    # Phase 3: Simulation
     logger.info("Starting Phase 3: Simulation")
     phase3_config = config['phase3']
     phase3_config.update({
         'protein_results': phase2a_results,
-        'simulation_dir': os.path.join(run_dir, "phase3", "simulations"),
+        'output_dir': os.path.join(run_dir, "phase3"),
         'device': config.get('device', 'cpu')
     })
 
     # Optionally, filter out unexpected keys for Phase 3
-    expected_keys_phase3 = ['protein_results', 'simulation_dir', 'device']
+    expected_keys_phase3 = ['protein_results', 'output_dir', 'device']
     filtered_phase3_config = {k: v for k, v in phase3_config.items() if k in expected_keys_phase3}
 
     # Unpack the filtered configuration dictionary when calling run_Phase_3
     simulation_results = run_Phase_3(**filtered_phase3_config)
-    save_json(simulation_results, Path(run_dir) / "phase3_results.json")
+    save_json(simulation_results, Path(run_dir) / "phase3" / "phase3_results.json")
     logger.info("Phase 3 results saved successfully.")
+
 
     # Phase 4: Final Analysis and Reporting
     logger.info("Starting Phase 4: Final Analysis and Reporting")
@@ -163,9 +164,11 @@ def main():
         'simulation_results': simulation_results,
         'output_dir': os.path.join(run_dir, "phase4")
     })
-    phase4_results = run_Phase_4(phase4_config)
+    
+    phase4_results = run_Phase_4(phase4_config)  # Pass phase4_config as a positional argument
     save_json(phase4_results, Path(run_dir) / "phase4_results.json")
     logger.info("Phase 4 results saved successfully.")
+
 
     # Save All Results Consolidated
     all_results = {
