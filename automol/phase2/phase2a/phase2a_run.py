@@ -40,18 +40,18 @@ def run_Phase_2a(
 ) -> Tuple[List[Dict[str, Any]], List[str]]:
     print(Fore.CYAN + "\nStarting Phase 2a: Generating and Optimizing novel proteins")
     logger.info("Starting Phase 2a: Generating and Optimizing novel proteins")
-    emit_progress("Starting Phase 2a: Generating and Optimizing novel proteins", "running", 0)
+    emit_progress("Phase 2a", 0)
     all_analysis_results = []
     best_score = 0
     all_generated_sequences = []
 
     for i, desc in enumerate(technical_descriptions):
         technical_instruction = str(desc)
-        emit_progress(f"Processing Technical Description {i+1}: {technical_instruction[:50]}...", "running", 10)
+        emit_progress("Phase 2a", 10)
         print(Fore.YELLOW + f"\nProcessing Technical Description {i+1}:")
         print(Fore.WHITE + f"- {technical_instruction}")
         logger.info(f"Processing Technical Description {i+1}: {technical_instruction}")
-        emit_progress(f"Processing Technical Description {i+1}: {technical_instruction[:50]}...", "running", 10)
+        emit_progress("Phase 2a", 10)
         attempts = 0
         max_attempts = 2
 
@@ -59,7 +59,7 @@ def run_Phase_2a(
             try:
                 generated_sequences = generate_protein_sequence(technical_instruction, num_sequences)
                 if not generated_sequences:
-                    emit_progress(f"Failed to generate sequence for attempt {attempts + 1}. Retrying...", "running", 20)
+                    emit_progress("Phase 2a", 20)
                     print(Fore.RED + f"Failed to generate sequence for attempt {attempts + 1}. Retrying...")
                     logger.warning(f"Failed to generate sequence for attempt {attempts + 1}. Retrying...")
                     attempts += 1
@@ -70,44 +70,44 @@ def run_Phase_2a(
                 all_generated_sequences.append(generated_sequence)
                 print(Fore.GREEN + f"Generated sequence (attempt {attempts + 1}): {generated_sequence[:50]}...")
                 logger.info(f"Generated sequence (attempt {attempts + 1}): {generated_sequence[:50]}...")
-                emit_progress(f"Generated sequence (attempt {attempts + 1}): {generated_sequence[:50]}...", "running", 30)
+                emit_progress("Phase 2a", 30)
                 optimized_results = run_optimization_pipeline(
                     [generated_sequence],
                     iterations=optimization_steps,
                     score_threshold=score_threshold
                 )
-                emit_progress(f"Optimizing sequence (attempt {attempts + 1})...", "running", 40)
+                emit_progress("Phase 2a", 40)
                 if optimized_results:
                     for opt_result in optimized_results:
                         optimized_sequence = opt_result.get('optimized_sequence')
                         optimized_score = opt_result.get('optimized_score', 0)
                         best_method = opt_result.get('best_method', 'N/A')
 
-                        emit_progress(f"Setting Initial Protein Sequences: {all_generated_sequences}...", "running", 50)
+                        emit_progress("Phase 2a", 50)
                         set_protein_sequences(sequences=[optimized_sequence], scores=[optimized_score], score_threshold=score_threshold)
-                        emit_progress("Protein sequences have been set in the shared state.", "running", 60)
+                        emit_progress("Phase 2a", 60)
                         print(Fore.BLUE + "Protein sequences have been set in the shared state.")
                         logger.info("Protein sequences have been set in the shared state.")
 
-                        emit_progress(f"Optimized Score: {optimized_score}", "running", 70)
-                        emit_progress(f"Best Method: {best_method}", "running", 80      )
+                        emit_progress("Phase 2a", 70)
+                        emit_progress("Phase 2a", 80)
                         logger.debug(f"Optimized Sequence: {optimized_sequence}")
                         logger.debug(f"Optimized Score: {optimized_score}")
                         logger.debug(f"Best Method: {best_method}")
-                        emit_progress(f"Optimized Score: {optimized_score}")
-                        emit_progress(f"Best Method: {best_method}")
+                        emit_progress("Phase 2a", 80)
+                        emit_progress("Phase 2a", 80)
 
                         if optimized_score > best_score:
                             best_score = optimized_score
                             analysis_dir, simulation_dir = create_sequence_directories(
                                 results_dir, len(all_analysis_results)
                             )
-                            emit_progress(f"Running prediction pipeline for sequence {len(all_analysis_results)}...", "running", 90 )
+                            emit_progress("Phase 2a", 90)
                             prediction_results = run_prediction_pipeline(
                                 [optimized_sequence],
                                 output_dir=predicted_structures_dir
                             )
-                            emit_progress(f"Prediction completed for sequence {len(all_analysis_results)}.", "running", 92)
+                            emit_progress("Phase 2a", 92)
                             if not prediction_results or not prediction_results[0].get('pdb_file'):
                                 print(Fore.RED + "Prediction failed. Skipping simulation and analysis.")
                                 logger.error("Prediction failed. Skipping simulation and analysis.")
@@ -118,7 +118,7 @@ def run_Phase_2a(
                             pdb_filename = os.path.basename(pdb_file)
                             new_pdb_path = os.path.join(analysis_dir, pdb_filename)
                             shutil.copy(pdb_file, new_pdb_path)
-                            emit_progress(f"Copying PDB file to analysis directory: {new_pdb_path}", "running", 95)
+                            emit_progress("Phase 2a", 95)
                             analysis_result = {
                                 'sequence': optimized_sequence,
                                 'score': optimized_score,
@@ -126,7 +126,7 @@ def run_Phase_2a(
                                 'analysis_dir': analysis_dir
                             }
                             all_analysis_results.append(analysis_result)        
-                            emit_progress(f"Analysis completed for sequence with score {optimized_score}.", "running", 96)
+                            emit_progress("Phase 2a", 96)
                             print(Fore.GREEN + f"Analysis completed for sequence with score {optimized_score}.")
                             logger.info(f"Analysis completed for sequence with score {optimized_score}.")
 
@@ -138,13 +138,13 @@ def run_Phase_2a(
                 attempts += 1
 
             if attempts == max_attempts:
-                emit_progress(f"Reached maximum attempts ({max_attempts}) for Technical Description {i+1}. Moving to next description.", "running", 100)
+                emit_progress("Phase 2a", 100)
                 print(Fore.YELLOW + f"Reached maximum attempts ({max_attempts}) for Technical Description {i+1}. Moving to next description.")
                 logger.info(f"Reached maximum attempts ({max_attempts}) for Technical Description {i+1}. Moving to next description.")
 
     # Removed internal saving
     set_protein_sequences(sequences=all_generated_sequences, scores=[1.0] * len(all_generated_sequences), score_threshold=score_threshold)
-    emit_progress("Phase 2a completed: All protein sequences generated and analyzed.", "running", 100)
+    emit_progress("Phase 2a", 100)
     print(Fore.GREEN + "Phase 2a completed: All protein sequences generated and analyzed.")
     logger.info("Phase 2a completed: All protein sequences generated and analyzed.")
 

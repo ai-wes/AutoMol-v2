@@ -8,7 +8,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from typing import Tuple
-from automol.exceptions import ESMProteinError  # Add this import at the top of the file
 
 from dotenv import load_dotenv
 load_dotenv()

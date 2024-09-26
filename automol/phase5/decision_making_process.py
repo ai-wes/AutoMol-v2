@@ -1,8 +1,18 @@
-import os
+
+import os   
+import sys
+# Add the parent directory to the Python path
+
+
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 import logging
 from pathlib import Path
 import json
-from generate_final_report import load_results, analyze_results
+from phase5.generate_final_report import load_results, analyze_phase2a_results, analyze_phase2b_results, analyze_phase3_results, analyze_phase4_results
 from server.app import emit_progress
 from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
@@ -119,10 +129,10 @@ def decision_making_process(analysis: dict, config: dict) -> str:
             run_dir = config.get('run_dir', 'results/latest_run')
             new_analysis = {
                 'phase1': analysis.get('phase1', {}),
-                'phase2a': analyze_results(load_results(run_dir, 'phase2a'), 'phase2a'),
-                'phase2b': analyze_results(load_results(run_dir, 'phase2b'), 'phase2b'),
-                'phase3': analyze_results(load_results(run_dir, 'phase3'), 'phase3'),
-                'phase4': analyze_results(load_results(run_dir, 'phase4'), 'phase4'),
+                'phase2a': analyze_phase2a_results(load_results(run_dir, 'phase2a'), 'phase2a'),
+                'phase2b': analyze_phase2b_results(load_results(run_dir, 'phase2b'), 'phase2b'),
+                'phase3': analyze_phase3_results(load_results(run_dir, 'phase3'), 'phase3'),
+                'phase4': analyze_phase4_results(load_results(run_dir, 'phase4'), 'phase4'),
             }
 
             previous_overall_score = overall_score

@@ -40,7 +40,7 @@ def run_Phase_2b(
     protein_sequences: List[str]
 ) -> Dict[str, Any]:
     logger.info("Starting Phase 2b: Generate and Optimize Ligands")
-    emit_progress("Starting Phase 2b: Generate and Optimize Ligands", 0)
+    emit_progress("Phase 2b", 0)
     phase2b_results = []
     
     total_proteins = len(protein_sequences)
@@ -50,14 +50,14 @@ def run_Phase_2b(
         novel_smiles = pipeline.generate_valid_novel_smiles(protein_sequence, num_sequences)
         valid_ligands = []
         max_optimization_attempts = 10  # Maximum number of optimization attempts
-        emit_progress(f"Processing protein sequence: {protein_sequence}", progress)
+        emit_progress("Phase 2b", progress)
         
         total_smiles = len(novel_smiles)
         for smiles_idx, smiles in enumerate(novel_smiles):
             smiles_progress = progress + int((smiles_idx / total_smiles) * (100 / total_proteins))
             passed, message = pre_screen_ligand(smiles)  # Validation of ligand
             attempts = 0
-            emit_progress(f"Processing ligand: {smiles}", smiles_progress)
+            emit_progress("Phase 2b", smiles_progress)
             while not passed and attempts < max_optimization_attempts:
                 logger.warning(f"Ligand {smiles} failed validation: {message}. Attempting optimization. Attempt {attempts + 1}/{max_optimization_attempts}")
                 print(f"WARNING: Ligand {smiles} failed validation: {message}. Attempting optimization. Attempt {attempts + 1}/{max_optimization_attempts}")
@@ -66,20 +66,20 @@ def run_Phase_2b(
                 attempts += 1
                 logger.info(f"Attempt {attempts}: Ligand {smiles} validation status: {passed}, message: {message}")
                 print(f"Attempt {attempts}: Ligand {smiles} validation status: {passed}, message: {message}")
-                emit_progress(f"Attempt {attempts}: Ligand {smiles} validation status: {passed}, message: {message}", smiles_progress)
+                emit_progress("Phase 2b", smiles_progress)
             if passed:
                 valid_ligands.append({"smiles": smiles})
                 logger.info(f"Ligand {smiles} passed validation after {attempts} attempts: {message}")
                 print(f"Ligand {smiles} passed validation after {attempts} attempts: {message}")
-                emit_progress(f"Ligand {smiles} passed validation after {attempts} attempts: {message}", smiles_progress)
+                emit_progress("Phase 2b", smiles_progress)
             else:
                 logger.warning(f"Ligand {smiles} failed validation after {attempts} attempts: {message}")
                 print(f"WARNING: Ligand {smiles} failed validation after {attempts} attempts: {message}")
-                emit_progress(f"Ligand {smiles} failed validation after {attempts} attempts: {message}", smiles_progress)
+                emit_progress("Phase 2b", smiles_progress)
         if not valid_ligands:
             logger.error("No ligands passed validation. Skipping this protein sequence.")
             print("ERROR: No ligands passed validation. Skipping this protein sequence.")
-            emit_progress("ERROR: No ligands passed validation. Skipping this protein sequence.", progress)
+            emit_progress("Phase 2b", progress)
             continue
 
         # Process docking for valid ligands
@@ -98,11 +98,11 @@ def run_Phase_2b(
                     phase2b_results.append(docking_result)
             except Exception as e:
                 logger.error(f"Error during docking process: {e}")
-                emit_progress(f"Error during docking process: {e}", ligand_progress)
+                emit_progress("Phase 2b", ligand_progress)
                 continue
     
     logger.info("Phase 2b completed successfully.")
-    emit_progress("Phase 2b completed successfully.", 100)
+    emit_progress("Phase 2b", 100)
     return {"phase2b_results": phase2b_results}
 
 # Function to execute Phase 2b with example inputs
@@ -114,7 +114,7 @@ def main():
     score_threshold = -8.0
     protein_sequences = ['MTEITAAMVKELRESTGAGMMDCKNALSETQHEWAYVELKSGAGSS']
     
-    emit_progress("Protein sequences: ", 0)
+    emit_progress("Phase 2b", 0)
     result = run_Phase_2b(
         predicted_structures_dir=predicted_structures_dir,
         results_dir=results_dir,
@@ -123,8 +123,7 @@ def main():
         score_threshold=score_threshold,
         protein_sequences=protein_sequences
     )
-    emit_progress("Result: ", 100)
-    emit_progress(json.dumps(result, indent=2), 100)
+    emit_progress("Phase 2b", 100)
 
 if __name__ == "__main__":
     main()

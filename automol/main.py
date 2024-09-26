@@ -49,7 +49,7 @@ def parse_arguments():
 def main():
     # Load configuration from config.json
     try:
-        with open('config.json', 'r') as config_file:
+        with open('./automol/config.json', 'r') as config_file:
             config = json.load(config_file)
         logger.info("Configuration loaded successfully.")
         emit_progress("Configuration loaded successfully.")
@@ -218,4 +218,5 @@ def main():
     emit_progress("Phase 5 results saved successfully.")
     
 if __name__ == "__main__":
+    emit_progress("Starting AutoMol-v2 pipeline...")
     main()

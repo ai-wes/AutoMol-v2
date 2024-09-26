@@ -3,6 +3,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 import threading
 import time
+from datetime import datetime
 
 from bson import ObjectId
 import json
@@ -20,7 +21,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 
 # Configure CORS
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000", "https://chat.build-a-bf.com"], "supports_credentials": True}})
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:3000", "http://dashboard.automol-ai.com"], "supports_credentials": True}})
 
 # Initialize SocketIO
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -70,13 +71,20 @@ def handle_disconnect():
     emit('status_message', {'message': 'Connected to server'})
 
 
-def emit_progress(phase, progress, message, status="running"):
+def emit_progress(phase=None, progress=None):
     socketio.emit('progress_update', {
         'phase': phase,
-        'progress': progress,
-        'message': message,
-        'status': status
+        'progress': progress
     })
+
+def emit_message(message):
+    socketio.emit('message', {'message': message})
+    
+def emit_notification(notification):
+    socketio.emit('notification', {'notification': notification})
+    
+def emit_status(status):
+    socketio.emit('status', {'status': status})
 
 # The socketio instance is already defined at the top of the file,
 # so there's no need to add it here. The function is correctly using
@@ -146,7 +154,7 @@ def save_configuration():
     try:
         config = request.json
         # Save the configuration to a file
-        with open('config.json', 'w') as f:
+        with open('./automol/config.json', 'w') as f:
             json.dump(config, f)
         return jsonify({"message": "Configuration saved successfully"}), 200
     except Exception as e:

@@ -1,7 +1,18 @@
+
+import os   
+import sys
+# Add the parent directory to the Python path
+
+
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 import os
 from pathlib import Path
-from generate_final_report import load_results, analyze_phase1_results, analyze_phase2a_results, analyze_phase2b_results, analyze_phase3_results, analyze_phase4_results, generate_final_report
-from decision_making_process import decision_making_process, main as decision_main
+from phase5.generate_final_report import load_results, analyze_phase1_results, analyze_phase2a_results, analyze_phase2b_results, analyze_phase3_results, analyze_phase4_results, generate_final_report
+from phase5.decision_making_process import decision_making_process, main as decision_main
 from server.app import emit_progress
 
 def run_Phase_5(base_output_dir: str, config_path: str):
