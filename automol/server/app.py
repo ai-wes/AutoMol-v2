@@ -1,3 +1,9 @@
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+
+import threading
+import time
+
 from bson import ObjectId
 import json
 import subprocess
@@ -40,6 +46,15 @@ pipeline_status = {
     "Phase 3 - Analysis and Interpretation": {"status": "idle", "progress": 0, "message": "IDLE"},
     "Phase 4 - Validation and Verification": {"status": "idle", "progress": 0, "message": "IDLE"},
 }
+
+class SocketIOHandler(logging.Handler):
+    def emit(self, record):
+        log_entry = self.format(record)
+        print(f"Emitting log: {log_entry}")  # Debug print
+        socketio.emit('log_message', {'message': log_entry})
+
+
+
 
 notifications = []
 
@@ -198,6 +213,18 @@ def get_pdb_file(filename):
     except Exception as e:
         logger.error(f"Error in get_pdb_file: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
+
+
+
+
+def send_idle_message():
+    while True:
+        socketio.emit('log_message', {'message': 'IDLE: Server is running'})
+        time.sleep(10)  # Send message every 10 seconds
+
+# Start the idle message thread when the server starts
+idle_thread = threading.Thread(target=send_idle_message, daemon=True)
+idle_thread.start()
 
 
     
