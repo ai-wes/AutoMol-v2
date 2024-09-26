@@ -1,0 +1,150 @@
+<div class="body" role="main">
+<section id="continuous3dfunction">
+<h1>Continuous3DFunction<a class="headerlink" href="#continuous3dfunction" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">Continuous3DFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is a TabulatedFunction that computes a continuous three dimensional function.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Continuous3DFunction" title="openmm.openmm.Continuous3DFunction"><span class="pre">Continuous3DFunction</span></a><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Continuous3DFunction" title="openmm.openmm.Continuous3DFunction"><span class="pre">Continuous3DFunction</span></a></dt>
+<dd><p>Create a Continuous3DFunction f(x,y,z) based on a set of tabulated values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>int</em>) â the tabulated values of the function f(x,y,z) at xsize uniformly spaced values of x between xmin and xmax, ysize values of y between ymin and ymax, and zsize values of z between zmin and zmax. A natural cubic spline is used to interpolate between the tabulated values. The function is assumed to be zero when x, y, or z is outside its specified range. The values should be ordered so that values[i+xsize*j+xsize*ysize*k] = f(x_i,y_j,z_k), where x_i is the iâth uniformly spaced value of x. This must be of length xsize*ysize*zsize.</p></li>
+<li><p><strong>xsize</strong> (<em>int</em>) â the number of table elements along the x direction</p></li>
+<li><p><strong>ysize</strong> (<em>vector&lt; double &gt;</em>) â the number of table elements along the y direction</p></li>
+<li><p><strong>ysize</strong> â the number of table elements along the z direction</p></li>
+<li><p><strong>xmin</strong> (<em>double</em>) â the value of x corresponding to the first element of values</p></li>
+<li><p><strong>xmax</strong> (<em>double</em>) â the value of x corresponding to the last element of values</p></li>
+<li><p><strong>ymin</strong> (<em>double</em>) â the value of y corresponding to the first element of values</p></li>
+<li><p><strong>ymax</strong> (<em>double</em>) â the value of y corresponding to the last element of values</p></li>
+<li><p><strong>zmin</strong> (<em>double</em>) â the value of z corresponding to the first element of values</p></li>
+<li><p><strong>zmax</strong> (<em>double</em>) â the value of z corresponding to the last element of values</p></li>
+<li><p><strong>periodic</strong> (<em>bool</em>) â whether the interpolated function is periodic</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.Copy" title="openmm.openmm.Continuous3DFunction.Copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Copy</span></code></a>(self)</p></td>
+<td><p>Create a deep copy of the tabulated function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.__init__" title="openmm.openmm.Continuous3DFunction.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â Continuous3DFunction)</p></td>
+<td><p>Create a Continuous3DFunction f(x,y,z) based on a set of tabulated values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.getFunctionParameters" title="openmm.openmm.Continuous3DFunction.getFunctionParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFunctionParameters</span></code></a>(self)</p></td>
+<td><p>Get the parameters for the tabulated function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.getPeriodic" title="openmm.openmm.Continuous3DFunction.getPeriodic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPeriodic</span></code></a>(self)</p></td>
+<td><p>Get the periodicity status of the tabulated function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.getUpdateCount" title="openmm.openmm.Continuous3DFunction.getUpdateCount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUpdateCount</span></code></a>(self)</p></td>
+<td><p>Get the value of a counter that is updated every time setFunctionParameters() is called.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.setFunctionParameters" title="openmm.openmm.Continuous3DFunction.setFunctionParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setFunctionParameters</span></code></a>(self,Â xsize,Â ysize,Â â¦)</p></td>
+<td><p>Set the parameters for the tabulated function.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Continuous3DFunction.thisown" title="openmm.openmm.Continuous3DFunction.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.getFunctionParameters">
+<span class="sig-name descname"><span class="pre">getFunctionParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.getFunctionParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters for the tabulated function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>values</strong> (<em>int</em>) â the tabulated values of the function f(x,y,z) at xsize uniformly spaced values of x between xmin and xmax, ysize values of y between ymin and ymax, and zsize values of z between zmin and zmax. A natural cubic spline is used to interpolate between the tabulated values. The function is assumed to be zero when x, y, or z is outside its specified range. The values should be ordered so that values[i+xsize*j+xsize*ysize*k] = f(x_i,y_j,z_k), where x_i is the iâth uniformly spaced value of x. This must be of length xsize*ysize*zsize.</p></li>
+<li><p><strong>xsize</strong> (<em>int</em>) â the number of table elements along the x direction</p></li>
+<li><p><strong>ysize</strong> (<em>int</em>) â the number of table elements along the y direction</p></li>
+<li><p><strong>zsize</strong> (<em>vector&lt; double &gt;</em>) â the number of table elements along the z direction</p></li>
+<li><p><strong>xmin</strong> (<em>double</em>) â the value of x corresponding to the first element of values</p></li>
+<li><p><strong>xmax</strong> (<em>double</em>) â the value of x corresponding to the last element of values</p></li>
+<li><p><strong>ymin</strong> (<em>double</em>) â the value of y corresponding to the first element of values</p></li>
+<li><p><strong>ymax</strong> (<em>double</em>) â the value of y corresponding to the last element of values</p></li>
+<li><p><strong>zmin</strong> (<em>double</em>) â the value of z corresponding to the first element of values</p></li>
+<li><p><strong>zmax</strong> (<em>double</em>) â the value of z corresponding to the last element of values</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.setFunctionParameters">
+<span class="sig-name descname"><span class="pre">setFunctionParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zmax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.setFunctionParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the parameters for the tabulated function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>int</em>) â the tabulated values of the function f(x,y,z) at xsize uniformly spaced values of x between xmin and xmax, ysize values of y between ymin and ymax, and zsize values of z between zmin and zmax. A natural cubic spline is used to interpolate between the tabulated values. The function is assumed to be zero when x, y, or z is outside its specified range. The values should be ordered so that values[i+xsize*j+xsize*ysize*k] = f(x_i,y_j,z_k), where x_i is the iâth uniformly spaced value of x. This must be of length xsize*ysize*zsize.</p></li>
+<li><p><strong>xsize</strong> (<em>int</em>) â the number of table elements along the x direction</p></li>
+<li><p><strong>ysize</strong> (<em>int</em>) â the number of table elements along the y direction</p></li>
+<li><p><strong>zsize</strong> (<em>vector&lt; double &gt;</em>) â the number of table elements along the z direction</p></li>
+<li><p><strong>xmin</strong> (<em>double</em>) â the value of x corresponding to the first element of values</p></li>
+<li><p><strong>xmax</strong> (<em>double</em>) â the value of x corresponding to the last element of values</p></li>
+<li><p><strong>ymin</strong> (<em>double</em>) â the value of y corresponding to the first element of values</p></li>
+<li><p><strong>ymax</strong> (<em>double</em>) â the value of y corresponding to the last element of values</p></li>
+<li><p><strong>zmin</strong> (<em>double</em>) â the value of z corresponding to the first element of values</p></li>
+<li><p><strong>zmax</strong> (<em>double</em>) â the value of z corresponding to the last element of values</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Continuous3DFunction" title="openmm.openmm.Continuous3DFunction"><span class="pre">Continuous3DFunction</span></a><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.Copy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a deep copy of the tabulated function</p>
+<div class="admonition-deprecated admonition">
+<p class="admonition-title">Deprecated</p>
+<blockquote>
+<div><p>This will be removed in a future release.</p>
+</div></blockquote>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.__eq__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.__ne__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.getPeriodic">
+<span class="sig-name descname"><span class="pre">getPeriodic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.getPeriodic" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the periodicity status of the tabulated function.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Continuous3DFunction.getUpdateCount">
+<span class="sig-name descname"><span class="pre">getUpdateCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.Continuous3DFunction.getUpdateCount" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the value of a counter that is updated every time setFunctionParameters() is called. This provides a fast way to detect when a function has changed.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

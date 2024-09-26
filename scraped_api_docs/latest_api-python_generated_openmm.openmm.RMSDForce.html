@@ -1,0 +1,148 @@
+<div class="body" role="main">
+<section id="rmsdforce">
+<h1>RMSDForce<a class="headerlink" href="#rmsdforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">RMSDForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RMSDForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is a force whose energy equals the root mean squared deviation (RMSD) between the current coordinates and a reference structure. It is intended for use with CustomCVForce. You will not normally want a force that exactly equals the RMSD, but there are many situations where it is useful to have a restraining or biasing force that depends on the RMSD in some way.</p>
+<p>The force is computed by first aligning the particle positions to the reference structure, then computing the RMSD between the aligned positions and the reference. The computation can optionally be done based on only a subset of the particles in the system.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">referencePositions</span></em>, <em class="sig-param"><span class="pre">particles=std::vector&lt;</span> <span class="pre">int</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RMSDForce" title="openmm.openmm.RMSDForce"><span class="pre">RMSDForce</span></a><a class="headerlink" href="#openmm.openmm.RMSDForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RMSDForce" title="openmm.openmm.RMSDForce"><span class="pre">RMSDForce</span></a></dt>
+<dd><p>Create an RMSDForce.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referencePositions</strong> (<em>vector&lt; Vec3 &gt;</em>) â the reference positions to compute the deviation from. The length of this vector must equal the number of particles in the system, even if not all particles are used in computing the RMSD.</p></li>
+<li><p><strong>particles</strong> (<em>vector&lt; int &gt;</em>) â the indices of the particles to use when computing the RMSD. If this is empty (the default), all particles in the system will be used.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.__init__" title="openmm.openmm.RMSDForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()Â -&gt;Â RMSDForce)</p></td>
+<td><p>Create an RMSDForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.getForceGroup" title="openmm.openmm.RMSDForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.getName" title="openmm.openmm.RMSDForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.getParticles" title="openmm.openmm.RMSDForce.getParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticles</span></code></a>(self)</p></td>
+<td><p>Get the indices of the particles to use when computing the RMSD.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.getReferencePositions" title="openmm.openmm.RMSDForce.getReferencePositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getReferencePositions</span></code></a>(self)</p></td>
+<td><p>Get the reference positions to compute the deviation from.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.setForceGroup" title="openmm.openmm.RMSDForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.setName" title="openmm.openmm.RMSDForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.setParticles" title="openmm.openmm.RMSDForce.setParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticles</span></code></a>(self,Â particles)</p></td>
+<td><p>Set the indices of the particles to use when computing the RMSD.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.setReferencePositions" title="openmm.openmm.RMSDForce.setReferencePositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setReferencePositions</span></code></a>(self,Â positions)</p></td>
+<td><p>Set the reference positions to compute the deviation from.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.updateParametersInContext" title="openmm.openmm.RMSDForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the reference positions and particle indices in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.usesPeriodicBoundaryConditions" title="openmm.openmm.RMSDForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RMSDForce.thisown" title="openmm.openmm.RMSDForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.RMSDForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.getReferencePositions">
+<span class="sig-name descname"><span class="pre">getReferencePositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::vector&lt;</span> <span class="pre">Vec3,std::allocator&lt;</span> <span class="pre">Vec3</span> <span class="pre">&gt;</span> <span class="pre">&gt;</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.RMSDForce.getReferencePositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the reference positions to compute the deviation from.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.setReferencePositions">
+<span class="sig-name descname"><span class="pre">setReferencePositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RMSDForce.setReferencePositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the reference positions to compute the deviation from.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.getParticles">
+<span class="sig-name descname"><span class="pre">getParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">vectori</span><a class="headerlink" href="#openmm.openmm.RMSDForce.getParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the indices of the particles to use when computing the RMSD. If this is empty, all particles in the system will be used.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.setParticles">
+<span class="sig-name descname"><span class="pre">setParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RMSDForce.setParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the indices of the particles to use when computing the RMSD. If this is empty, all particles in the system will be used.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RMSDForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the reference positions and particle indices in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setReferencePositions() and setParticles() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.RMSDForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RMSDForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.RMSDForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RMSDForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RMSDForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RMSDForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

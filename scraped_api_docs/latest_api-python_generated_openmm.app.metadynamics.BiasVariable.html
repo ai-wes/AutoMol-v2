@@ -1,0 +1,42 @@
+<div class="body" role="main">
+<section id="biasvariable">
+<h1>BiasVariable<a class="headerlink" href="#biasvariable" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.metadynamics.BiasVariable">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.metadynamics.</span></span><span class="sig-name descname"><span class="pre">BiasVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">biasWidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.metadynamics.BiasVariable" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A collective variable that can be used to bias a simulation with metadynamics.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.metadynamics.BiasVariable.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">biasWidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridWidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.metadynamics.BiasVariable.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a BiasVariable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>force</strong> (<a class="reference internal" href="openmm.openmm.Force.html#openmm.openmm.Force" title="openmm.openmm.Force"><em>Force</em></a>) â the Force object whose potential energy defines the collective variable</p></li>
+<li><p><strong>minValue</strong> (<em>float</em><em> or </em><em>unit.Quantity</em>) â the minimum value the collective variable can take.  If it should ever go below this,
+the bias force will be set to 0.</p></li>
+<li><p><strong>maxValue</strong> (<em>float</em><em> or </em><em>unit.Quantity</em>) â the maximum value the collective variable can take.  If it should ever go above this,
+the bias force will be set to 0.</p></li>
+<li><p><strong>biasWidth</strong> (<em>float</em><em> or </em><em>unit.Quantity</em>) â the width (standard deviation) of the Gaussians added to the bias during metadynamics</p></li>
+<li><p><strong>periodic</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) â whether this is a periodic variable, such that minValue and maxValue are physical equivalent</p></li>
+<li><p><strong>gridWidth</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) â the number of grid points to use when tabulating the bias function.  If this is omitted,
+a reasonable value is chosen automatically.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.metadynamics.BiasVariable.__init__" title="openmm.app.metadynamics.BiasVariable.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(force,Â minValue,Â maxValue,Â biasWidth)</p></td>
+<td><p>Create a BiasVariable.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+</section>
+</div>

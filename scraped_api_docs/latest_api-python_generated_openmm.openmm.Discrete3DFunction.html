@@ -1,0 +1,131 @@
+<div class="body" role="main">
+<section id="discrete3dfunction">
+<h1>Discrete3DFunction<a class="headerlink" href="#discrete3dfunction" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">Discrete3DFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is a TabulatedFunction that computes a discrete three dimensional function f(x,y,z). To evaluate it, x, y, and z are each rounded to the nearest integer and the table element with those indices is returned. If any index is outside the range [0, size), the result is undefined.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Discrete3DFunction" title="openmm.openmm.Discrete3DFunction"><span class="pre">Discrete3DFunction</span></a><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Discrete3DFunction" title="openmm.openmm.Discrete3DFunction"><span class="pre">Discrete3DFunction</span></a></dt>
+<dd><p>Create a Discrete3DFunction f(x,y,z) based on a set of tabulated values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xsize</strong> (<em>int</em>) â the number of table elements along the x direction</p></li>
+<li><p><strong>ysize</strong> (<em>int</em>) â the number of table elements along the y direction</p></li>
+<li><p><strong>zsize</strong> (<em>int</em>) â the number of table elements along the z direction</p></li>
+<li><p><strong>values</strong> (<em>vector&lt; double &gt;</em>) â the tabulated values of the function f(x,y,z), ordered so that values[i+xsize*j+xsize*ysize*k] = f(i,j,k). This must be of length xsize*ysize*zsize.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.Copy" title="openmm.openmm.Discrete3DFunction.Copy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Copy</span></code></a>(self)</p></td>
+<td><p>Create a deep copy of the tabulated function</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.__init__" title="openmm.openmm.Discrete3DFunction.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â Discrete3DFunction)</p></td>
+<td><p>Create a Discrete3DFunction f(x,y,z) based on a set of tabulated values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.getFunctionParameters" title="openmm.openmm.Discrete3DFunction.getFunctionParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFunctionParameters</span></code></a>(self)</p></td>
+<td><p>Get the parameters for the tabulated function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.getPeriodic" title="openmm.openmm.Discrete3DFunction.getPeriodic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPeriodic</span></code></a>(self)</p></td>
+<td><p>Get the periodicity status of the tabulated function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.getUpdateCount" title="openmm.openmm.Discrete3DFunction.getUpdateCount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUpdateCount</span></code></a>(self)</p></td>
+<td><p>Get the value of a counter that is updated every time setFunctionParameters() is called.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.setFunctionParameters" title="openmm.openmm.Discrete3DFunction.setFunctionParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setFunctionParameters</span></code></a>(self,Â xsize,Â ysize,Â â¦)</p></td>
+<td><p>Set the parameters for the tabulated function.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Discrete3DFunction.thisown" title="openmm.openmm.Discrete3DFunction.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.getFunctionParameters">
+<span class="sig-name descname"><span class="pre">getFunctionParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.getFunctionParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters for the tabulated function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>xsize</strong> (<em>int</em>) â the number of table elements along the x direction</p></li>
+<li><p><strong>ysize</strong> (<em>int</em>) â the number of table elements along the y direction</p></li>
+<li><p><strong>zsize</strong> (<em>int</em>) â the number of table elements along the z direction</p></li>
+<li><p><strong>values</strong> (<em>vector&lt; double &gt;</em>) â the tabulated values of the function f(x,y,z), ordered so that values[i+xsize*j+xsize*ysize*k] = f(i,j,k). This must be of length xsize*ysize*zsize.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.setFunctionParameters">
+<span class="sig-name descname"><span class="pre">setFunctionParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ysize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.setFunctionParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the parameters for the tabulated function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xsize</strong> (<em>int</em>) â the number of table elements along the x direction</p></li>
+<li><p><strong>ysize</strong> (<em>int</em>) â the number of table elements along the y direction</p></li>
+<li><p><strong>zsize</strong> (<em>int</em>) â the number of table elements along the z direction</p></li>
+<li><p><strong>values</strong> (<em>vector&lt; double &gt;</em>) â the tabulated values of the function f(x,y,z), ordered so that values[i+xsize*j+xsize*ysize*k] = f(i,j,k). This must be of length xsize*ysize*zsize.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.Copy">
+<span class="sig-name descname"><span class="pre">Copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Discrete3DFunction" title="openmm.openmm.Discrete3DFunction"><span class="pre">Discrete3DFunction</span></a><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.Copy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a deep copy of the tabulated function</p>
+<div class="admonition-deprecated admonition">
+<p class="admonition-title">Deprecated</p>
+<blockquote>
+<div><p>This will be removed in a future release.</p>
+</div></blockquote>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.__eq__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.__ne__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.getPeriodic">
+<span class="sig-name descname"><span class="pre">getPeriodic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.getPeriodic" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the periodicity status of the tabulated function.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Discrete3DFunction.getUpdateCount">
+<span class="sig-name descname"><span class="pre">getUpdateCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.Discrete3DFunction.getUpdateCount" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the value of a counter that is updated every time setFunctionParameters() is called. This provides a fast way to detect when a function has changed.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

@@ -1,0 +1,375 @@
+<div class="body" role="main">
+<section id="customexternalforce">
+<h1>CustomExternalForce<a class="headerlink" href="#customexternalforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">CustomExternalForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class implements an âexternalâ force on particles. The force may be applied to any subset of the particles in the System. The force on each particle is specified by an arbitrary algebraic expression, which may depend on the current position of the particle as well as on arbitrary global and per-particle parameters.</p>
+<p>To use this class, create a CustomExternalForce object, passing an algebraic expression to the constructor that defines the potential energy of each affected particle. The expression may depend on the particleâs x, y, and z coordinates, as well as on any parameters you choose. Then call addPerParticleParameter() to define per-particle parameters, and addGlobalParameter() to define global parameters. The values of per-particle parameters are specified as part of the system definition, while values of global parameters may be modified during a simulation by calling Context::setParameter(). Finally, call addParticle() once for each particle that should be affected by the force. After a particle has been added, you can modify its parameters by calling setParticleParameters(). This will have no effect on Contexts that already exist unless you call updateParametersInContext().</p>
+<p>As an example, the following code creates a CustomExternalForce that attracts each particle to a target position (x0, y0, z0) via a harmonic potential:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CustomExternalForce</span><span class="o">*</span><span class="w"> </span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CustomExternalForce</span><span class="p">(</span><span class="s">"k*((x-x0)^2+(y-y0)^2+(z-z0)^2)"</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This force depends on four parameters: the spring constant k and equilibrium coordinates x0, y0, and z0. The following code defines these parameters:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">force</span><span class="o">-&gt;</span><span class="n">addGlobalParameter</span><span class="p">(</span><span class="s">"k"</span><span class="p">,</span><span class="w"> </span><span class="mf">100.0</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addPerParticleParameter</span><span class="p">(</span><span class="s">"x0"</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addPerParticleParameter</span><span class="p">(</span><span class="s">"y0"</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addPerParticleParameter</span><span class="p">(</span><span class="s">"z0"</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Special care is needed in systems that use periodic boundary conditions. In that case, each particle really represents an infinite set of particles repeating through space. The variables x, y, and z contain the coordinates of one of those periodic copies, but there is no guarantee about which. It might even change from one time step to the next. You can handle this situation by using the function periodicdistance(x1, y1, z1, x2, y2, z2), which returns the minimum distance between periodic copies of the points (x1, y1, z1) and (x2, y2, z2). For example, the force given above would be rewritten as</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CustomExternalForce</span><span class="o">*</span><span class="w"> </span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CustomExternalForce</span><span class="p">(</span><span class="s">"k*periodicdistance(x, y, z, x0, y0, z0)^2"</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Expressions may involve the operators + (add), - (subtract), * (multiply), / (divide), and ^ (power), and the following functions: sqrt, exp, log, sin, cos, sec, csc, tan, cot, asin, acos, atan, atan2, sinh, cosh, tanh, erf, erfc, min, max, abs, floor, ceil, step, delta, select. All trigonometric functions are defined in radians, and log is the natural logarithm. step(x) = 0 if x is less than 0, 1 otherwise. delta(x) = 1 if x is 0, 0 otherwise. select(x,y,z) = z if x = 0, y otherwise.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.CustomExternalForce" title="openmm.openmm.CustomExternalForce"><span class="pre">CustomExternalForce</span></a><a class="headerlink" href="#openmm.openmm.CustomExternalForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.CustomExternalForce" title="openmm.openmm.CustomExternalForce"><span class="pre">CustomExternalForce</span></a></dt>
+<dd><p>Create a CustomExternalForce.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>energy</strong> (<em>string</em>) â an algebraic expression giving the potential energy of each particle as a function of its x, y, and z coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.__init__" title="openmm.openmm.CustomExternalForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â CustomExternalForce)</p></td>
+<td><p>Create a CustomExternalForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.addGlobalParameter" title="openmm.openmm.CustomExternalForce.addGlobalParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addGlobalParameter</span></code></a>(self,Â name,Â defaultValue)</p></td>
+<td><p>Add a new global parameter that the interaction may depend on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.addParticle" title="openmm.openmm.CustomExternalForce.addParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticle</span></code></a>(self,Â particle[,Â parameters])</p></td>
+<td><p>Add a particle term to the force field.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.addPerParticleParameter" title="openmm.openmm.CustomExternalForce.addPerParticleParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addPerParticleParameter</span></code></a>(self,Â name)</p></td>
+<td><p>Add a new per-particle parameter that the force may depend on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getEnergyFunction" title="openmm.openmm.CustomExternalForce.getEnergyFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEnergyFunction</span></code></a>(self)</p></td>
+<td><p>Get the algebraic expression that gives the potential energy of each particle</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getForceGroup" title="openmm.openmm.CustomExternalForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getGlobalParameterDefaultValue" title="openmm.openmm.CustomExternalForce.getGlobalParameterDefaultValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalParameterDefaultValue</span></code></a>(self,Â index)</p></td>
+<td><p>Get the default value of a global parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getGlobalParameterName" title="openmm.openmm.CustomExternalForce.getGlobalParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalParameterName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a global parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getName" title="openmm.openmm.CustomExternalForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getNumGlobalParameters" title="openmm.openmm.CustomExternalForce.getNumGlobalParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumGlobalParameters</span></code></a>(self)</p></td>
+<td><p>Get the number of global parameters that the force depends on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getNumParticles" title="openmm.openmm.CustomExternalForce.getNumParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticles</span></code></a>(self)</p></td>
+<td><p>Get the number of particles for which force field parameters have been defined.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getNumPerParticleParameters" title="openmm.openmm.CustomExternalForce.getNumPerParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumPerParticleParameters</span></code></a>(self)</p></td>
+<td><p>Get the number of per-particle parameters that the force depends on</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getParticleParameters" title="openmm.openmm.CustomExternalForce.getParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the force field parameters for a force field term.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.getPerParticleParameterName" title="openmm.openmm.CustomExternalForce.getPerParticleParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPerParticleParameterName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a per-particle parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setEnergyFunction" title="openmm.openmm.CustomExternalForce.setEnergyFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setEnergyFunction</span></code></a>(self,Â energy)</p></td>
+<td><p>Set the algebraic expression that gives the potential energy of each particle</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setForceGroup" title="openmm.openmm.CustomExternalForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setGlobalParameterDefaultValue" title="openmm.openmm.CustomExternalForce.setGlobalParameterDefaultValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGlobalParameterDefaultValue</span></code></a>(self,Â index,Â â¦)</p></td>
+<td><p>Set the default value of a global parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setGlobalParameterName" title="openmm.openmm.CustomExternalForce.setGlobalParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGlobalParameterName</span></code></a>(self,Â index,Â name)</p></td>
+<td><p>Set the name of a global parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setName" title="openmm.openmm.CustomExternalForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setParticleParameters" title="openmm.openmm.CustomExternalForce.setParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleParameters</span></code></a>(self,Â index,Â particle)</p></td>
+<td><p>Set the force field parameters for a force field term.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.setPerParticleParameterName" title="openmm.openmm.CustomExternalForce.setPerParticleParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPerParticleParameterName</span></code></a>(self,Â index,Â name)</p></td>
+<td><p>Set the name of a per-particle parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.updateParametersInContext" title="openmm.openmm.CustomExternalForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the per-particle parameters in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.usesPeriodicBoundaryConditions" title="openmm.openmm.CustomExternalForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomExternalForce.thisown" title="openmm.openmm.CustomExternalForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getNumParticles">
+<span class="sig-name descname"><span class="pre">getNumParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getNumParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particles for which force field parameters have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getNumPerParticleParameters">
+<span class="sig-name descname"><span class="pre">getNumPerParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getNumPerParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of per-particle parameters that the force depends on</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getNumGlobalParameters">
+<span class="sig-name descname"><span class="pre">getNumGlobalParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getNumGlobalParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of global parameters that the force depends on.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getEnergyFunction">
+<span class="sig-name descname"><span class="pre">getEnergyFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getEnergyFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the algebraic expression that gives the potential energy of each particle</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setEnergyFunction">
+<span class="sig-name descname"><span class="pre">setEnergyFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setEnergyFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the algebraic expression that gives the potential energy of each particle</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.addPerParticleParameter">
+<span class="sig-name descname"><span class="pre">addPerParticleParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.addPerParticleParameter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a new per-particle parameter that the force may depend on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the parameter that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getPerParticleParameterName">
+<span class="sig-name descname"><span class="pre">getPerParticleParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getPerParticleParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a per-particle parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to get the name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setPerParticleParameterName">
+<span class="sig-name descname"><span class="pre">setPerParticleParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setPerParticleParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of a per-particle parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to set the name</p></li>
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.addGlobalParameter">
+<span class="sig-name descname"><span class="pre">addGlobalParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.addGlobalParameter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a new global parameter that the interaction may depend on. The default value provided to this method is the initial value of the parameter in newly created Contexts. You can change the value at any time by calling setParameter() on the Context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p></li>
+<li><p><strong>defaultValue</strong> (<em>double</em>) â the default value of the parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the parameter that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getGlobalParameterName">
+<span class="sig-name descname"><span class="pre">getGlobalParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getGlobalParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to get the name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setGlobalParameterName">
+<span class="sig-name descname"><span class="pre">setGlobalParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setGlobalParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to set the name</p></li>
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getGlobalParameterDefaultValue">
+<span class="sig-name descname"><span class="pre">getGlobalParameterDefaultValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getGlobalParameterDefaultValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default value of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to get the default value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter default value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setGlobalParameterDefaultValue">
+<span class="sig-name descname"><span class="pre">setGlobalParameterDefaultValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setGlobalParameterDefaultValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default value of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to set the default value</p></li>
+<li><p><strong>defaultValue</strong> (<em>double</em>) â the default value of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.addParticle">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">particle</span></em>, <em class="sig-param"><span class="pre">parameters=std::vector&lt;</span> <span class="pre">double</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.addParticle" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a particle term to the force field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle</strong> (<em>int</em>) â the index of the particle this term is applied to</p></li>
+<li><p><strong>parameters</strong> (<em>vector&lt; double &gt;</em>) â the list of parameters for the new force term</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the particle term that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getParticleParameters">
+<span class="sig-name descname"><span class="pre">getParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for a force field term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the particle term for which to get parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>particle</strong> (<em>int</em>) â the index of the particle this term is applied to</p></li>
+<li><p><strong>parameters</strong> (<em>vector&lt; double &gt;</em>) â the list of parameters for the force field term</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setParticleParameters">
+<span class="sig-name descname"><span class="pre">setParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">index</span></em>, <em class="sig-param"><span class="pre">particle</span></em>, <em class="sig-param"><span class="pre">parameters=std::vector&lt;</span> <span class="pre">double</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a force field term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the particle term for which to set parameters</p></li>
+<li><p><strong>particle</strong> (<em>int</em>) â the index of the particle this term is applied to</p></li>
+<li><p><strong>parameters</strong> (<em>vector&lt; double &gt;</em>) â the list of parameters for the force field term</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the per-particle parameters in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setParticleParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>This method has several limitations. The only information it updates is the values of per-particle parameters. All other aspects of the Force (such as the energy function) are unaffected and can only be changed by reinitializing the Context. Also, this method cannot be used to add new particles, only to change the parameters of existing ones.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>false</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomExternalForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomExternalForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

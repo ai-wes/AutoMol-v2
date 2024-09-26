@@ -1,0 +1,324 @@
+<div class="body" role="main">
+<section id="forcefield">
+<h1>ForceField<a class="headerlink" href="#forcefield" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.forcefield.</span></span><span class="sig-name descname"><span class="pre">ForceField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A ForceField constructs OpenMM System objects based on a Topology.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">files</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load one or more XML files and create a ForceField object based on them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>files</strong> (<em>list</em>) â A list of XML files defining the force field.  Each entry may
+be an absolute file path, a path relative to the current working
+directory, a path relative to this moduleâs data subdirectory
+(for built in force fields), or an open file-like object with a
+read() method from which the forcefield XML data can be loaded.</p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.__init__" title="openmm.app.forcefield.ForceField.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(*files)</p></td>
+<td><p>Load one or more XML files and create a ForceField object based on them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.createSystem" title="openmm.app.forcefield.ForceField.createSystem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createSystem</span></code></a>(topology[,Â nonbondedMethod,Â â¦])</p></td>
+<td><p>Construct an OpenMM System representing a Topology with this force field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.generateTemplatesForUnmatchedResidues" title="openmm.app.forcefield.ForceField.generateTemplatesForUnmatchedResidues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generateTemplatesForUnmatchedResidues</span></code></a>(topology)</p></td>
+<td><p>Generate forcefield residue templates for residues in specified topology for which no forcefield templates are available.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.getGenerators" title="openmm.app.forcefield.ForceField.getGenerators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGenerators</span></code></a>()</p></td>
+<td><p>Get the list of all registered generators.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.getMatchingTemplates" title="openmm.app.forcefield.ForceField.getMatchingTemplates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMatchingTemplates</span></code></a>(topology[,Â â¦])</p></td>
+<td><p>Return a list of forcefield residue templates matching residues in the specified topology.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.getUnmatchedResidues" title="openmm.app.forcefield.ForceField.getUnmatchedResidues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUnmatchedResidues</span></code></a>(topology[,Â â¦])</p></td>
+<td><p>Return a list of Residue objects from specified topology for which no forcefield templates are available.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.loadFile" title="openmm.app.forcefield.ForceField.loadFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadFile</span></code></a>(files[,Â resname_prefix])</p></td>
+<td><p>Load an XML file and add the definitions from it to this ForceField.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerAtomType" title="openmm.app.forcefield.ForceField.registerAtomType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerAtomType</span></code></a>(parameters)</p></td>
+<td><p>Register a new atom type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerGenerator" title="openmm.app.forcefield.ForceField.registerGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerGenerator</span></code></a>(generator)</p></td>
+<td><p>Register a new generator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerPatch" title="openmm.app.forcefield.ForceField.registerPatch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerPatch</span></code></a>(patch)</p></td>
+<td><p>Register a new patch that can be applied to templates.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerResidueTemplate" title="openmm.app.forcefield.ForceField.registerResidueTemplate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerResidueTemplate</span></code></a>(template)</p></td>
+<td><p>Register a new residue template.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerScript" title="openmm.app.forcefield.ForceField.registerScript"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerScript</span></code></a>(script)</p></td>
+<td><p>Register a new script to be executed after building the System.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerTemplateGenerator" title="openmm.app.forcefield.ForceField.registerTemplateGenerator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerTemplateGenerator</span></code></a>(generator)</p></td>
+<td><p>Register a residue template generator that can be used to parameterize residues that do not match existing forcefield templates.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerTemplateMatcher" title="openmm.app.forcefield.ForceField.registerTemplateMatcher"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerTemplateMatcher</span></code></a>(matcher)</p></td>
+<td><p>Register an object that can override the default logic for matching templates to residues.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.forcefield.ForceField.registerTemplatePatch" title="openmm.app.forcefield.ForceField.registerTemplatePatch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerTemplatePatch</span></code></a>(residue,Â patch,Â â¦)</p></td>
+<td><p>Register that a particular patch can be used with a particular residue.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.loadFile">
+<span class="sig-name descname"><span class="pre">loadFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resname_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.loadFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load an XML file and add the definitions from it to this ForceField.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>files</strong> (<em>string</em><em> or </em><em>file</em><em> or </em><em>tuple</em>) â An XML file or tuple of XML files containing force field definitions.
+Each entry may be either an absolute file path, a path relative to the current working
+directory, a path relative to this moduleâs data subdirectory (for
+built in force fields), or an open file-like object with a read()
+method from which the forcefield XML data can be loaded.</p></li>
+<li><p><strong>prefix</strong> (<em>string</em>) â An optional string to be prepended to each residue name found in the
+loaded files.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.getGenerators">
+<span class="sig-name descname"><span class="pre">getGenerators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.getGenerators" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the list of all registered generators.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerGenerator">
+<span class="sig-name descname"><span class="pre">registerGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerGenerator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a new generator.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerAtomType">
+<span class="sig-name descname"><span class="pre">registerAtomType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerAtomType" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a new atom type.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerResidueTemplate">
+<span class="sig-name descname"><span class="pre">registerResidueTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerResidueTemplate" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a new residue template.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerPatch">
+<span class="sig-name descname"><span class="pre">registerPatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">patch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerPatch" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a new patch that can be applied to templates.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerTemplatePatch">
+<span class="sig-name descname"><span class="pre">registerTemplatePatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">residue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patchResidueIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerTemplatePatch" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register that a particular patch can be used with a particular residue.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerScript">
+<span class="sig-name descname"><span class="pre">registerScript</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">script</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerScript" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a new script to be executed after building the System.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerTemplateMatcher">
+<span class="sig-name descname"><span class="pre">registerTemplateMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matcher</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerTemplateMatcher" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register an object that can override the default logic for matching templates to residues.</p>
+<p>A template matcher is a callable object that can be invoked as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">template</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">forcefield</span><span class="p">,</span> <span class="n">residue</span><span class="p">,</span> <span class="n">bondedToAtom</span><span class="p">,</span> <span class="n">ignoreExternalBonds</span><span class="p">,</span> <span class="n">ignoreExtraParticles</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">forcefield</span></code> is the ForceField invoking it, <code class="docutils literal notranslate"><span class="pre">residue</span></code> is an openmm.app.Residue object,
+<code class="docutils literal notranslate"><span class="pre">bondedToAtom[i]</span></code> is the set of atoms bonded to atom index i, and <code class="docutils literal notranslate"><span class="pre">ignoreExternalBonds</span></code> and
+<code class="docutils literal notranslate"><span class="pre">ignoreExtraParticles</span></code> indicate whether external bonds and extra particules should be considered
+in matching templates.</p>
+<p>It should return a _TemplateData object that matches the residue.  Alternatively it may return
+None, in which case the standard logic will be used to find a template for the residue.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This method is experimental, and its API is subject to change.</p>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.registerTemplateGenerator">
+<span class="sig-name descname"><span class="pre">registerTemplateGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.registerTemplateGenerator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a residue template generator that can be used to parameterize residues that do not match existing forcefield templates.</p>
+<p>This functionality can be used to add handlers to parameterize small molecules or unnatural/modified residues.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This method is experimental, and its API is subject to change.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>generator</strong> (<em>function</em>) â A function that will be called when a residue is encountered that does not match an existing forcefield template.</p></li>
+<li><p><strong>a residue without a template is encountered</strong> (<em>When</em>) â </p></li>
+<li><p><strong>generator function is called with</strong> (<em>the</em>) â </p></li>
+<li><p><strong>::</strong> â success = generator(forcefield, residue)</p></li>
+<li><p><strong>forcefield is the calling ForceField object and residue is a openmm.app.topology.Residue object.</strong> (<em>where</em>) â </p></li>
+<li><p><strong>must conform to the following API</strong> (<em>generator</em>) â </p></li>
+<li><p><strong>::</strong> â <p>generator API</p>
+<dl class="field-list simple">
+<dt class="field-odd">param forcefield</dt>
+<dd class="field-odd"><p>The ForceField object to which residue templates and/or parameters are to be added.</p>
+</dd>
+<dt class="field-even">type forcefield</dt>
+<dd class="field-even"><p>openmm.app.ForceField</p>
+</dd>
+<dt class="field-odd">param residue</dt>
+<dd class="field-odd"><p>The residue topology for which a template is to be generated.</p>
+</dd>
+<dt class="field-even">type residue</dt>
+<dd class="field-even"><p>openmm.app.Topology.Residue</p>
+</dd>
+<dt class="field-odd">returns</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>success</strong> (<em>bool</em>) â If the generator is able to successfully parameterize the residue, <cite>True</cite> is returned.
+If the generator cannot parameterize the residue, it should return <cite>False</cite> and not modify <cite>forcefield</cite>.</p></li>
+<li><p>The generator should either register a residue template directly with <cite>forcefield.registerResidueTemplate(template)</cite></p></li>
+<li><p>or it should call <cite>forcefield.loadFile(file)</cite> to load residue definitions from an ffxml file.</p></li>
+<li><p>It can also use the <cite>ForceField</cite> programmatic API to add additional atom types (via <cite>forcefield.registerAtomType(parameters)</cite>)</p></li>
+<li><p><em>or additional parameters.</em></p></li>
+</ul>
+</dd>
+</dl>
+</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.getUnmatchedResidues">
+<span class="sig-name descname"><span class="pre">getUnmatchedResidues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residueTemplates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.getUnmatchedResidues" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return a list of Residue objects from specified topology for which no forcefield templates are available.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This method is experimental, and its API is subject to change.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (<a class="reference internal" href="openmm.app.topology.Topology.html#openmm.app.topology.Topology" title="openmm.app.topology.Topology"><em>Topology</em></a>) â The Topology whose residues are to be checked against the forcefield residue templates.</p></li>
+<li><p><strong>residueTemplates</strong> (<em>dict=dict</em><em>(</em><em>)</em>) â Specifies which template to use for particular residues.  The keys should be Residue
+objects from the Topology, and the values should be the names of the templates to
+use for them.  This is useful when a ForceField contains multiple templates that
+can match the same residue (e.g Fe2+ and Fe3+ templates in the ForceField for a
+monoatomic iron ion in the Topology).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>unmatched_residues</strong> (<em>list of Residue</em>) â List of Residue objects from <cite>topology</cite> for which no forcefield residue templates are available.
+Note that multiple instances of the same residue appearing at different points in the topology may be returned.</p></li>
+<li><p><em>This method may be of use in generating missing residue templates or diagnosing parameterization failures.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.getMatchingTemplates">
+<span class="sig-name descname"><span class="pre">getMatchingTemplates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreExternalBonds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.getMatchingTemplates" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return a list of forcefield residue templates matching residues in the specified topology.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This method is experimental, and its API is subject to change.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (<a class="reference internal" href="openmm.app.topology.Topology.html#openmm.app.topology.Topology" title="openmm.app.topology.Topology"><em>Topology</em></a>) â The Topology whose residues are to be checked against the forcefield residue templates.</p></li>
+<li><p><strong>ignoreExternalBonds</strong> (<em>bool=False</em>) â If true, ignore external bonds when matching residues to templates.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>templates</strong> (<em>list of _TemplateData</em>) â List of forcefield residue templates corresponding to residues in the topology.
+templates[index] is template corresponding to residue <cite>index</cite> in topology.residues()</p></li>
+<li><p><em>This method may be of use in debugging issues related to parameter assignment.</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.generateTemplatesForUnmatchedResidues">
+<span class="sig-name descname"><span class="pre">generateTemplatesForUnmatchedResidues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.generateTemplatesForUnmatchedResidues" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Generate forcefield residue templates for residues in specified topology for which no forcefield templates are available.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This method is experimental, and its API is subject to change.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>topology</strong> (<a class="reference internal" href="openmm.app.topology.Topology.html#openmm.app.topology.Topology" title="openmm.app.topology.Topology"><em>Topology</em></a>) â The Topology whose residues are to be checked against the forcefield residue templates.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>templates</strong> (<em>list of _TemplateData</em>) â List of forcefield residue templates corresponding to residues in <cite>topology</cite> for which no forcefield templates are currently available.
+Atom types will be set to <cite>None</cite>, but template name, atom names, elements, and connectivity will be taken from corresponding Residue objects.</p></li>
+<li><p><strong>residues</strong> (<em>list of Residue</em>) â List of Residue objects that were used to generate the templates.
+<cite>residues[index]</cite> is the Residue that was used to generate the template <cite>templates[index]</cite></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.forcefield.ForceField.createSystem">
+<span class="sig-name descname"><span class="pre">createSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonbondedMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NoCutoff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonbondedCutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=1.0,</span> <span class="pre">unit=nanometer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigidWater</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removeCMMotion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydrogenMass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">residueTemplates</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignoreExternalBonds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">switchDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flexibleConstraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drudeMass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=0.4,</span> <span class="pre">unit=dalton)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.forcefield.ForceField.createSystem" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Construct an OpenMM System representing a Topology with this force field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (<a class="reference internal" href="openmm.app.topology.Topology.html#openmm.app.topology.Topology" title="openmm.app.topology.Topology"><em>Topology</em></a>) â The Topology for which to create a System</p></li>
+<li><p><strong>nonbondedMethod</strong> (<em>object=NoCutoff</em>) â The method to use for nonbonded interactions.  Allowed values are
+NoCutoff, CutoffNonPeriodic, CutoffPeriodic, Ewald, PME, or LJPME.</p></li>
+<li><p><strong>nonbondedCutoff</strong> (<em>distance=1*nanometer</em>) â The cutoff distance to use for nonbonded interactions</p></li>
+<li><p><strong>constraints</strong> (<em>object=None</em>) â Specifies which bonds and angles should be implemented with constraints.
+Allowed values are None, HBonds, AllBonds, or HAngles.</p></li>
+<li><p><strong>rigidWater</strong> (<em>boolean=None</em>) â If true, water molecules will be fully rigid regardless of the value
+passed for the constraints argument.  If None (the default), it uses the
+default behavior for this force fieldâs water model.</p></li>
+<li><p><strong>removeCMMotion</strong> (<em>boolean=True</em>) â If true, a CMMotionRemover will be added to the System</p></li>
+<li><p><strong>hydrogenMass</strong> (<em>mass=None</em>) â The mass to use for hydrogen atoms bound to heavy atoms.  Any mass
+added to a hydrogen is subtracted from the heavy atom to keep
+their total mass the same.  If rigidWater is used to make water molecules
+rigid, then water hydrogens are not altered.</p></li>
+<li><p><strong>residueTemplates</strong> (<em>dict=dict</em><em>(</em><em>)</em>) â Specifies which template to use for particular residues.  The keys should be Residue
+objects from the Topology, and the values should be the names of the templates to
+use for them.  This is useful when a ForceField contains multiple templates that
+can match the same residue (e.g Fe2+ and Fe3+ templates in the ForceField for a
+monoatomic iron ion in the Topology).</p></li>
+<li><p><strong>ignoreExternalBonds</strong> (<em>boolean=False</em>) â If true, ignore external bonds when matching residues to templates.  This is
+useful when the Topology represents one piece of a larger molecule, so chains are
+not terminated properly.  This option can create ambiguities where multiple
+templates match the same residue.  If that happens, use the residueTemplates
+argument to specify which one to use.</p></li>
+<li><p><strong>switchDistance</strong> (<em>float=None</em>) â The distance at which the potential energy switching function is turned on for
+Lennard-Jones interactions. If this is None, no switching function will be used.</p></li>
+<li><p><strong>flexibleConstraints</strong> (<em>boolean=False</em>) â If True, parameters for constrained degrees of freedom will be added to the System</p></li>
+<li><p><strong>drudeMass</strong> (<em>mass=0.4*amu</em>) â The mass to use for Drude particles.  Any mass added to a Drude particle is
+subtracted from its parent atom to keep their total mass the same.</p></li>
+<li><p><strong>args</strong> â Arbitrary additional keyword arguments may also be specified.
+This allows extra parameters to be specified that are specific to
+particular force fields.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the newly created System</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>system</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

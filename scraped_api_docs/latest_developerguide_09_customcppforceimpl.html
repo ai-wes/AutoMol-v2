@@ -1,0 +1,42 @@
+<div class="body" role="main">
+<style> .code {font-family:monospace;} </style>
+<style> .caption {text-align:center;} </style><section id="platform-independent-code-with-customcppforceimpl">
+<span id="customcppforceimpl"></span><h1><span class="section-number">9. </span>Platform-Independent Code with CustomCPPForceImpl<a class="headerlink" href="#platform-independent-code-with-customcppforceimpl" title="Permalink to this headline">Â¶</a></h1>
+<p>In most cases, Forces are written with platform-specific code that runs as
+efficiently as possible on the available hardware.  There are some situations
+where that is unnecessarily complicated.  For example, you might write a plugin
+that interfaces to an external library through its own public API.  Because all
+expensive calculations are done by the external library, there is little
+opportunity for any kind of platform-specific optimization.  All you can do is
+copy positions over to the external library and copy forces back, hopefully in
+a way that is not too inefficient, and preferably with as little code as
+possible.  CustomCPPForceImpl is a tool for doing that.</p>
+<p>To use it, you write your Force subclass in the usual way, providing whatever
+API is appropriate for it.  Then for the corresponding ForceImpl, simply
+subclass CustomCPPForceImpl and override <code>computeForce()</code> to perform the
+calculation using platform-independent C++ code.  Nothing more is required.  It
+will automatically work on all platforms.  You do not need to write any GPU
+code, provide a Kernel or KernelFactory, define registration functions, or even
+create plugin libraries to be loaded dynamically.  The single library containing
+the Force and ForceImpl is all you need.</p>
+<p>Here is an example of what the code to implement your ForceImpl might look like.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExampleForceImpl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">CustomCPPForceImpl</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">ExampleForceImpl</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ExampleForce</span><span class="o">&amp;</span><span class="w"> </span><span class="n">owner</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">CustomCPPForceImpl</span><span class="p">(</span><span class="n">owner</span><span class="p">),</span><span class="w"> </span><span class="n">owner</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">computeForce</span><span class="p">(</span><span class="n">ContextImpl</span><span class="o">&amp;</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">positions</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">forces</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Compute the forces and energy here.  Store the forces into the</span>
+<span class="w">        </span><span class="c1">// vector and return the energy.</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">ExampleForce</span><span class="o">&amp;</span><span class="w"> </span><span class="n">getOwner</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">owner</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">ExampleForce</span><span class="o">&amp;</span><span class="w"> </span><span class="n">owner</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</section>
+</div>

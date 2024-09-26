@@ -1,0 +1,348 @@
+<div class="body" role="main">
+<section id="context">
+<h1>Context<a class="headerlink" href="#context" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.Context">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">Context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A Context stores the complete state of a simulation. More specifically, it includes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The current time</p></li>
+<li><p>The position of each particle</p></li>
+<li><p>The velocity of each particle</p></li>
+<li><p>The values of configurable parameters defined by Force objects in the System</p></li>
+</ul>
+</div></blockquote>
+<p>You can retrieve a snapshot of the current state at any time by calling getState(). This allows you to record the state of the simulation at various points, either for analysis or for checkpointing. getState() can also be used to retrieve the current forces on each particle and the current energy of the System.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrator</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Context" title="openmm.openmm.Context"><span class="pre">Context</span></a><a class="headerlink" href="#openmm.openmm.Context.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Context" title="openmm.openmm.Context"><span class="pre">Context</span></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">properties</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Context" title="openmm.openmm.Context"><span class="pre">Context</span></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Context" title="openmm.openmm.Context"><span class="pre">Context</span></a></dt>
+<dd><p>Construct a new Context in which to run a simulation, explicitly specifying what Platform should be used to perform calculations and the values of platform-specific properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>system</strong> (<a class="reference internal" href="openmm.openmm.System.html#openmm.openmm.System" title="openmm.openmm.System"><em>System</em></a>) â the System which will be simulated</p></li>
+<li><p><strong>integrator</strong> (<a class="reference internal" href="openmm.openmm.Integrator.html#openmm.openmm.Integrator" title="openmm.openmm.Integrator"><em>Integrator</em></a>) â the Integrator which will be used to simulate the System</p></li>
+<li><p><strong>platform</strong> (<a class="reference internal" href="openmm.openmm.Platform.html#openmm.openmm.Platform" title="openmm.openmm.Platform"><em>Platform</em></a>) â the Platform to use for calculations</p></li>
+<li><p><strong>properties</strong> (<em>map&lt; std::string</em><em>, </em><em>std::string &gt;</em>) â a set of values for platform-specific properties. Keys are the property names.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.__init__" title="openmm.openmm.Context.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â Context
+Â -&gt;Â Context
+Â -&gt;Â Context)</p></td>
+<td><p>Construct a new Context in which to run a simulation, explicitly specifying what Platform should be used to perform calculations and the values of platform-specific properties.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.applyConstraints" title="openmm.openmm.Context.applyConstraints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyConstraints</span></code></a>(self,Â tol)</p></td>
+<td><p>Update the positions of particles so that all distance constraints are satisfied.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.applyVelocityConstraints" title="openmm.openmm.Context.applyVelocityConstraints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">applyVelocityConstraints</span></code></a>(self,Â tol)</p></td>
+<td><p>Update the velocities of particles so the net velocity of each constrained distance is zero.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.computeVirtualSites" title="openmm.openmm.Context.computeVirtualSites"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeVirtualSites</span></code></a>(self)</p></td>
+<td><p>Recompute the locations of all virtual sites.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.createCheckpoint" title="openmm.openmm.Context.createCheckpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createCheckpoint</span></code></a>(self)</p></td>
+<td><p>Create a checkpoint recording the current state of the Context.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntegrator</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.getMolecules" title="openmm.openmm.Context.getMolecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMolecules</span></code></a>(self)</p></td>
+<td><p>Get a description of how the particles in the system are grouped into molecules.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.getParameter" title="openmm.openmm.Context.getParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParameter</span></code></a>(self,Â name)</p></td>
+<td><p>Get the value of an adjustable parameter defined by a Force object in the System.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.getParameters" title="openmm.openmm.Context.getParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParameters</span></code></a>(self)</p></td>
+<td><p>Get all adjustable parameters that have been defined by Force objects in the System, along with their current values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.getPlatform" title="openmm.openmm.Context.getPlatform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatform</span></code></a>(-&gt;Â Platform)</p></td>
+<td><p>Get the Platform being used for calculations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.getState" title="openmm.openmm.Context.getState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getState</span></code></a>([getPositions,Â getVelocities,Â â¦])</p></td>
+<td><p>Get a State object recording the current state information stored in this context.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.getStepCount" title="openmm.openmm.Context.getStepCount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getStepCount</span></code></a>(self)</p></td>
+<td><p>Get the current step count.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.getSystem" title="openmm.openmm.Context.getSystem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSystem</span></code></a>(self)</p></td>
+<td><p>Get System being simulated in this context.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.getTime" title="openmm.openmm.Context.getTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTime</span></code></a>(self)</p></td>
+<td><p>Get the current time of the simulation (in picoseconds).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.loadCheckpoint" title="openmm.openmm.Context.loadCheckpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadCheckpoint</span></code></a>(self,Â checkpoint)</p></td>
+<td><p>Load a checkpoint that was written by createCheckpoint().</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.reinitialize" title="openmm.openmm.Context.reinitialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reinitialize</span></code></a>(self[,Â preserveState])</p></td>
+<td><p>When a Context is created, it caches information about the System being simulated and the Force objects contained in it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.setParameter" title="openmm.openmm.Context.setParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParameter</span></code></a>(self,Â name,Â value)</p></td>
+<td><p>Set the value of an adjustable parameter defined by a Force object in the System.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.setPeriodicBoxVectors" title="openmm.openmm.Context.setPeriodicBoxVectors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPeriodicBoxVectors</span></code></a>(self,Â a,Â b,Â c)</p></td>
+<td><p>Set the vectors defining the axes of the periodic box (measured in nm).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.setPositions" title="openmm.openmm.Context.setPositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPositions</span></code></a>(self,Â positions)</p></td>
+<td><p>Set the positions of all particles in the System (measured in nm).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.setState" title="openmm.openmm.Context.setState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setState</span></code></a>(self,Â state)</p></td>
+<td><p>Copy information from a State object into this Context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.setStepCount" title="openmm.openmm.Context.setStepCount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setStepCount</span></code></a>(self,Â count)</p></td>
+<td><p>Set the current step count.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.setTime" title="openmm.openmm.Context.setTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setTime</span></code></a>(self,Â time)</p></td>
+<td><p>Set the current time of the simulation (in picoseconds).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.setVelocities" title="openmm.openmm.Context.setVelocities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setVelocities</span></code></a>(self,Â velocities)</p></td>
+<td><p>Set the velocities of all particles in the System (measured in nm/picosecond).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Context.setVelocitiesToTemperature" title="openmm.openmm.Context.setVelocitiesToTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setVelocitiesToTemperature</span></code></a>(self,Â temperature)</p></td>
+<td><p>Set the velocities of all particles in the System to random values chosen from a Boltzmann distribution at a given temperature.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Context.thisown" title="openmm.openmm.Context.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.Context.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.Context.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getSystem">
+<span class="sig-name descname"><span class="pre">getSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="openmm.openmm.System.html#openmm.openmm.System" title="openmm.openmm.System"><span class="pre">System</span></a><a class="headerlink" href="#openmm.openmm.Context.getSystem" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get System being simulated in this context.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getPlatform">
+<span class="sig-name descname"><span class="pre">getPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="openmm.openmm.Platform.html#openmm.openmm.Platform" title="openmm.openmm.Platform"><span class="pre">Platform</span></a><a class="headerlink" href="#openmm.openmm.Context.getPlatform" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">getPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="openmm.openmm.Platform.html#openmm.openmm.Platform" title="openmm.openmm.Platform"><span class="pre">Platform</span></a></dt>
+<dd><p>Get the Platform being used for calculations.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setState">
+<span class="sig-name descname"><span class="pre">setState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setState" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Copy information from a State object into this Context. This restores the Context to approximately the same state it was in when the State was created. If the State does not include a piece of information (e.g. positions or velocities), that aspect of the Context is left unchanged.</p>
+<p>Even when all possible information is included in the State, the effect of calling this method is still less complete than loadCheckpoint(). For example, it does not restore the internal states of random number generators. On the other hand, it has the advantage of not being hardware specific.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getTime">
+<span class="sig-name descname"><span class="pre">getTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.Context.getTime" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the current time of the simulation (in picoseconds).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setTime">
+<span class="sig-name descname"><span class="pre">setTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setTime" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the current time of the simulation (in picoseconds).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getStepCount">
+<span class="sig-name descname"><span class="pre">getStepCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">long</span> <span class="pre">long</span><a class="headerlink" href="#openmm.openmm.Context.getStepCount" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the current step count.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setStepCount">
+<span class="sig-name descname"><span class="pre">setStepCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setStepCount" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the current step count.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setPositions">
+<span class="sig-name descname"><span class="pre">setPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setPositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the positions of all particles in the System (measured in nm). This method simply sets the positions without checking to see whether they satisfy distance constraints. If you want constraints to be enforced, call applyConstraints() after setting the positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>positions</strong> (<em>vector&lt; Vec3 &gt;</em>) â a vector whose length equals the number of particles in the System. The iâth element contains the position of the iâth particle.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setVelocities">
+<span class="sig-name descname"><span class="pre">setVelocities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocities</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setVelocities" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the velocities of all particles in the System (measured in nm/picosecond).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>velocities</strong> (<em>vector&lt; Vec3 &gt;</em>) â a vector whose length equals the number of particles in the System. The iâth element contains the velocity of the iâth particle.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setVelocitiesToTemperature">
+<span class="sig-name descname"><span class="pre">setVelocitiesToTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">randomSeed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">osrngseed()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setVelocitiesToTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the velocities of all particles in the System to random values chosen from a Boltzmann distribution at a given temperature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>double</em>) â the temperature for which to select the velocities (measured in Kelvin)</p></li>
+<li><p><strong>randomSeed</strong> (<em>int</em>) â the random number seed to use when selecting velocities</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getParameters">
+<span class="sig-name descname"><span class="pre">getParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">mapstringdouble</span><a class="headerlink" href="#openmm.openmm.Context.getParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get all adjustable parameters that have been defined by Force objects in the System, along with their current values.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getParameter">
+<span class="sig-name descname"><span class="pre">getParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.Context.getParameter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the value of an adjustable parameter defined by a Force object in the System.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>string</em>) â the name of the parameter to get</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setParameter">
+<span class="sig-name descname"><span class="pre">setParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setParameter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the value of an adjustable parameter defined by a Force object in the System.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter to set</p></li>
+<li><p><strong>value</strong> (<em>double</em>) â the value of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.setPeriodicBoxVectors">
+<span class="sig-name descname"><span class="pre">setPeriodicBoxVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.setPeriodicBoxVectors" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the vectors defining the axes of the periodic box (measured in nm). They will affect any Force that uses periodic boundary conditions.</p>
+<p>Triclinic boxes are supported, but the vectors must satisfy certain requirements. In particular, a must point in the x direction, b must point âmostlyâ in the y direction, and c must point âmostlyâ in the z direction. See the documentation for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><em>Vec3</em></a>) â the vector defining the first edge of the periodic box</p></li>
+<li><p><strong>b</strong> (<a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><em>Vec3</em></a>) â the vector defining the second edge of the periodic box</p></li>
+<li><p><strong>c</strong> (<a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><em>Vec3</em></a>) â the vector defining the third edge of the periodic box</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.applyConstraints">
+<span class="sig-name descname"><span class="pre">applyConstraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.applyConstraints" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the positions of particles so that all distance constraints are satisfied. This also recomputes the locations of all virtual sites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tol</strong> (<em>double</em>) â the distance tolerance within which constraints must be satisfied.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.applyVelocityConstraints">
+<span class="sig-name descname"><span class="pre">applyVelocityConstraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.applyVelocityConstraints" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the velocities of particles so the net velocity of each constrained distance is zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tol</strong> (<em>double</em>) â the velocity tolerance within which constraints must be satisfied.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.computeVirtualSites">
+<span class="sig-name descname"><span class="pre">computeVirtualSites</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.computeVirtualSites" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Recompute the locations of all virtual sites. There is rarely a reason to call this, since virtual sites are also updated by applyConstraints(). This is only for the rare situations when you want to enforce virtual sites but <em>not</em> constraints.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.reinitialize">
+<span class="sig-name descname"><span class="pre">reinitialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserveState</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.reinitialize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>When a Context is created, it caches information about the System being simulated and the Force objects contained in it. This means that, if the System or Forces are then modified, the Context does not see the changes. Call reinitialize() to force the Context to rebuild its internal representation of the System and pick up any changes that have been made.</p>
+<p>This is an expensive operation, so you should try to avoid calling it too frequently. Most Force classes have an updateParametersInContext() method that provides a less expensive way of updating certain types of information. However, this method is the only way to make some types of changes, so it is sometimes necessary to call it.</p>
+<p>By default, reinitializing a Context causes all state information (positions, velocities, etc.) to be discarded. You can optionally tell it to try to preserve state information. It does this by internally creating a checkpoint, then reinitializing the Context, then loading the checkpoint. Be aware that if the System has changed in a way that prevents the checkpoint from being loaded (such as changing the number of particles), this will throw an exception and the state information will be lost.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getMolecules">
+<span class="sig-name descname"><span class="pre">getMolecules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">vectorii</span><a class="headerlink" href="#openmm.openmm.Context.getMolecules" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get a description of how the particles in the system are grouped into molecules. Two particles are in the same molecule if they are connected by constraints or bonds, where every Force object can define bonds in whatever way are appropriate to that force.</p>
+<p>Each element lists the indices of all particles in a single molecule. Every particle is guaranteed to belong to exactly one molecule.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.getState">
+<span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">getPositions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getVelocities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getForces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getEnergy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getParameterDerivatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getIntegratorParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforcePeriodicBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.getState" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get a State object recording the current state information stored in this context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>getPositions</strong> (<em>bool=False</em>) â whether to store particle positions in the State</p></li>
+<li><p><strong>getVelocities</strong> (<em>bool=False</em>) â whether to store particle velocities in the State</p></li>
+<li><p><strong>getForces</strong> (<em>bool=False</em>) â whether to store the forces acting on particles in the State</p></li>
+<li><p><strong>getEnergy</strong> (<em>bool=False</em>) â whether to store potential and kinetic energy in the State</p></li>
+<li><p><strong>getParameters</strong> (<em>bool=False</em>) â whether to store context parameters in the State</p></li>
+<li><p><strong>getParameterDerivatives</strong> (<em>bool=False</em>) â whether to store parameter derivatives in the State</p></li>
+<li><p><strong>getIntegratorParameters</strong> (<em>bool=False</em>) â whether to store integrator parameters in the State</p></li>
+<li><p><strong>enforcePeriodicBox</strong> (<em>bool=False</em>) â if false, the position of each particle will be whatever position
+is stored in the Context, regardless of periodic boundary conditions.
+If true, particle positions will be translated so the center of
+every molecule lies in the same periodic box.</p></li>
+<li><p><strong>groups</strong> (<em>set={0</em><em>,</em><em>1</em><em>,</em><em>2</em><em>,</em><em>...</em><em>,</em><em>31}</em>) â a set of indices for which force groups to include when computing
+forces and energies. The default value includes all groups. groups
+can also be passed as an unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.createCheckpoint">
+<span class="sig-name descname"><span class="pre">createCheckpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span><a class="headerlink" href="#openmm.openmm.Context.createCheckpoint" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a checkpoint recording the current state of the Context.
+This should be treated as an opaque block of binary data.  See loadCheckpoint() for more details.</p>
+<p>Returns: a string containing the checkpoint data</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Context.loadCheckpoint">
+<span class="sig-name descname"><span class="pre">loadCheckpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Context.loadCheckpoint" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load a checkpoint that was written by createCheckpoint().</p>
+<p>A checkpoint contains not only publicly visible data such as the particle positions and
+velocities, but also internal data such as the states of random number generators.  Ideally,
+loading a checkpoint should restore the Context to an identical state to when it was written,
+such that continuing the simulation will produce an identical trajectory.  This is not strictly
+guaranteed to be true, however, and should not be relied on.  For most purposes, however, the
+internal state should be close enough to be reasonably considered equivalent.</p>
+<p>A checkpoint contains data that is highly specific to the Context from which it was created.
+It depends on the details of the System, the Platform being used, and the hardware and software
+of the computer it was created on.  If you try to load it on a computer with different hardware,
+or for a System that is different in any way, loading is likely to fail.  Checkpoints created
+with different versions of OpenMM are also often incompatible.  If a checkpoint cannot be loaded,
+that is signaled by throwing an exception.</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><ul class="simple">
+<li><p>checkpoint (string) the checkpoint data to load</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

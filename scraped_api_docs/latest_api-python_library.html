@@ -1,0 +1,289 @@
+<div class="body" role="main">
+<section id="library-layer">
+<span id="library"></span><h1>Library Layer<a class="headerlink" href="#library-layer" title="Permalink to this headline">Â¶</a></h1>
+<section id="core-objects">
+<h2>Core Objects<a class="headerlink" href="#core-objects" title="Permalink to this headline">Â¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.System.html#openmm.openmm.System" title="openmm.openmm.System"><code class="xref py py-obj docutils literal notranslate"><span class="pre">System</span></code></a></p></td>
+<td><p>This class represents a molecular system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Context</span></code></a></p></td>
+<td><p>A Context stores the complete state of a simulation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.Platform.html#openmm.openmm.Platform" title="openmm.openmm.Platform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Platform</span></code></a></p></td>
+<td><p>A Platform defines an implementation of all the kernels needed to perform some calculation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.State.html#openmm.openmm.State" title="openmm.openmm.State"><code class="xref py py-obj docutils literal notranslate"><span class="pre">State</span></code></a></p></td>
+<td><p>A State object records a snapshot of the current state of a simulation at a point in time.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="forces">
+<h2>Forces<a class="headerlink" href="#forces" title="Permalink to this headline">Â¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.ATMForce.html#openmm.openmm.ATMForce" title="openmm.openmm.ATMForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ATMForce</span></code></a></p></td>
+<td><p>The ATMForce class implements the Alchemical Transfer Method (ATM) for OpenMM.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.AmoebaGeneralizedKirkwoodForce.html#openmm.openmm.AmoebaGeneralizedKirkwoodForce" title="openmm.openmm.AmoebaGeneralizedKirkwoodForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmoebaGeneralizedKirkwoodForce</span></code></a></p></td>
+<td><p>This class implements an implicit solvation force using the generalized Kirkwood/Grycuk model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.AmoebaMultipoleForce.html#openmm.openmm.AmoebaMultipoleForce" title="openmm.openmm.AmoebaMultipoleForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmoebaMultipoleForce</span></code></a></p></td>
+<td><p>This class implements the Amoeba multipole interaction.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.AmoebaTorsionTorsionForce.html#openmm.openmm.AmoebaTorsionTorsionForce" title="openmm.openmm.AmoebaTorsionTorsionForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmoebaTorsionTorsionForce</span></code></a></p></td>
+<td><p>This class implements the Amoeba torsion-torsion interaction.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.AmoebaVdwForce.html#openmm.openmm.AmoebaVdwForce" title="openmm.openmm.AmoebaVdwForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmoebaVdwForce</span></code></a></p></td>
+<td><p>This class models van der Waals forces in the AMOEBA force field.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.AmoebaWcaDispersionForce.html#openmm.openmm.AmoebaWcaDispersionForce" title="openmm.openmm.AmoebaWcaDispersionForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmoebaWcaDispersionForce</span></code></a></p></td>
+<td><p>This class implements a nonbonded interaction between pairs of particles typically used along with AmoebaGeneralizedKirkwoodForce as part of an implicit solvent model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.AndersenThermostat.html#openmm.openmm.AndersenThermostat" title="openmm.openmm.AndersenThermostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AndersenThermostat</span></code></a></p></td>
+<td><p>This class uses the Andersen method to maintain constant temperature.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CMAPTorsionForce.html#openmm.openmm.CMAPTorsionForce" title="openmm.openmm.CMAPTorsionForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CMAPTorsionForce</span></code></a></p></td>
+<td><p>This class implements an interaction between pairs of dihedral angles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CMMotionRemover.html#openmm.openmm.CMMotionRemover" title="openmm.openmm.CMMotionRemover"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CMMotionRemover</span></code></a></p></td>
+<td><p>This class prevents the center of mass of a System from drifting.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomAngleForce.html#openmm.openmm.CustomAngleForce" title="openmm.openmm.CustomAngleForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomAngleForce</span></code></a></p></td>
+<td><p>This class implements interactions between sets of three particles that depend on the angle between them.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomBondForce.html#openmm.openmm.CustomBondForce" title="openmm.openmm.CustomBondForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomBondForce</span></code></a></p></td>
+<td><p>This class implements bonded interactions between pairs of particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomCVForce.html#openmm.openmm.CustomCVForce" title="openmm.openmm.CustomCVForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomCVForce</span></code></a></p></td>
+<td><p>This class supports energy functions that depend on collective variables.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomCentroidBondForce.html#openmm.openmm.CustomCentroidBondForce" title="openmm.openmm.CustomCentroidBondForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomCentroidBondForce</span></code></a></p></td>
+<td><p>This class is similar to CustomCompoundBondForce, but instead of applying forces between individual particles, it applies them between the centers of groups of particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomCompoundBondForce.html#openmm.openmm.CustomCompoundBondForce" title="openmm.openmm.CustomCompoundBondForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomCompoundBondForce</span></code></a></p></td>
+<td><p>This class supports a wide variety of bonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomExternalForce.html#openmm.openmm.CustomExternalForce" title="openmm.openmm.CustomExternalForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomExternalForce</span></code></a></p></td>
+<td><p>This class implements an âexternalâ force on particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomGBForce.html#openmm.openmm.CustomGBForce" title="openmm.openmm.CustomGBForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomGBForce</span></code></a></p></td>
+<td><p>This class implements complex, multiple stage nonbonded interactions between particles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomHbondForce.html#openmm.openmm.CustomHbondForce" title="openmm.openmm.CustomHbondForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomHbondForce</span></code></a></p></td>
+<td><p>This class supports a wide variety of energy functions used to represent hydrogen bonding.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomManyParticleForce.html#openmm.openmm.CustomManyParticleForce" title="openmm.openmm.CustomManyParticleForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomManyParticleForce</span></code></a></p></td>
+<td><p>This class supports a wide variety of nonbonded N-particle interactions, where N is user specified.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomNonbondedForce.html#openmm.openmm.CustomNonbondedForce" title="openmm.openmm.CustomNonbondedForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomNonbondedForce</span></code></a></p></td>
+<td><p>This class implements nonbonded interactions between particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomTorsionForce.html#openmm.openmm.CustomTorsionForce" title="openmm.openmm.CustomTorsionForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomTorsionForce</span></code></a></p></td>
+<td><p>This class implements interactions between sets of four particles that depend on the torsion angle between them.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.DrudeForce.html#openmm.openmm.DrudeForce" title="openmm.openmm.DrudeForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DrudeForce</span></code></a></p></td>
+<td><p>This class implements forces that are specific to Drude oscillators.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.Force.html#openmm.openmm.Force" title="openmm.openmm.Force"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Force</span></code></a></p></td>
+<td><p>Force objects apply forces to the particles in a System, or alter their behavior in other ways.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.GBSAOBCForce.html#openmm.openmm.GBSAOBCForce" title="openmm.openmm.GBSAOBCForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GBSAOBCForce</span></code></a></p></td>
+<td><p>This class implements an implicit solvation force using the GBSA-OBC model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.GayBerneForce.html#openmm.openmm.GayBerneForce" title="openmm.openmm.GayBerneForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GayBerneForce</span></code></a></p></td>
+<td><p>This class implements the Gay-Berne anisotropic potential.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.HarmonicAngleForce.html#openmm.openmm.HarmonicAngleForce" title="openmm.openmm.HarmonicAngleForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HarmonicAngleForce</span></code></a></p></td>
+<td><p>This class implements an interaction between groups of three particles that varies harmonically with the angle between them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.HarmonicBondForce.html#openmm.openmm.HarmonicBondForce" title="openmm.openmm.HarmonicBondForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HarmonicBondForce</span></code></a></p></td>
+<td><p>This class implements an interaction between pairs of particles that varies harmonically with the distance between them.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.HippoNonbondedForce.html#openmm.openmm.HippoNonbondedForce" title="openmm.openmm.HippoNonbondedForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HippoNonbondedForce</span></code></a></p></td>
+<td><p>This class implements all nonbonded interactions in the HIPPO force field: electrostatics, induction, charge transfer, dispersion, and repulsion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.MonteCarloAnisotropicBarostat.html#openmm.openmm.MonteCarloAnisotropicBarostat" title="openmm.openmm.MonteCarloAnisotropicBarostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MonteCarloAnisotropicBarostat</span></code></a></p></td>
+<td><p>This class uses a Monte Carlo algorithm to adjust the size of the periodic box, simulating the effect of constant pressure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.MonteCarloBarostat.html#openmm.openmm.MonteCarloBarostat" title="openmm.openmm.MonteCarloBarostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MonteCarloBarostat</span></code></a></p></td>
+<td><p>This class uses a Monte Carlo algorithm to adjust the size of the periodic box, simulating the effect of constant pressure.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.MonteCarloFlexibleBarostat.html#openmm.openmm.MonteCarloFlexibleBarostat" title="openmm.openmm.MonteCarloFlexibleBarostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MonteCarloFlexibleBarostat</span></code></a></p></td>
+<td><p>This class uses a Monte Carlo algorithm to adjust the size and shape of the periodic box, simulating the effect of constant pressure.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.MonteCarloMembraneBarostat.html#openmm.openmm.MonteCarloMembraneBarostat" title="openmm.openmm.MonteCarloMembraneBarostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MonteCarloMembraneBarostat</span></code></a></p></td>
+<td><p>This is a Monte Carlo barostat designed specifically for membrane simulations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.NonbondedForce.html#openmm.openmm.NonbondedForce" title="openmm.openmm.NonbondedForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NonbondedForce</span></code></a></p></td>
+<td><p>This class implements nonbonded interactions between particles, including a Coulomb force to represent electrostatics and a Lennard-Jones force to represent van der Waals interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.PeriodicTorsionForce.html#openmm.openmm.PeriodicTorsionForce" title="openmm.openmm.PeriodicTorsionForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeriodicTorsionForce</span></code></a></p></td>
+<td><p>This class implements an interaction between groups of four particles that varies periodically with the torsion angle between them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.RBTorsionForce.html#openmm.openmm.RBTorsionForce" title="openmm.openmm.RBTorsionForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RBTorsionForce</span></code></a></p></td>
+<td><p>This class implements an interaction between groups of four particles that varies with the torsion angle between them according to the Ryckaert-Bellemans potential.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.RMSDForce.html#openmm.openmm.RMSDForce" title="openmm.openmm.RMSDForce"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSDForce</span></code></a></p></td>
+<td><p>This is a force whose energy equals the root mean squared deviation (RMSD) between the current coordinates and a reference structure.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.RPMDMonteCarloBarostat.html#openmm.openmm.RPMDMonteCarloBarostat" title="openmm.openmm.RPMDMonteCarloBarostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RPMDMonteCarloBarostat</span></code></a></p></td>
+<td><p>This class is very similar to MonteCarloBarostat, but it is specifically designed for use with RPMDIntegrator.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="integrators">
+<h2>Integrators<a class="headerlink" href="#integrators" title="Permalink to this headline">Â¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.amd.AMDForceGroupIntegrator.html#openmm.amd.AMDForceGroupIntegrator" title="openmm.amd.AMDForceGroupIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AMDForceGroupIntegrator</span></code></a></p></td>
+<td><p>AMDForceGroupIntegrator implements a single boost aMD integration algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.amd.AMDIntegrator.html#openmm.amd.AMDIntegrator" title="openmm.amd.AMDIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AMDIntegrator</span></code></a></p></td>
+<td><p>AMDIntegrator implements the aMD integration algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.BrownianIntegrator.html#openmm.openmm.BrownianIntegrator" title="openmm.openmm.BrownianIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrownianIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator which simulates a System using Brownian dynamics.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.CompoundIntegrator.html#openmm.openmm.CompoundIntegrator" title="openmm.openmm.CompoundIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompoundIntegrator</span></code></a></p></td>
+<td><p>This class allows you to use multiple integration algorithms within a single simulation, switching back and forth between them.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.CustomIntegrator.html#openmm.openmm.CustomIntegrator" title="openmm.openmm.CustomIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator that can be used to implemented arbitrary, user defined integration algorithms.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.DrudeIntegrator.html#openmm.openmm.DrudeIntegrator" title="openmm.openmm.DrudeIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DrudeIntegrator</span></code></a></p></td>
+<td><p>A base class to encapsulate features common to Drude integrators.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.DrudeLangevinIntegrator.html#openmm.openmm.DrudeLangevinIntegrator" title="openmm.openmm.DrudeLangevinIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DrudeLangevinIntegrator</span></code></a></p></td>
+<td><p>This Integrator simulates systems that include Drude particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.DrudeNoseHooverIntegrator.html#openmm.openmm.DrudeNoseHooverIntegrator" title="openmm.openmm.DrudeNoseHooverIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DrudeNoseHooverIntegrator</span></code></a></p></td>
+<td><p>This Integrator simulates systems that include Drude particles.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.DrudeSCFIntegrator.html#openmm.openmm.DrudeSCFIntegrator" title="openmm.openmm.DrudeSCFIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DrudeSCFIntegrator</span></code></a></p></td>
+<td><p>This is a leap-frog Verlet Integrator that simulates systems with Drude particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.amd.DualAMDIntegrator.html#openmm.amd.DualAMDIntegrator" title="openmm.amd.DualAMDIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DualAMDIntegrator</span></code></a></p></td>
+<td><p>DualAMDIntegrator implements a dual boost aMD integration algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.Integrator.html#openmm.openmm.Integrator" title="openmm.openmm.Integrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Integrator</span></code></a></p></td>
+<td><p>An Integrator defines a method for simulating a System by integrating the equations of motion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.LangevinIntegrator.html#openmm.openmm.LangevinIntegrator" title="openmm.openmm.LangevinIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LangevinIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator which simulates a System using Langevin dynamics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.LangevinMiddleIntegrator.html#openmm.openmm.LangevinMiddleIntegrator" title="openmm.openmm.LangevinMiddleIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LangevinMiddleIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator which simulates a System using Langevin dynamics, with the LFMiddle discretization (J.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.mtsintegrator.MTSIntegrator.html#openmm.mtsintegrator.MTSIntegrator" title="openmm.mtsintegrator.MTSIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MTSIntegrator</span></code></a></p></td>
+<td><p>MTSIntegrator implements the rRESPA multiple time step integration algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.mtsintegrator.MTSLangevinIntegrator.html#openmm.mtsintegrator.MTSLangevinIntegrator" title="openmm.mtsintegrator.MTSLangevinIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MTSLangevinIntegrator</span></code></a></p></td>
+<td><p>MTSLangevinIntegrator implements the BAOAB-RESPA multiple time step algorithm for constant temperature dynamics.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.NoseHooverIntegrator.html#openmm.openmm.NoseHooverIntegrator" title="openmm.openmm.NoseHooverIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoseHooverIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator which simulates a System using one or more Nose Hoover chain thermostats, using the âmiddleâ leapfrog propagation algorithm described in J.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.RPMDIntegrator.html#openmm.openmm.RPMDIntegrator" title="openmm.openmm.RPMDIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RPMDIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator which simulates a System using ring polymer molecular dynamics (RPMD).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.VariableLangevinIntegrator.html#openmm.openmm.VariableLangevinIntegrator" title="openmm.openmm.VariableLangevinIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariableLangevinIntegrator</span></code></a></p></td>
+<td><p>This is an error controlled, variable time step Integrator that simulates a System using Langevin dynamics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.VariableVerletIntegrator.html#openmm.openmm.VariableVerletIntegrator" title="openmm.openmm.VariableVerletIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariableVerletIntegrator</span></code></a></p></td>
+<td><p>This is an error controlled, variable time step Integrator that simulates a System using the leap-frog Verlet algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.VerletIntegrator.html#openmm.openmm.VerletIntegrator" title="openmm.openmm.VerletIntegrator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VerletIntegrator</span></code></a></p></td>
+<td><p>This is an Integrator which simulates a System using the leap-frog Verlet algorithm.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="extras">
+<h2>Extras<a class="headerlink" href="#extras" title="Permalink to this headline">Â¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.Continuous1DFunction.html#openmm.openmm.Continuous1DFunction" title="openmm.openmm.Continuous1DFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Continuous1DFunction</span></code></a></p></td>
+<td><p>This is a TabulatedFunction that computes a continuous one dimensional function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.Continuous2DFunction.html#openmm.openmm.Continuous2DFunction" title="openmm.openmm.Continuous2DFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Continuous2DFunction</span></code></a></p></td>
+<td><p>This is a TabulatedFunction that computes a continuous two dimensional function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.Continuous3DFunction.html#openmm.openmm.Continuous3DFunction" title="openmm.openmm.Continuous3DFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Continuous3DFunction</span></code></a></p></td>
+<td><p>This is a TabulatedFunction that computes a continuous three dimensional function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.Discrete1DFunction.html#openmm.openmm.Discrete1DFunction" title="openmm.openmm.Discrete1DFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Discrete1DFunction</span></code></a></p></td>
+<td><p>This is a TabulatedFunction that computes a discrete one dimensional function f(x).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.Discrete2DFunction.html#openmm.openmm.Discrete2DFunction" title="openmm.openmm.Discrete2DFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Discrete2DFunction</span></code></a></p></td>
+<td><p>This is a TabulatedFunction that computes a discrete two dimensional function f(x,y).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.Discrete3DFunction.html#openmm.openmm.Discrete3DFunction" title="openmm.openmm.Discrete3DFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Discrete3DFunction</span></code></a></p></td>
+<td><p>This is a TabulatedFunction that computes a discrete three dimensional function f(x,y,z).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.LocalCoordinatesSite.html#openmm.openmm.LocalCoordinatesSite" title="openmm.openmm.LocalCoordinatesSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalCoordinatesSite</span></code></a></p></td>
+<td><p>This is a VirtualSite that uses the locations of several other particles to compute a local coordinate system, then places the virtual site at a fixed location in that coordinate system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.LocalEnergyMinimizer.html#openmm.openmm.LocalEnergyMinimizer" title="openmm.openmm.LocalEnergyMinimizer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LocalEnergyMinimizer</span></code></a></p></td>
+<td><p>Given a Context, this class searches for a new set of particle positions that represent a local minimum of the potential energy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.MinimizationReporter.html#openmm.openmm.MinimizationReporter" title="openmm.openmm.MinimizationReporter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MinimizationReporter</span></code></a></p></td>
+<td><p>A MinimizationReporter can be passed to LocalEnergyMinimizer::minimize() to provide periodic information on the progress of minimization, and to give you the chance to stop minimization early.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.NoseHooverChain.html#openmm.openmm.NoseHooverChain" title="openmm.openmm.NoseHooverChain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoseHooverChain</span></code></a></p></td>
+<td><p>This class defines a chain of Nose-Hoover particles to be used as a heat bath to scale the velocities of a collection of particles subject to thermostating.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.OpenMMException.html#openmm.OpenMMException" title="openmm.OpenMMException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OpenMMException</span></code></a></p></td>
+<td><p>This is the class used for all exceptions thrown by the C++ library.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.OutOfPlaneSite.html#openmm.openmm.OutOfPlaneSite" title="openmm.openmm.OutOfPlaneSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OutOfPlaneSite</span></code></a></p></td>
+<td><p>This is a VirtualSite that computes the particle location based on three other particlesâ locations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.SerializationNode.html#openmm.openmm.SerializationNode" title="openmm.openmm.SerializationNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SerializationNode</span></code></a></p></td>
+<td><p>A SerializationNode stores information about an object during serialization or deserialization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.SerializationProxy.html#openmm.openmm.SerializationProxy" title="openmm.openmm.SerializationProxy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SerializationProxy</span></code></a></p></td>
+<td><p>A SerializationProxy is an object that knows how to serialize and deserialize objects of a particular type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.TabulatedFunction.html#openmm.openmm.TabulatedFunction" title="openmm.openmm.TabulatedFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TabulatedFunction</span></code></a></p></td>
+<td><p>A TabulatedFunction uses a set of tabulated values to define a mathematical function.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.ThreeParticleAverageSite.html#openmm.openmm.ThreeParticleAverageSite" title="openmm.openmm.ThreeParticleAverageSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeParticleAverageSite</span></code></a></p></td>
+<td><p>This is a VirtualSite that computes the particle location as a weighted average of three other particleâs locations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.TwoParticleAverageSite.html#openmm.openmm.TwoParticleAverageSite" title="openmm.openmm.TwoParticleAverageSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TwoParticleAverageSite</span></code></a></p></td>
+<td><p>This is a VirtualSite that computes the particle location as a weighted average of two other particleâs locations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vec3</span></code></a></p></td>
+<td><p>Vec3 is a 3-element tuple that supports many math operations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/openmm.openmm.VirtualSite.html#openmm.openmm.VirtualSite" title="openmm.openmm.VirtualSite"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VirtualSite</span></code></a></p></td>
+<td><p>A VirtualSite describes the rules for computing a particleâs position based on other particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/openmm.openmm.XmlSerializer.html#openmm.openmm.XmlSerializer" title="openmm.openmm.XmlSerializer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XmlSerializer</span></code></a></p></td>
+<td><p>XmlSerializer is used for serializing objects as XML, and for reconstructing them again.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</div>

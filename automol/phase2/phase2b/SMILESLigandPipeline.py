@@ -1,3 +1,4 @@
+
 import os
 import sys
 import gc
@@ -7,6 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from typing import Tuple
+from automol.exceptions import ESMProteinError  # Add this import at the top of the file
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -17,6 +19,7 @@ import torch
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors, Crippen
 from rdkit.Chem.MolStandardize import rdMolStandardize
+from server.app import emit_progress
 
 from deap import base, creator, tools, algorithms
 from transformers import EncoderDecoderModel, RobertaTokenizer
@@ -40,15 +43,15 @@ def checkpoint(step_name):
     def decorator(func):
         def wrapper(*args, **kwargs):
             logger.info(f"Starting step: {step_name}")
-            print(Fore.CYAN + f"Starting step: {step_name}")
+            emit_progress(f"Starting step: {step_name}")
             try:
                 result = func(*args, **kwargs)
                 logger.info(f"Completed step: {step_name}")
-                print(Fore.GREEN + f"Completed step: {step_name}")
+                emit_progress(f"Completed step: {step_name}")
                 return result
             except Exception as e:
                 logger.error(f"Error in step {step_name}: {str(e)}")
-                print(Fore.RED + f"Error in step {step_name}: {str(e)}")
+                emit_progress(f"Error in step {step_name}: {str(e)}")
                 raise
         return wrapper
     return decorator
@@ -73,10 +76,10 @@ def pre_screen_ligand(smiles: str) -> Tuple[bool, str]:
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         return False, "Invalid SMILES for minimal viability"
-
+    emit_progress(f"Valid SMILES: {smiles}")
     mol_weight = Descriptors.MolWt(mol)
     logp = Descriptors.MolLogP(mol)
-
+    emit_progress(f"MolWt: {mol_weight}")
     # Less stringent criteria
     weight_range = (100, 600)
     logp_range = (-3, 6)
@@ -85,7 +88,7 @@ def pre_screen_ligand(smiles: str) -> Tuple[bool, str]:
         return False, f"MW {mol_weight} out of minimal range"
     if not (logp_range[0] <= logp <= logp_range[1]):
         return False, f"LogP {logp} out of minimal range"
-
+    emit_progress(f"LogP: {logp}")
     return True, "Ligand passes minimal viability screening"
 
 
@@ -103,11 +106,13 @@ class SMILESGenerator:
         """Load the tokenizer and model."""
         if self.protein_tokenizer is None:
             self.protein_tokenizer = RobertaTokenizer.from_pretrained(self.model_name)
+            emit_progress("Protein tokenizer loaded.")
             logger.info("Protein tokenizer loaded.")
             print(Fore.YELLOW + "Protein tokenizer loaded.")
 
         if self.mol_tokenizer is None:
             self.mol_tokenizer = RobertaTokenizer.from_pretrained("seyonec/PubChem10M_SMILES_BPE_450k")
+            emit_progress("Molecule tokenizer loaded.")
             logger.info("Molecule tokenizer loaded.")
             print(Fore.YELLOW + "Molecule tokenizer loaded.")
 
@@ -116,11 +121,11 @@ class SMILESGenerator:
             self.model.eval()  # Set the model to evaluation mode
             if USE_CUDA:
                 self.model = self.model.cuda()
+                emit_progress("Model loaded on CUDA.")
                 logger.info("Model loaded on CUDA.")
-                print(Fore.YELLOW + "Model loaded on CUDA.")
             else:
                 logger.info("Model loaded on CPU.")
-                print(Fore.YELLOW + "Model loaded on CPU.")
+                emit_progress("Model loaded on CPU.")
 
     def unload_model(self):
         """Unload the model and tokenizer to free up memory."""
@@ -128,21 +133,21 @@ class SMILESGenerator:
             del self.model
             self.model = None
             logger.info("Model unloaded.")
-            print(Fore.YELLOW + "Model unloaded.")
+            emit_progress("Model unloaded.")
         if self.protein_tokenizer is not None:
             del self.protein_tokenizer
             self.protein_tokenizer = None
             logger.info("Protein tokenizer unloaded.")
-            print(Fore.YELLOW + "Protein tokenizer unloaded.")
+            emit_progress("Protein tokenizer unloaded.")
         if self.mol_tokenizer is not None:
             del self.mol_tokenizer
             self.mol_tokenizer = None
             logger.info("Molecule tokenizer unloaded.")
-            print(Fore.YELLOW + "Molecule tokenizer unloaded.")
+            emit_progress("Molecule tokenizer unloaded.")
         if USE_CUDA:
             torch.cuda.empty_cache()
             logger.info("CUDA cache cleared.")
-            print(Fore.YELLOW + "CUDA cache cleared.")
+            emit_progress("CUDA cache cleared.")
 
     def is_valid_smiles(self, smiles: str) -> bool:
         """Check if a SMILES string is valid."""
@@ -188,11 +193,11 @@ class SMILESGenerator:
             return []
 
         finally:
-            print(Fore.YELLOW + "Unloading model...")
+            emit_progress("Unloading model...")
             self.unload_model()
             torch.cuda.empty_cache()
             gc.collect()
-            print(Fore.YELLOW + "CUDA cache cleared.")
+            emit_progress("CUDA cache cleared.")
 
 
 class SMILESOptimizer:
@@ -201,7 +206,7 @@ class SMILESOptimizer:
     def __init__(self, population_size=200, generations=10):
         self.population_size = population_size
         self.generations = generations
-
+        emit_progress("SMILES Optimizer initialized.")
         # Define a single-objective fitness function to maximize LogP + QED
         if not hasattr(creator, "FitnessMax"):
             creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -222,19 +227,20 @@ class SMILESOptimizer:
         # Here, we initialize with a generic benzene ring
         return creator.Individual(['c1ccccc1'])
 
+    @checkpoint("SMILES Optimization")
     def optimize_smiles(self, smiles: str) -> str:
         """Optimize a single SMILES string."""
         self.original_smiles = smiles
         population = self.toolbox.population(n=self.population_size)
+        emit_progress("Initial population created.")
         logger.info("Initial population created.")
-        print(Fore.CYAN + "Initial population created.")
 
         # Evaluate the entire population
         for individual in population:
             individual.fitness.values = self.toolbox.evaluate(individual)
 
         logger.info("Initial population evaluated.")
-        print(Fore.CYAN + "Initial population evaluated.")
+        emit_progress("Initial population evaluated.")
 
         # Begin the evolution
         for gen in range(self.generations):
@@ -249,19 +255,19 @@ class SMILESOptimizer:
             population = self.toolbox.select(offspring, k=len(population))
 
             logger.info(f"Generation {gen + 1} complete.")
-            print(Fore.CYAN + f"Generation {gen + 1} complete.")
+            emit_progress(f"Generation {gen + 1} complete.")
 
             # Early stopping if no improvement
             if all(ind.fitness.values[0] <= 0 for ind in population):
                 logger.warning("All individuals have non-positive fitness. Stopping early.")
-                print(Fore.YELLOW + "All individuals have non-positive fitness. Stopping early.")
+                emit_progress("All individuals have non-positive fitness. Stopping early.")
                 break
 
         # Select the best individual
         best_ind = tools.selBest(population, k=1)[0]
         optimized_smiles = best_ind[0]
         logger.info(f"Optimized SMILES: {optimized_smiles}")
-        print(Fore.GREEN + f"Optimized SMILES: {optimized_smiles}")
+        emit_progress(f"Optimized SMILES: {optimized_smiles}")
         return optimized_smiles
 
     def fitness_function(self, individual):
@@ -326,20 +332,20 @@ class SMILESOptimizer:
                 new_smiles = Chem.MolToSmiles(new_mol)
                 if self.is_valid_smiles(new_smiles):
                     logger.debug(f"Mutation successful. New SMILES: {new_smiles}")
-                    print(Fore.BLUE + f"Mutation successful. New SMILES: {new_smiles}")
+                    emit_progress(f"Mutation successful. New SMILES: {new_smiles}")
                     return new_smiles
                 else:
                     logger.debug(f"Mutation resulted in invalid SMILES: {new_smiles}")
-                    print(Fore.YELLOW + f"Mutation resulted in invalid SMILES: {new_smiles}")
+                    emit_progress(f"Mutation resulted in invalid SMILES: {new_smiles}")
                     return smiles
             except Exception as e:
                 logger.warning(f"Mutation failed: {e}")
-                print(Fore.YELLOW + f"Mutation failed: {e}")
+                emit_progress(f"Mutation failed: {e}")
                 return smiles
 
         except Exception as e:
             logger.warning(f"Mutation process encountered an error: {e}")
-            print(Fore.YELLOW + f"Mutation process encountered an error: {e}")
+            emit_progress(f"Mutation process encountered an error: {e}")
             return smiles  # Return original SMILES if mutation fails
 
     def mutate_molecule(self, individual):
@@ -437,41 +443,15 @@ class StructurePredictor:
 
             output_path = os.path.join(output_dir, f"ligand_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdb")
             Chem.MolToPDBFile(mol, output_path)
+            emit_progress(f"3D structure prediction completed. PDB file saved: {output_path}")
             return [output_path]
         except Exception as e:
             logger.error(f"Error in 3D structure prediction: {e}")
+            emit_progress(f"Error in 3D structure prediction: {e}")
             return ["default_ligand.pdb"]
-
-    @checkpoint("3D Protein Structure Prediction")
-    def predict_3d_protein_structure(self, protein_sequence: str, output_dir: str) -> List[str]:
-        """
-        Predict the 3D structure of a protein from its sequence.
-        For demonstration purposes, this function will generate a dummy PDB file.
-        In practice, you would integrate with a protein structure prediction tool like AlphaFold.
-        """
-        try:
-            # Placeholder: Generate a dummy PDB file
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            filename = f"protein_{timestamp}.pdb"
-            filepath = os.path.join(output_dir, filename)
-
-            # Ensure the output directory exists
-            os.makedirs(output_dir, exist_ok=True)
-
-            with open(filepath, 'w') as f:
-                f.write("ATOM      1  N   ALA A   1      11.104  13.207   2.100  1.00 20.00           N\n")
-                f.write("ATOM      2  CA  ALA A   1      12.560  13.207   2.100  1.00 20.00           C\n")
-                # Add more dummy atoms as needed
-
-            logger.info(f"3D protein structure prediction completed. PDB file saved: {filepath}")
-            print(Fore.GREEN + f"3D protein structure prediction completed. PDB file saved: {filepath}")
-            return [filepath]
-
-        except Exception as e:
-            logger.error(f"Error in 3D protein structure prediction: {e}")
-            print(Fore.RED + f"Error in 3D protein structure prediction: {e}")
-            return [os.path.join(output_dir, "default_protein.pdb")]
-
+        
+        
+        
 
 class LigandScorer:
     """Calculates scores for ligands based on various properties."""
@@ -506,7 +486,7 @@ class LigandScorer:
             # Calculate the final score as a weighted average of all criteria
             weights = [1.5, 1.5, 1, 1, 1, 1]  # Give slightly more weight to MW and LogP
             score = sum(s * w for s, w in zip(scores, weights)) / sum(weights)
-
+            emit_progress(f"SMILES score: {score}")
             return score
 
         except Exception as e:
@@ -516,12 +496,19 @@ class LigandScorer:
     def calculate_docking_score(self, docking_results: List[Dict[str, Any]], protein_ensemble: List[str]) -> float:
         """Calculate an overall docking score based on docking results."""
         if not docking_results:
+            logger.warning("No docking results provided")
+            emit_progress("No docking results provided")
             return 0.0
+
         # Example: average docking score
         scores = [result['score'] for result in docking_results if 'score' in result]
         if not scores:
+            logger.warning("No scores provided in docking results")
+            emit_progress("No scores provided in docking results")
             return 0.0
         average_docking_score = sum(scores) / len(scores)
+        logger.info(f"Average docking score: {average_docking_score}")
+        emit_progress(f"Average docking score: {average_docking_score}")
         return average_docking_score
 
 
@@ -541,7 +528,7 @@ class EnsembleDocker:
                 # Placeholder: Generate a random docking score
                 score = random.uniform(-15.0, -5.0)  # Typical binding affinities in kcal/mol
                 docking_results.append({'protein': protein_pdb, 'score': score})
-
+                emit_progress(f"Docking results: {docking_results}")
             # Save docking results to a file
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             results_filepath = os.path.join(results_dir, f"docking_results_{timestamp}.txt")
@@ -549,7 +536,7 @@ class EnsembleDocker:
             with open(results_filepath, 'w') as f:
                 for result in docking_results:
                     f.write(f"Protein: {result['protein']}, Score: {result['score']}\n")
-
+            emit_progress(f"Ensemble docking completed. Results saved to {results_filepath}")
             logger.info(f"Ensemble docking completed. Results saved to {results_filepath}")
             print(Fore.GREEN + f"Ensemble docking completed. Results saved to {results_filepath}")
             return docking_results
@@ -570,6 +557,7 @@ class Analyzer:
         For demonstration, calculate the best score and average score.
         """
         try:
+            emit_progress(f"Analyzing docking results: {docking_results}")
             if not docking_results:
                 return {"best_score": None, "average_score": None}
 
@@ -579,6 +567,9 @@ class Analyzer:
 
             best_score = min(scores)  # Lower score is better
             average_score = sum(scores) / len(scores)
+            emit_progress(f"Best score: {best_score}")
+            emit_progress(f"Average score: {average_score}")
+            emit_progress(f"Total docked proteins: {len(docking_results)}")
 
             analysis = {
                 "best_score": best_score,
@@ -588,6 +579,7 @@ class Analyzer:
 
             logger.info(f"Docking Analysis: {analysis}")
             print(Fore.GREEN + f"Docking Analysis: {analysis}")
+            emit_progress(f"Docking Analysis: {analysis}")
             return analysis
 
         except Exception as e:
@@ -614,8 +606,10 @@ class SMILESLigandPipeline:
             return False
         try:
             Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ALL ^ Chem.SanitizeFlags.SANITIZE_KEKULIZE)
+            emit_progress(f"Validated SMILES: {smiles}")
             return True
         except:
+            emit_progress(f"Invalid SMILES: {smiles}")
             return False
 
     def generate_valid_novel_smiles(self, protein_sequence: str, num_sequences: int) -> List[str]:
@@ -627,14 +621,14 @@ class SMILESLigandPipeline:
             smiles_list = self.generator.generate_smiles_from_protein(protein_sequence, 1)
             if not smiles_list:
                 attempts += 1
+                emit_progress(f"No SMILES generated. Attempts: {attempts}")
                 continue
             smiles = smiles_list[0]
             if self.validate_novel_smiles(smiles):
                 valid_smiles.append(smiles)
             attempts += 1
             if attempts % 10 == 0:
-                logger.info(f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
-                print(Fore.YELLOW + f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
+                emit_progress(f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
         return valid_smiles
 
     def generate_protein_structures(self, protein_sequence: str, output_dir: str) -> List[str]:
@@ -665,8 +659,7 @@ class SMILESLigandPipeline:
         for protein_sequence in protein_sequences:
             try:
                 smiles_list = self.generate_valid_novel_smiles(protein_sequence, num_sequences)
-                logger.info(f"Generated SMILES: {smiles_list}")
-                print(Fore.CYAN + f"Generated SMILES: {smiles_list}")
+                emit_progress(f"Generated SMILES: {smiles_list}")
 
                 for smiles in smiles_list:
                     result = self.process_single_smiles(smiles, protein_sequence, predicted_structures_dir, results_dir, score_threshold)
@@ -678,7 +671,7 @@ class SMILESLigandPipeline:
                 print(Fore.RED + f"Error processing protein sequence {protein_sequence}: {e}")
 
         logger.info("Pipeline completed")
-        print(Fore.CYAN + "Pipeline completed")
+        emit_progress("Pipeline completed")
 
         return all_results
 
@@ -690,10 +683,10 @@ class SMILESLigandPipeline:
             optimized_smiles = self.optimizer.optimize_smiles(smiles)
             result['optimized_smiles'] = optimized_smiles
             logger.info(f"Optimized SMILES: {optimized_smiles}")
-            print(Fore.GREEN + f"Optimized SMILES: {optimized_smiles}")
+            emit_progress(f"Optimized SMILES: {optimized_smiles}")
         except Exception as e:
             logger.warning(f"Error during SMILES optimization: {e}")
-            print(Fore.YELLOW + f"Error during SMILES optimization: {e}")
+            emit_progress(f"Error during SMILES optimization: {e}")
             return None
 
         # 2. Validate and Adjust LogP
@@ -701,10 +694,10 @@ class SMILESLigandPipeline:
             adjusted_smiles = self.adjust_logp(optimized_smiles)
             result['adjusted_smiles'] = adjusted_smiles
             logger.info(f"Adjusted SMILES: {adjusted_smiles}")
-            print(Fore.GREEN + f"Adjusted SMILES: {adjusted_smiles}")
+            emit_progress(f"Adjusted SMILES: {adjusted_smiles}")
         except Exception as e:
             logger.warning(f"Error during LogP adjustment: {e}")
-            print(Fore.YELLOW + f"Error during LogP adjustment: {e}")
+            emit_progress(f"Error during LogP adjustment: {e}")
             return None
 
         # 3. 3D Structure Prediction
@@ -712,20 +705,20 @@ class SMILESLigandPipeline:
             ligand_pdb = self.predictor.predict_3d_ligand_structure(adjusted_smiles, predicted_structures_dir)
             result['ligand_pdb'] = ligand_pdb
             logger.info(f"3D Structure Prediction completed: {ligand_pdb}")
-            print(Fore.GREEN + f"3D Structure Prediction completed: {ligand_pdb}")
+            emit_progress(f"3D Structure Prediction completed: {ligand_pdb}")
         except Exception as e:
             logger.warning(f"Error in 3D structure prediction: {e}")
-            print(Fore.YELLOW + f"Error in 3D structure prediction: {e}")
+            emit_progress(f"Error in 3D structure prediction: {e}")
             return None
 
         # 4. Generate Protein Structures
         try:
             protein_ensemble = self.generate_protein_structures(protein_sequence, predicted_structures_dir)
             logger.info(f"Generated {len(protein_ensemble)} protein structures")
-            print(Fore.GREEN + f"Generated {len(protein_ensemble)} protein structures")
+            emit_progress(f"Generated {len(protein_ensemble)} protein structures")
         except Exception as e:
             logger.warning(f"Error in protein structure generation: {e}")
-            print(Fore.YELLOW + f"Error in protein structure generation: {e}")
+            emit_progress(f"Error in protein structure generation: {e}")
             return None
 
         # 5. Ensemble Docking
@@ -734,10 +727,10 @@ class SMILESLigandPipeline:
                 docking_results = self.docker.dock_ensemble(ligand_pdb, protein_ensemble, results_dir)
                 result['docking_results'] = docking_results
                 logger.info("Ensemble Docking completed")
-                print(Fore.GREEN + "Ensemble Docking completed")
+                emit_progress("Ensemble Docking completed")
             except Exception as e:
                 logger.warning(f"Error in ensemble docking: {e}")
-                print(Fore.YELLOW + f"Error in ensemble docking: {e}")
+                emit_progress(f"Error in ensemble docking: {e}")
                 return None
 
         # 6. Analyze Docking Results
@@ -746,10 +739,10 @@ class SMILESLigandPipeline:
                 analysis = self.analyzer.analyze(result['docking_results'])
                 result['analysis'] = analysis
                 logger.info("Docking Analysis completed")
-                print(Fore.GREEN + "Docking Analysis completed")
+                emit_progress("Docking Analysis completed")
             except Exception as e:
                 logger.warning(f"Error in docking analysis: {e}")
-                print(Fore.YELLOW + f"Error in docking analysis: {e}")
+                emit_progress(f"Error in docking analysis: {e}")
                 return None
 
         # 7. Scoring
@@ -757,20 +750,20 @@ class SMILESLigandPipeline:
             score = self.score_novel_ligand(result['docking_results'], protein_ensemble)
             result['score'] = score
             logger.info(f"Ligand scored: {score}")
-            print(Fore.GREEN + f"Ligand scored: {score}")
+            emit_progress(f"Ligand scored: {score}")
         except Exception as e:
             logger.warning(f"Error in scoring: {e}")
-            print(Fore.YELLOW + f"Error in scoring: {e}")
+            emit_progress(f"Error in scoring: {e}")
             return None
 
         # 8. Filter based on score
         if score >= score_threshold:
             logger.info(f"Ligand {smiles} passed with score {score}")
-            print(Fore.GREEN + f"Ligand {smiles} passed with score {score}")
+            emit_progress(f"Ligand {smiles} passed with score {score}")
             return result
         else:
             logger.info(f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
-            print(Fore.YELLOW + f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
+            emit_progress(f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
             return None
 
     def adjust_logp(self, smiles: str, target_logp=2.5, tolerance=0.5) -> str:
@@ -813,10 +806,11 @@ class SMILESLigandPipeline:
 
             new_mol = rwmol.GetMol()
             Chem.SanitizeMol(new_mol)
+            emit_progress(f"Added group {group} to molecule")
             return new_mol
         except Exception as e:
             logger.warning(f"Failed to add group {group} to molecule: {e}")
-            print(Fore.YELLOW + f"Failed to add group {group} to molecule: {e}")
+            emit_progress(f"Failed to add group {group} to molecule: {e}")
             return mol
 
 
@@ -865,6 +859,7 @@ class SMILESLigandPipeline:
             return False
         try:
             Chem.SanitizeMol(mol, sanitizeOps=Chem.SanitizeFlags.SANITIZE_ALL ^ Chem.SanitizeFlags.SANITIZE_KEKULIZE)
+            emit_progress(f"Validated SMILES: {smiles}")
             return True
         except:
             return False
@@ -885,7 +880,7 @@ class SMILESLigandPipeline:
             attempts += 1
             if attempts % 10 == 0:
                 logger.info(f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
-                print(Fore.YELLOW + f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
+                emit_progress(f"Attempted {attempts} times to generate valid SMILES. Found {len(valid_smiles)} valid SMILES so far.")
         return valid_smiles
 
     def generate_protein_structures(self, protein_sequence: str, output_dir: str) -> List[str]:
@@ -945,6 +940,7 @@ class SMILESLigandPipeline:
         except Exception as e:
             logger.warning(f"Error during SMILES optimization: {e}")
             print(Fore.YELLOW + f"Error during SMILES optimization: {e}")
+            emit_progress(f"Error during SMILES optimization: {e}")
             return None
 
         # 2. Validate and Adjust LogP
@@ -956,6 +952,7 @@ class SMILESLigandPipeline:
         except Exception as e:
             logger.warning(f"Error during LogP adjustment: {e}")
             print(Fore.YELLOW + f"Error during LogP adjustment: {e}")
+            emit_progress(f"Error during LogP adjustment: {e}")
             return None
 
         # 3. 3D Structure Prediction
@@ -967,6 +964,7 @@ class SMILESLigandPipeline:
         except Exception as e:
             logger.warning(f"Error in 3D structure prediction: {e}")
             print(Fore.YELLOW + f"Error in 3D structure prediction: {e}")
+            emit_progress(f"Error in 3D structure prediction: {e}")
             return None
 
         # 4. Generate Protein Structures
@@ -977,6 +975,7 @@ class SMILESLigandPipeline:
         except Exception as e:
             logger.warning(f"Error in protein structure generation: {e}")
             print(Fore.YELLOW + f"Error in protein structure generation: {e}")
+            emit_progress(f"Error in protein structure generation: {e}")
             return None
 
         # 5. Ensemble Docking
@@ -989,6 +988,7 @@ class SMILESLigandPipeline:
             except Exception as e:
                 logger.warning(f"Error in ensemble docking: {e}")
                 print(Fore.YELLOW + f"Error in ensemble docking: {e}")
+                emit_progress(f"Error in ensemble docking: {e}")
                 return None
 
         # 6. Analyze Docking Results
@@ -1001,6 +1001,7 @@ class SMILESLigandPipeline:
             except Exception as e:
                 logger.warning(f"Error in docking analysis: {e}")
                 print(Fore.YELLOW + f"Error in docking analysis: {e}")
+                emit_progress(f"Error in docking analysis: {e}")
                 return None
 
         # 7. Scoring
@@ -1012,16 +1013,18 @@ class SMILESLigandPipeline:
         except Exception as e:
             logger.warning(f"Error in scoring: {e}")
             print(Fore.YELLOW + f"Error in scoring: {e}")
+            emit_progress(f"Error in scoring: {e}")
             return None
 
         # 8. Filter based on score
         if score >= score_threshold:
             logger.info(f"Ligand {smiles} passed with score {score}")
-            print(Fore.GREEN + f"Ligand {smiles} passed with score {score}")
+            emit_progress(f"Ligand {smiles} passed with score {score}")
             return result
         else:
             logger.info(f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
             print(Fore.YELLOW + f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
+            emit_progress(f"Ligand {smiles} did not meet the score threshold ({score_threshold}).")
             return None
 
     def adjust_logp(self, smiles: str, target_logp=2.5, tolerance=0.5) -> str:

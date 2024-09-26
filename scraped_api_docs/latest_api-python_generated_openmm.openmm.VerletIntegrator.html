@@ -1,0 +1,132 @@
+<div class="body" role="main">
+<section id="verletintegrator">
+<h1>VerletIntegrator<a class="headerlink" href="#verletintegrator" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">VerletIntegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is an Integrator which simulates a System using the leap-frog Verlet algorithm.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepSize</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.VerletIntegrator" title="openmm.openmm.VerletIntegrator"><span class="pre">VerletIntegrator</span></a><a class="headerlink" href="#openmm.openmm.VerletIntegrator.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.VerletIntegrator" title="openmm.openmm.VerletIntegrator"><span class="pre">VerletIntegrator</span></a></dt>
+<dd><p>Create a VerletIntegrator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>stepSize</strong> (<em>double</em>) â the step size with which to integrate the system (in picoseconds)</p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.__init__" title="openmm.openmm.VerletIntegrator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â VerletIntegrator)</p></td>
+<td><p>Create a VerletIntegrator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.getConstraintTolerance" title="openmm.openmm.VerletIntegrator.getConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConstraintTolerance</span></code></a>(self)</p></td>
+<td><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.getIntegrationForceGroups" title="openmm.openmm.VerletIntegrator.getIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntegrationForceGroups</span></code></a>(self)</p></td>
+<td><p>Get which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.getStepSize" title="openmm.openmm.VerletIntegrator.getStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getStepSize</span></code></a>(self)</p></td>
+<td><p>Get the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.setConstraintTolerance" title="openmm.openmm.VerletIntegrator.setConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setConstraintTolerance</span></code></a>(self,Â tol)</p></td>
+<td><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.setIntegrationForceGroups" title="openmm.openmm.VerletIntegrator.setIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setIntegrationForceGroups</span></code></a>(groups)</p></td>
+<td><p>Set which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.setStepSize" title="openmm.openmm.VerletIntegrator.setStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setStepSize</span></code></a>(self,Â size)</p></td>
+<td><p>Set the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.step" title="openmm.openmm.VerletIntegrator.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>(self,Â steps)</p></td>
+<td><p>Advance a simulation through time by taking a series of time steps.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.VerletIntegrator.thisown" title="openmm.openmm.VerletIntegrator.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.step" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance a simulation through time by taking a series of time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> (<em>int</em>) â the number of time steps to take</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.getConstraintTolerance">
+<span class="sig-name descname"><span class="pre">getConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.getConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.getIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">getIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.getIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get which force groups to use for integration. By default, all force groups are included. This is interpreted as a set of bit flags: the forces from group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.getStepSize">
+<span class="sig-name descname"><span class="pre">getStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.getStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the size of each time step, in picoseconds. If this integrator uses variable time steps, the size of the most recent step is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the step size, measured in ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.setConstraintTolerance">
+<span class="sig-name descname"><span class="pre">setConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.setConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.setIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">setIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.setIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set which force groups to use for integration.  By default, all force groups are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>groups</strong> (<em>set</em><em> or </em><em>int</em>) â a set of indices for which force groups to include when integrating the equations of motion.
+Alternatively, the groups can be passed as a single unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.VerletIntegrator.setStepSize">
+<span class="sig-name descname"><span class="pre">setStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.VerletIntegrator.setStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the size of each time step, in picoseconds. If this integrator uses variable time steps, the effect of calling this method is undefined, and it may simply be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>double</em>) â the step size, measured in ps</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

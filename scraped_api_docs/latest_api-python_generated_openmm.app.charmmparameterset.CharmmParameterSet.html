@@ -1,0 +1,229 @@
+<div class="body" role="main">
+<section id="charmmparameterset">
+<h1>CharmmParameterSet<a class="headerlink" href="#charmmparameterset" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.charmmparameterset.</span></span><span class="sig-name descname"><span class="pre">CharmmParameterSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Stores a parameter set defined by CHARMM files. It stores the equivalent of
+the information found in the MASS section of the CHARMM topology file
+(TOP/RTF) and all of the information in the parameter files (PAR)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filenames</strong> (<em>List of topology</em><em>, </em><em>parameter</em><em>, </em><em>and stream files to load into the parameter set.</em>) â <dl class="simple">
+<dt>The following file type suffixes are recognized. Unrecognized file types raise a TypeError</dt><dd><ul class="simple">
+<li><p>.rtf, .top â Residue topology file</p></li>
+<li><p>.par, .prm â Parameter file</p></li>
+<li><p>.str â Stream file</p></li>
+<li><dl class="simple">
+<dt>.inp â If âparâ is in the file name, it is a parameter file. If</dt><dd><p>âtopâ is in the file name, it is a topology file. Otherwise,
+raise TypeError</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">All</span> <span class="pre">type</span> <span class="pre">lists</span> <span class="pre">are</span> <span class="pre">dictionaries</span> <span class="pre">whose</span> <span class="pre">keys</span> <span class="pre">are</span> <span class="pre">tuples</span> <span class="pre">(with</span> <span class="pre">however</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">many</span> <span class="pre">elements</span> <span class="pre">are</span> <span class="pre">needed</span> <span class="pre">to</span> <span class="pre">define</span> <span class="pre">that</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">parameter).</span> <span class="pre">The</span> <span class="pre">types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">that</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">in</span> <span class="pre">any</span> <span class="pre">order</span> <span class="pre">are</span> <span class="pre">SORTED.</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">atom_types_str</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">atom_types_int</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">atom_types_tuple</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">bond_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">angle_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">urey_bradley_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">dihedral_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">improper_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">cmap_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">nbfix_types</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">The</span> <span class="pre">dihedral</span> <span class="pre">types</span> <span class="pre">can</span> <span class="pre">be</span> <span class="pre">multiterm,</span> <span class="pre">so</span> <span class="pre">the</span> <span class="pre">values</span> <span class="pre">for</span> <span class="pre">each</span> <span class="pre">dict</span> <span class="pre">key</span> <span class="pre">is</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">actually</span> <span class="pre">a</span> <span class="pre">list</span> <span class="pre">of</span> <span class="pre">DihedralType</span> <span class="pre">instances.</span> <span class="pre">The</span> <span class="pre">atom_types</span> <span class="pre">are</span> <span class="pre">dicts</span> <span class="pre">that</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">match</span> <span class="pre">the</span> <span class="pre">name</span> <span class="pre">(str),</span> <span class="pre">number</span> <span class="pre">(int),</span> <span class="pre">or</span> <span class="pre">(name,</span> <span class="pre">number)</span> <span class="pre">tuple</span> <span class="pre">(tuple)</span> <span class="pre">to</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">the</span> <span class="pre">atom</span> <span class="pre">type.</span> <span class="pre">The</span> <span class="pre">tuple</span> <span class="pre">is</span> <span class="pre">guaranteed</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">the</span> <span class="pre">most</span> <span class="pre">robust,</span> <span class="pre">although</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">when</span> <span class="pre">only</span> <span class="pre">the</span> <span class="pre">integer</span> <span class="pre">or</span> <span class="pre">string</span> <span class="pre">is</span> <span class="pre">available</span> <span class="pre">the</span> <span class="pre">other</span> <span class="pre">dictionaries</span> <span class="pre">are</span></span></dt>
+<dd></dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.helpful">
+<span class="sig-name descname"><span class="pre">helpful</span></span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.helpful" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">CharmmParameterSet</span><span class="p">(</span><span class="s1">'charmm22.top'</span><span class="p">,</span> <span class="s1">'charmm22.par'</span><span class="p">,</span> <span class="s1">'file.str'</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet.__init__" title="openmm.app.charmmparameterset.CharmmParameterSet.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet.condense" title="openmm.app.charmmparameterset.CharmmParameterSet.condense"><code class="xref py py-obj docutils literal notranslate"><span class="pre">condense</span></code></a>()</p></td>
+<td><p>This function goes through each of the parameter type dicts and eliminates duplicate types.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet.loadSet" title="openmm.app.charmmparameterset.CharmmParameterSet.loadSet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadSet</span></code></a>([tfile,Â pfile,Â sfiles,Â permissive])</p></td>
+<td><p>Instantiates a CharmmParameterSet from a Topology file and a Parameter file (or just a Parameter file if it has all information)</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet.readParameterFile" title="openmm.app.charmmparameterset.CharmmParameterSet.readParameterFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readParameterFile</span></code></a>(pfile[,Â permissive])</p></td>
+<td><p>Reads all of the parameters from a parameter file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet.readStreamFile" title="openmm.app.charmmparameterset.CharmmParameterSet.readStreamFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readStreamFile</span></code></a>(sfile)</p></td>
+<td><p>Reads RTF and PAR sections from a stream file and dispatches the sections to readTopologyFile or readParameterFile</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet.readTopologyFile" title="openmm.app.charmmparameterset.CharmmParameterSet.readTopologyFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readTopologyFile</span></code></a>(tfile)</p></td>
+<td><p>Reads _only_ the atom type definitions from a topology file.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.loadSet">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">loadSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permissive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.loadSet" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Instantiates a CharmmParameterSet from a Topology file and a Parameter
+file (or just a Parameter file if it has all information)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tfile</strong> (<em>str</em>) â Name of the Topology (RTF/TOP) file</p></li>
+<li><p><strong>pfile</strong> (<em>str</em>) â Name of the Parameter (PAR) file</p></li>
+<li><p><strong>sfiles</strong> (<em>list of str</em>) â List or tuple of stream (STR) file names.</p></li>
+<li><p><strong>permissive</strong> (<em>bool=False</em>) â Accept non-bonbded parameters for undefined atom types</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>New CharmmParameterSet populated with the parameters found in the
+provided files.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openmm.app.charmmparameterset.CharmmParameterSet" title="openmm.app.charmmparameterset.CharmmParameterSet">CharmmParameterSet</a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The RTF file is read first (if provided), followed by the PAR file,
+followed by the list of stream files (in the order they are
+provided). Parameters in each stream file will overwrite those that
+came before (or simply append to the existing set if they are
+different)</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.readParameterFile">
+<span class="sig-name descname"><span class="pre">readParameterFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permissive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.readParameterFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Reads all of the parameters from a parameter file. Versions 36 and later
+of the CHARMM force field files have an ATOMS section defining all of
+the atom types.  Older versions need to load this information from the
+RTF/TOP files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pfile</strong> (<em>str</em>) â Name of the CHARMM PARameter file to read</p></li>
+<li><p><strong>permissive</strong> (<em>bool</em>) â Accept non-bonbded parameters for undefined atom types (default:
+False).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The atom types must all be loaded by the end of this routine. Either
+supply a PAR file with atom definitions in them or read in a RTF/TOP
+file first. Failure to do so will result in a raised RuntimeError.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.readTopologyFile">
+<span class="sig-name descname"><span class="pre">readTopologyFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.readTopologyFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Reads _only_ the atom type definitions from a topology file. This is
+unnecessary for versions 36 and later of the CHARMM force field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tfile</strong> (<em>str</em>) â : Name of the CHARMM TOPology file to read</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The CHARMM TOPology file is also called a Residue Topology File</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.readStreamFile">
+<span class="sig-name descname"><span class="pre">readStreamFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.readStreamFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Reads RTF and PAR sections from a stream file and dispatches the
+sections to readTopologyFile or readParameterFile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sfile</strong> (<em>str</em><em> or </em><em>CharmmStreamFile</em>) â Stream file to parse</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmparameterset.CharmmParameterSet.condense">
+<span class="sig-name descname"><span class="pre">condense</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmparameterset.CharmmParameterSet.condense" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This function goes through each of the parameter type dicts and
+eliminates duplicate types. After calling this function, every unique
+bond, angle, dihedral, improper, or cmap type will pair with EVERY key
+in the type mapping dictionaries that points to the equivalent type</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">CharmmParameterSet</span><span class="p">(</span><span class="s1">'charmm.prm'</span><span class="p">)</span><span class="o">.</span><span class="n">condense</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

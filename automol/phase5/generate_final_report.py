@@ -58,96 +58,73 @@ def analyze_phase4_results(phase4_results: dict) -> dict:
     # Assuming phase4_results contains the final analysis report
     return phase4_results
 
-def generate_final_report(cumulative_results: dict, base_output_dir: str):
-    """
-    Generates a final consolidated report after all iterations.
+from datetime import datetime
 
-    Args:
-        cumulative_results (dict): Aggregated results from all iterations.
-        base_output_dir (str): Base directory where reports are stored.
-    """
+def generate_final_report(analysis: dict, output_path: str):
+    """Generates a comprehensive report from the analysis data."""
     report_lines = []
-    report_lines.append("# Final Consolidated Molecular Experiment Report\n")
+    report_lines.append("# Final Comprehensive Report\n")
     report_lines.append(f"Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
 
-    for iteration, run_results in enumerate(cumulative_results['phase1'], start=1):
-        report_lines.append(f"## Iteration {iteration}\n")
+    # Phase 1
+    report_lines.append("## Phase 1: Hypothesis Generation\n")
+    phase1 = analysis.get('phase1', {})
+    report_lines.append(f"**Technical Description:** {phase1.get('technical_description', '')}\n")
+    report_lines.append(f"**Initial Hypothesis:** {phase1.get('initial_hypothesis', '')}\n")
 
-        # Phase 1
-        phase1 = run_results.get('phase1', {})
-        report_lines.append("### Phase 1: Hypothesis Generation\n")
-        report_lines.append(f"**Technical Description:** {phase1.get('technical_description', '')}\n")
-        report_lines.append(f"**Initial Hypothesis:** {phase1.get('initial_hypothesis', '')}\n")
+    # Phase 2a
+    report_lines.append("## Phase 2a: Protein Generation and Optimization\n")
+    phase2a = analysis.get('phase2a', {})
+    sequences = phase2a.get('sequences', [])
+    scores = phase2a.get('scores', [])
+    report_lines.append(f"**Number of Sequences Generated:** {len(sequences)}\n")
+    report_lines.append(f"**Average Optimization Score:** {phase2a.get('average_score', 0):.2f}\n")
+    report_lines.append("### Sequences and Scores:\n")
+    for seq, score in zip(sequences, scores):
+        report_lines.append(f"- **Sequence:** {seq}\n  - **Score:** {score:.2f}\n")
 
-        # Phase 2a
-        phase2a = run_results.get('phase2a', {})
-        report_lines.append("### Phase 2a: Protein Generation and Optimization\n")
-        sequences = phase2a.get('phase2a_results', [])
-        scores = [seq.get('score', 0) for seq in sequences]
-        report_lines.append(f"**Number of Sequences Generated:** {len(sequences)}\n")
-        report_lines.append(f"**Average Optimization Score:** {sum(scores) / len(scores) if scores else 0:.2f}\n")
-        report_lines.append("#### Sequences and Scores:\n")
-        for seq in sequences:
-            report_lines.append(f"- **Sequence:** {seq.get('sequence', '')}\n  - **Score:** {seq.get('score', 0):.2f}\n")
+    # Phase 2b
+    report_lines.append("## Phase 2b: Ligand Generation and Optimization\n")
+    phase2b = analysis.get('phase2b', {})
+    smiles_list = phase2b.get('ligands', [])
+    report_lines.append(f"**Total Valid Ligands Generated:** {len(smiles_list)}\n")
+    report_lines.append("### Ligand SMILES:\n")
+    for smiles in smiles_list:
+        report_lines.append(f"- {smiles}\n")
 
-        # Phase 2b
-        phase2b = run_results.get('phase2b', {})
-        ligands = phase2b.get('phase2b_results', [])
-        smiles_list = [ligand.get('smiles') for ligand in ligands]
-        report_lines.append("### Phase 2b: Ligand Generation and Optimization\n")
-        report_lines.append(f"**Total Valid Ligands Generated:** {len(smiles_list)}\n")
-        report_lines.append("#### Ligand SMILES:\n")
-        for smiles in smiles_list:
-            report_lines.append(f"- {smiles}\n")
+    # Phase 3
+    report_lines.append("## Phase 3: Simulation\n")
+    phase3 = analysis.get('phase3', {})
+    report_lines.append("### Simulation Summary:\n")
+    report_lines.append("```json\n")
+    report_lines.append(json.dumps(phase3.get('simulation_summary', {}), indent=2))
+    report_lines.append("\n```\n")
+    report_lines.append("### Docking Summary:\n")
+    report_lines.append("```json\n")
+    report_lines.append(json.dumps(phase3.get('docking_summary', {}), indent=2))
+    report_lines.append("\n```\n")
+    report_lines.append("### Analysis Summary:\n")
+    report_lines.append("```json\n")
+    report_lines.append(json.dumps(phase3.get('analysis_summary', {}), indent=2))
+    report_lines.append("\n```\n")
 
-        # Phase 3
-        phase3 = run_results.get('phase3', {})
-        report_lines.append("### Phase 3: Simulation\n")
-        simulation_summary = phase3.get('simulation_summary', {})
-        docking_summary = phase3.get('docking_summary', {})
-        analysis_summary = phase3.get('analysis_summary', {})
-        report_lines.append("#### Simulation Summary:\n")
-        report_lines.append("```json\n")
-        report_lines.append(json.dumps(simulation_summary, indent=2))
-        report_lines.append("\n```\n")
-        report_lines.append("#### Docking Summary:\n")
-        report_lines.append("```json\n")
-        report_lines.append(json.dumps(docking_summary, indent=2))
-        report_lines.append("\n```\n")
-        report_lines.append("#### Analysis Summary:\n")
-        report_lines.append("```json\n")
-        report_lines.append(json.dumps(analysis_summary, indent=2))
-        report_lines.append("\n```\n")
+    # Phase 4
+    report_lines.append("## Phase 4: Digital Twin Simulation and Analysis\n")
+    report_lines.append("### Final Analysis Results:\n")
+    report_lines.append("```json\n")
+    report_lines.append(json.dumps(analysis.get('phase4', {}), indent=2))
+    report_lines.append("\n```\n")
 
-        # Phase 4
-        phase4 = run_results.get('phase4', {})
-        report_lines.append("### Phase 4: Digital Twin Simulation and Analysis\n")
-        report_lines.append("#### Final Analysis Results:\n")
-        report_lines.append("```json\n")
-        report_lines.append(json.dumps(phase4, indent=2))
-        report_lines.append("\n```\n")
-
-    # Save the final consolidated report
-    final_report_path = os.path.join(base_output_dir, 'final_consolidated_report.md')
-    with open(final_report_path, 'w') as f:
+    # Write the report to a file
+    with open(output_path, 'w') as f:
         f.write('\n'.join(report_lines))
-    print(f"Final consolidated report generated at {final_report_path}")
+    print(f"Final report generated at {output_path}")
+
 
 
 
 
 def has_significant_improvement(current_best: float, previous_best: float, improvement_threshold: float = 0.05) -> bool:
-    """
-    Determines if there is a significant improvement.
-
-    Args:
-        current_best (float): Best score in the current iteration.
-        previous_best (float): Best score in the previous iteration.
-        improvement_threshold (float): Minimum relative improvement required.
-
-    Returns:
-        bool: True if significant improvement, False otherwise.
-    """
     if previous_best == 0:
         return current_best > 0
     improvement = (current_best - previous_best) / previous_best
@@ -172,7 +149,7 @@ def main():
     phase3_results = load_results(run_dir, 'phase3_results')
     phase4_results = load_results(run_dir, 'phase4_results')
 
-    # Analyze results
+    # Collect and analyze results
     analysis = {
         'phase1': analyze_phase1_results(phase1_results),
         'phase2a': analyze_phase2a_results(phase2a_results),
@@ -181,9 +158,11 @@ def main():
         'phase4': analyze_phase4_results(phase4_results)
     }
 
-    # Generate report
-    output_path = Path(run_dir) / 'comprehensive_report.md'
-    generate_report(analysis, output_path)
+    # Generate the report
+    output_path = os.path.join(run_dir, 'final_comprehensive_report.md')
+    generate_final_report(analysis, output_path)
+
+
 
 if __name__ == '__main__':
     main()

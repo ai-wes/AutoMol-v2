@@ -1,0 +1,282 @@
+<div class="body" role="main">
+<section id="gbsaobcforce">
+<h1>GBSAOBCForce<a class="headerlink" href="#gbsaobcforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">GBSAOBCForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class implements an implicit solvation force using the GBSA-OBC model.</p>
+<p>To use this class, create a GBSAOBCForce object, then call addParticle() once for each particle in the System to define its parameters. The number of particles for which you define GBSA parameters must be exactly equal to the number of particles in the System, or else an exception will be thrown when you try to create a Context. After a particle has been added, you can modify its force field parameters by calling setParticleParameters(). This will have no effect on Contexts that already exist unless you call updateParametersInContext().</p>
+<p>When using this Force, the System should also include a NonbondedForce, and both objects must specify identical charges for all particles. Otherwise, the results will not be correct. Furthermore, if the nonbonded method is set to CutoffNonPeriodic or CutoffPeriodic, you should call setReactionFieldDielectric(1.0) on the NonbondedForce to turn off the reaction field approximation, which does not produce correct results when combined with GBSA.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.GBSAOBCForce" title="openmm.openmm.GBSAOBCForce"><span class="pre">GBSAOBCForce</span></a><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.GBSAOBCForce" title="openmm.openmm.GBSAOBCForce"><span class="pre">GBSAOBCForce</span></a></dt>
+<dd><p>Create a GBSAOBCForce.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.__init__" title="openmm.openmm.GBSAOBCForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â GBSAOBCForce)</p></td>
+<td><p>Create a GBSAOBCForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.addParticle" title="openmm.openmm.GBSAOBCForce.addParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticle</span></code></a>(self,Â charge,Â radius,Â scalingFactor)</p></td>
+<td><p>Add the GBSA parameters for a particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getCutoffDistance" title="openmm.openmm.GBSAOBCForce.getCutoffDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCutoffDistance</span></code></a>(self)</p></td>
+<td><p>Get the cutoff distance (in nm) being used for nonbonded interactions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getForceGroup" title="openmm.openmm.GBSAOBCForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getName" title="openmm.openmm.GBSAOBCForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getNonbondedMethod" title="openmm.openmm.GBSAOBCForce.getNonbondedMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNonbondedMethod</span></code></a>(self)</p></td>
+<td><p>Get the method used for handling long range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getNumParticles" title="openmm.openmm.GBSAOBCForce.getNumParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticles</span></code></a>(self)</p></td>
+<td><p>Get the number of particles in the system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getParticleParameters" title="openmm.openmm.GBSAOBCForce.getParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the force field parameters for a particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getSoluteDielectric" title="openmm.openmm.GBSAOBCForce.getSoluteDielectric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSoluteDielectric</span></code></a>(self)</p></td>
+<td><p>Get the dielectric constant for the solute.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getSolventDielectric" title="openmm.openmm.GBSAOBCForce.getSolventDielectric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSolventDielectric</span></code></a>(self)</p></td>
+<td><p>Get the dielectric constant for the solvent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.getSurfaceAreaEnergy" title="openmm.openmm.GBSAOBCForce.getSurfaceAreaEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSurfaceAreaEnergy</span></code></a>(self)</p></td>
+<td><p>Get the energy scale for the surface energy term, measured in kJ/mol/nm^2.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setCutoffDistance" title="openmm.openmm.GBSAOBCForce.setCutoffDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setCutoffDistance</span></code></a>(self,Â distance)</p></td>
+<td><p>Set the cutoff distance (in nm) being used for nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setForceGroup" title="openmm.openmm.GBSAOBCForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setName" title="openmm.openmm.GBSAOBCForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setNonbondedMethod" title="openmm.openmm.GBSAOBCForce.setNonbondedMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setNonbondedMethod</span></code></a>(self,Â method)</p></td>
+<td><p>Set the method used for handling long range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setParticleParameters" title="openmm.openmm.GBSAOBCForce.setParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleParameters</span></code></a>(self,Â index,Â charge,Â â¦)</p></td>
+<td><p>Set the force field parameters for a particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setSoluteDielectric" title="openmm.openmm.GBSAOBCForce.setSoluteDielectric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSoluteDielectric</span></code></a>(self,Â dielectric)</p></td>
+<td><p>Set the dielectric constant for the solute.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setSolventDielectric" title="openmm.openmm.GBSAOBCForce.setSolventDielectric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSolventDielectric</span></code></a>(self,Â dielectric)</p></td>
+<td><p>Set the dielectric constant for the solvent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.setSurfaceAreaEnergy" title="openmm.openmm.GBSAOBCForce.setSurfaceAreaEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSurfaceAreaEnergy</span></code></a>(self,Â energy)</p></td>
+<td><p>Set the energy scale for the surface energy term, measured in kJ/mol/nm^2.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.updateParametersInContext" title="openmm.openmm.GBSAOBCForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the particle parameters in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.usesPeriodicBoundaryConditions" title="openmm.openmm.GBSAOBCForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CutoffNonPeriodic</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CutoffPeriodic</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoCutoff</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.GBSAOBCForce.thisown" title="openmm.openmm.GBSAOBCForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getNumParticles">
+<span class="sig-name descname"><span class="pre">getNumParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getNumParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particles in the system.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.addParticle">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalingFactor</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.addParticle" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add the GBSA parameters for a particle. This should be called once for each particle in the System. When it is called for the iâth time, it specifies the parameters for the iâth particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>charge</strong> (<em>double</em>) â the charge of the particle, measured in units of the proton charge</p></li>
+<li><p><strong>radius</strong> (<em>double</em>) â the GBSA radius of the particle, measured in nm</p></li>
+<li><p><strong>scalingFactor</strong> (<em>double</em>) â the OBC scaling factor for the particle</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the particle that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getParticleParameters">
+<span class="sig-name descname"><span class="pre">getParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for a particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the particle for which to get parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>charge</strong> (<em>double</em>) â the charge of the particle, measured in units of the proton charge</p></li>
+<li><p><strong>radius</strong> (<em>double</em>) â the GBSA radius of the particle, measured in nm</p></li>
+<li><p><strong>scalingFactor</strong> (<em>double</em>) â the OBC scaling factor for the particle</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setParticleParameters">
+<span class="sig-name descname"><span class="pre">setParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scalingFactor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the particle for which to set parameters</p></li>
+<li><p><strong>charge</strong> (<em>double</em>) â the charge of the particle, measured in units of the proton charge</p></li>
+<li><p><strong>radius</strong> (<em>double</em>) â the GBSA radius of the particle, measured in nm</p></li>
+<li><p><strong>scalingFactor</strong> (<em>double</em>) â the OBC scaling factor for the particle</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getSolventDielectric">
+<span class="sig-name descname"><span class="pre">getSolventDielectric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getSolventDielectric" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the dielectric constant for the solvent.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setSolventDielectric">
+<span class="sig-name descname"><span class="pre">setSolventDielectric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dielectric</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setSolventDielectric" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the dielectric constant for the solvent.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getSoluteDielectric">
+<span class="sig-name descname"><span class="pre">getSoluteDielectric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getSoluteDielectric" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the dielectric constant for the solute.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setSoluteDielectric">
+<span class="sig-name descname"><span class="pre">setSoluteDielectric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dielectric</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setSoluteDielectric" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the dielectric constant for the solute.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getSurfaceAreaEnergy">
+<span class="sig-name descname"><span class="pre">getSurfaceAreaEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getSurfaceAreaEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the energy scale for the surface energy term, measured in kJ/mol/nm^2.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setSurfaceAreaEnergy">
+<span class="sig-name descname"><span class="pre">setSurfaceAreaEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setSurfaceAreaEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the energy scale for the surface energy term, measured in kJ/mol/nm^2.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getNonbondedMethod">
+<span class="sig-name descname"><span class="pre">getNonbondedMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">OpenMM::GBSAOBCForce::NonbondedMethod</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getNonbondedMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the method used for handling long range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setNonbondedMethod">
+<span class="sig-name descname"><span class="pre">setNonbondedMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setNonbondedMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the method used for handling long range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getCutoffDistance">
+<span class="sig-name descname"><span class="pre">getCutoffDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getCutoffDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the cutoff distance (in nm) being used for nonbonded interactions. If the NonbondedMethod in use is NoCutoff, this value will have no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the cutoff distance, measured in nm</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setCutoffDistance">
+<span class="sig-name descname"><span class="pre">setCutoffDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setCutoffDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the cutoff distance (in nm) being used for nonbonded interactions. If the NonbondedMethod in use is NoCutoff, this value will have no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distance</strong> (<em>double</em>) â the cutoff distance, measured in nm</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the particle parameters in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setParticleParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>The only information this method updates is the values of per-particle parameters. All other aspects of the Force (the nonbonded method, the cutoff distance, etc.) are unaffected and can only be changed by reinitializing the Context. Furthermore, this method cannot be used to add new particles, only to change the parameters of existing ones.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.GBSAOBCForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.GBSAOBCForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

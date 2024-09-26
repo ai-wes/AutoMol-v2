@@ -1,0 +1,317 @@
+<div class="body" role="main">
+<section id="platform">
+<h1>Platform<a class="headerlink" href="#platform" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.Platform">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">Platform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A Platform defines an implementation of all the kernels needed to perform some calculation. More precisely, a Platform object acts as a registry for a set of KernelFactory objects which together implement the kernels. The Platform class, in turn, provides a static registry of all available Platform objects.</p>
+<p>To get a Platform object, call</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Platform</span><span class="o">&amp;</span><span class="w"> </span><span class="n">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Platform</span><span class="o">::</span><span class="n">findPlatform</span><span class="p">(</span><span class="n">kernelNames</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>passing in the names of all kernels that will be required for the calculation you plan to perform. It will return the fastest available Platform which provides implementations of all the specified kernels. You can then call createKernel() to construct particular kernels as needed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.__init__" title="openmm.openmm.Platform.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.findPlatform" title="openmm.openmm.Platform.findPlatform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findPlatform</span></code></a>(kernelNames)</p></td>
+<td><p>Find a Platform which can be used to perform a calculation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getDefaultPluginsDirectory" title="openmm.openmm.Platform.getDefaultPluginsDirectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDefaultPluginsDirectory</span></code></a>()</p></td>
+<td><p>Get the default directory from which to load plugins.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getName" title="openmm.openmm.Platform.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this platform.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getNumPlatforms" title="openmm.openmm.Platform.getNumPlatforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumPlatforms</span></code></a>()</p></td>
+<td><p>Get the number of Platforms that have been registered.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getOpenMMVersion" title="openmm.openmm.Platform.getOpenMMVersion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getOpenMMVersion</span></code></a>()</p></td>
+<td><p>Get a string containing the version number of the OpenMM library.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getPlatform" title="openmm.openmm.Platform.getPlatform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatform</span></code></a>(index)</p></td>
+<td><p>Get a registered Platform by index.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getPlatformByName" title="openmm.openmm.Platform.getPlatformByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPlatformByName</span></code></a>(name)</p></td>
+<td><p>Get the registered Platform with a particular name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getPluginLoadFailures" title="openmm.openmm.Platform.getPluginLoadFailures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPluginLoadFailures</span></code></a>()</p></td>
+<td><p>Get any failures caused during the last call to loadPluginsFromDirectory</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getPropertyDefaultValue" title="openmm.openmm.Platform.getPropertyDefaultValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPropertyDefaultValue</span></code></a>(self,Â property)</p></td>
+<td><p>Get the default value of a Platform-specific property.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getPropertyNames" title="openmm.openmm.Platform.getPropertyNames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPropertyNames</span></code></a>(self)</p></td>
+<td><p>Get the names of all Platform-specific properties this Platform supports.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getPropertyValue" title="openmm.openmm.Platform.getPropertyValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPropertyValue</span></code></a>(self,Â context,Â property)</p></td>
+<td><p>Get the value of a Platform-specific property for a Context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.getSpeed" title="openmm.openmm.Platform.getSpeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSpeed</span></code></a>(self)</p></td>
+<td><p>Get an estimate of how fast this Platform class is.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.linkedContextCreated" title="openmm.openmm.Platform.linkedContextCreated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linkedContextCreated</span></code></a>(self,Â context,Â â¦)</p></td>
+<td><p>This is called whenever a new Context is created using ContextImpl::createLinkedContext().</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.loadPluginLibrary" title="openmm.openmm.Platform.loadPluginLibrary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadPluginLibrary</span></code></a>(file)</p></td>
+<td><p>Load a dynamic library (DLL) which contains an OpenMM plugin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.loadPluginsFromDirectory" title="openmm.openmm.Platform.loadPluginsFromDirectory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadPluginsFromDirectory</span></code></a>(directory)</p></td>
+<td><p>Load multiple dynamic libraries (DLLs) which contain OpenMM plugins from one or more directories.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.registerPlatform" title="openmm.openmm.Platform.registerPlatform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registerPlatform</span></code></a>(platform)</p></td>
+<td><p>Register a new Platform.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.setPropertyDefaultValue" title="openmm.openmm.Platform.setPropertyDefaultValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPropertyDefaultValue</span></code></a>(self,Â property,Â value)</p></td>
+<td><p>Set the default value of a Platform-specific property.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.setPropertyValue" title="openmm.openmm.Platform.setPropertyValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPropertyValue</span></code></a>(self,Â context,Â property,Â value)</p></td>
+<td><p>Set the value of a Platform-specific property for a Context.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.Platform.supportsDoublePrecision" title="openmm.openmm.Platform.supportsDoublePrecision"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supportsDoublePrecision</span></code></a>(self)</p></td>
+<td><p>Get whether this Platform supports double precision arithmetic.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.supportsKernels" title="openmm.openmm.Platform.supportsKernels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supportsKernels</span></code></a>(self,Â kernelNames)</p></td>
+<td><p>Determine whether this Platforms provides implementations of a set of kernels.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.Platform.thisown" title="openmm.openmm.Platform.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.Platform.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.registerPlatform">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">registerPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform.registerPlatform" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Register a new Platform.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getNumPlatforms">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">getNumPlatforms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.Platform.getNumPlatforms" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of Platforms that have been registered.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getPlatform">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">getPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Platform" title="openmm.openmm.Platform"><span class="pre">Platform</span></a><a class="headerlink" href="#openmm.openmm.Platform.getPlatform" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get a registered Platform by index.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getPluginLoadFailures">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">getPluginLoadFailures</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">vectorstring</span><a class="headerlink" href="#openmm.openmm.Platform.getPluginLoadFailures" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get any failures caused during the last call to loadPluginsFromDirectory</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getPlatformByName">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">getPlatformByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Platform" title="openmm.openmm.Platform"><span class="pre">Platform</span></a><a class="headerlink" href="#openmm.openmm.Platform.getPlatformByName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the registered Platform with a particular name. If no Platform with that name has been registered, this throws an exception.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.findPlatform">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">findPlatform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernelNames</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.Platform" title="openmm.openmm.Platform"><span class="pre">Platform</span></a><a class="headerlink" href="#openmm.openmm.Platform.findPlatform" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Find a Platform which can be used to perform a calculation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kernelNames</strong> (<em>vector&lt; std::string &gt;</em>) â the names of all kernels which will be needed for the calculation</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the fastest registered Platform which supports all of the requested kernels. If no Platform exists which supports all of them, this will throw an exception.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openmm.openmm.Platform" title="openmm.openmm.Platform">Platform</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.loadPluginLibrary">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">loadPluginLibrary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform.loadPluginLibrary" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load a dynamic library (DLL) which contains an OpenMM plugin. Typically, each Platform is distributed as a separate dynamic library. This method can then be called at runtime to load each available library. Each library should contain an initializer function to register any Platforms and KernelFactories that it contains.</p>
+<p>If the file does not exist or cannot be loaded, an exception is thrown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>string</em>) â the path to the dynamic library file. This is interpreted using the operating systemâs rules for loading libraries. Typically it may be either an absolute path or relative to a set of standard locations.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.loadPluginsFromDirectory">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">loadPluginsFromDirectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span> → <span class="pre">vectorstring</span><a class="headerlink" href="#openmm.openmm.Platform.loadPluginsFromDirectory" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load multiple dynamic libraries (DLLs) which contain OpenMM plugins from one or more directories. Multiple fully-qualified paths can be joined together with â:â on unix-like systems (or â;â on windows-like systems); each will be searched for plugins, in-order. For example, â/foo/plugins:/bar/pluginsâ will search both .. code-block:: c++</p>
+<blockquote>
+<div><p>/foo/plugins and .. code-block:: c++</p>
+<p>/bar/plugins. If an identically-named plugin is encountered twice it will be loaded at both points; be careful!!!</p>
+</div></blockquote>
+<p>This method loops over every file contained in the specified directories and calls loadPluginLibrary() for each one. If an error occurs while trying to load a particular file, that file is simply ignored. You can retrieve a list of all such errors by calling getPluginLoadFailures().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>directory</strong> (<em>string</em>) â a â:â (unix) or â;â (windows) deliminated list of paths containing libraries to load</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the names of all files which were successfully loaded as libraries</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector&lt; std::string &gt;</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getDefaultPluginsDirectory">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">getDefaultPluginsDirectory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.Platform.getDefaultPluginsDirectory" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default directory from which to load plugins. If the environment variable OPENMM_PLUGIN_DIR is set, this returns its value. Otherwise, it returns a platform specific default location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the path to the default plugin directory</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getOpenMMVersion">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">getOpenMMVersion</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.Platform.getOpenMMVersion" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get a string containing the version number of the OpenMM library.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.Platform.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this platform. This should be a unique identifier which can be used to recognized it.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getSpeed">
+<span class="sig-name descname"><span class="pre">getSpeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.Platform.getSpeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get an estimate of how fast this Platform class is. This need not be precise. It only is expected to return an order or magnitude estimate of the relative performance of different Platform classes. An unoptimized reference implementation should return 1.0, and all other Platforms should return a larger value that is an estimate of how many times faster they are than the reference implementation.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.supportsDoublePrecision">
+<span class="sig-name descname"><span class="pre">supportsDoublePrecision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Platform.supportsDoublePrecision" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether this Platform supports double precision arithmetic. If this returns false, the platform is permitted to represent double precision values internally as single precision.</p>
+<div class="admonition-deprecated admonition">
+<p class="admonition-title">Deprecated</p>
+<blockquote>
+<div><p>This method is not well defined, and is too simplistic to describe the actual behavior of some Platforms, such as ones that offer multiple precision modes. It will be removed in a future release.</p>
+</div></blockquote>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getPropertyNames">
+<span class="sig-name descname"><span class="pre">getPropertyNames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">vectorstring</span><a class="headerlink" href="#openmm.openmm.Platform.getPropertyNames" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the names of all Platform-specific properties this Platform supports.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getPropertyValue">
+<span class="sig-name descname"><span class="pre">getPropertyValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.Platform.getPropertyValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the value of a Platform-specific property for a Context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> (<a class="reference internal" href="openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><em>Context</em></a>) â the Context for which to get the property</p></li>
+<li><p><strong>property</strong> (<em>string</em>) â the name of the property to get</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the value of the property</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.setPropertyValue">
+<span class="sig-name descname"><span class="pre">setPropertyValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform.setPropertyValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the value of a Platform-specific property for a Context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> (<a class="reference internal" href="openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><em>Context</em></a>) â the Context for which to set the property</p></li>
+<li><p><strong>property</strong> (<em>string</em>) â the name of the property to set</p></li>
+<li><p><strong>value</strong> (<em>string</em>) â the value to set for the property</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.getPropertyDefaultValue">
+<span class="sig-name descname"><span class="pre">getPropertyDefaultValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.Platform.getPropertyDefaultValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default value of a Platform-specific property. This is the value that will be used for newly created Contexts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>property</strong> (<em>string</em>) â the name of the property to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the default value of the property</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.setPropertyDefaultValue">
+<span class="sig-name descname"><span class="pre">setPropertyDefaultValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform.setPropertyDefaultValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default value of a Platform-specific property. This is the value that will be used for newly created Contexts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>property</strong> (<em>string</em>) â the name of the property to set</p></li>
+<li><p><strong>value</strong> (<em>string</em>) â the value to set for the property</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.linkedContextCreated">
+<span class="sig-name descname"><span class="pre">linkedContextCreated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">originalContext</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.Platform.linkedContextCreated" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is called whenever a new Context is created using ContextImpl::createLinkedContext(). It gives the Platform a chance to initialize the context and store platform-specific data in it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>context</strong> (<em>ContextImpl</em>) â the newly created context</p></li>
+<li><p><strong>originalContext</strong> (<em>ContextImpl</em>) â the original context it is linked to</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.Platform.supportsKernels">
+<span class="sig-name descname"><span class="pre">supportsKernels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernelNames</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.Platform.supportsKernels" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Determine whether this Platforms provides implementations of a set of kernels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kernelNames</strong> (<em>vector&lt; std::string &gt;</em>) â the names of the kernels of interests</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if this Platform provides implementations of all the kernels in the list, false if there are any which it does not support</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

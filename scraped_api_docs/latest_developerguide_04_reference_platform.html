@@ -1,0 +1,24 @@
+<div class="body" role="main">
+<style> .code {font-family:monospace;} </style>
+<style> .caption {text-align:center;} </style><section id="the-reference-platform">
+<span id="id1"></span><h1><span class="section-number">4. </span>The Reference Platform<a class="headerlink" href="#the-reference-platform" title="Permalink to this headline">Â¶</a></h1>
+<p>The reference Platform is written with simplicity and clarity in mind, not
+performance.  (It is still not always as simple or clear as one might hope, but
+that is the goal.)  When implementing a new feature, it is recommended to create
+the reference implementation first, then use that as a model for the versions in
+other Platforms.</p>
+<p>When using the reference Platform, the âplatform-specific dataâ stored in
+ContextImpl is of type ReferencePlatform::PlatformData, which is declared in
+ReferencePlatform.h.  It has fields for storing positions, velocities, box
+vectors, and other types of data.</p>
+<p>The PlatformDataâs vector of forces contains one element for each particle.  At
+the start of each force evaluation, all elements of it are set to zero.  Each
+Force adds its own contributions to the vector, so that at the end, it contains
+the total force acting on each particle.</p>
+<p>There are a few additional classes that contain useful static methods.
+SimTKOpenMMUtilities has various utility functions, of which the most important
+is a random number generator.  ReferenceForce provides methods for calculating
+the displacement between two positions, optionally taking periodic boundary
+conditions into account.</p>
+</section>
+</div>

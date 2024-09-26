@@ -1,0 +1,67 @@
+<div class="body" role="main">
+<section id="integrators">
+<h1>Integrators<a class="headerlink" href="#integrators" title="Permalink to this headline">Â¶</a></h1>
+<section id="the-integrator-abstract-class">
+<h2>The <code class="docutils literal notranslate"><span class="pre">Integrator</span></code> abstract class<a class="headerlink" href="#the-integrator-abstract-class" title="Permalink to this headline">Â¶</a></h2>
+<p>An <code class="docutils literal notranslate"><span class="pre">Integrator</span></code> implements an algorithm for advancing the simulation through
+time.  <code class="docutils literal notranslate"><span class="pre">Integrator</span></code> is an abstract class; subclasses implement specific
+algorithms.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/Integrator.html"><code class="docutils literal notranslate"><span class="pre">Integrator</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="general-purpose-integrators">
+<h2>General purpose integrators<a class="headerlink" href="#general-purpose-integrators" title="Permalink to this headline">Â¶</a></h2>
+<p>These are integrators appropriate for traditional MD and BD simulations.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/BrownianIntegrator.html"><code class="docutils literal notranslate"><span class="pre">BrownianIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/LangevinIntegrator.html"><code class="docutils literal notranslate"><span class="pre">LangevinIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/LangevinMiddleIntegrator.html"><code class="docutils literal notranslate"><span class="pre">LangevinMiddleIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/NoseHooverIntegrator.html"><code class="docutils literal notranslate"><span class="pre">NoseHooverIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/VariableLangevinIntegrator.html"><code class="docutils literal notranslate"><span class="pre">VariableLangevinIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/VariableVerletIntegrator.html"><code class="docutils literal notranslate"><span class="pre">VariableVerletIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/VerletIntegrator.html"><code class="docutils literal notranslate"><span class="pre">VerletIntegrator</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="drude-integrators">
+<h2>Drude integrators<a class="headerlink" href="#drude-integrators" title="Permalink to this headline">Â¶</a></h2>
+<p>These integrators permit modelling polarization with a Drude particle.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/DrudeIntegrator.html"><code class="docutils literal notranslate"><span class="pre">DrudeIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/DrudeLangevinIntegrator.html"><code class="docutils literal notranslate"><span class="pre">DrudeLangevinIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/DrudeNoseHooverIntegrator.html"><code class="docutils literal notranslate"><span class="pre">DrudeNoseHooverIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/DrudeSCFIntegrator.html"><code class="docutils literal notranslate"><span class="pre">DrudeSCFIntegrator</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="ring-polymer-molecular-dynamics-integrators">
+<h2>Ring Polymer Molecular Dynamics integrators<a class="headerlink" href="#ring-polymer-molecular-dynamics-integrators" title="Permalink to this headline">Â¶</a></h2>
+<p>The RPMD integrator implements Ring Polymer MD.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/RPMDIntegrator.html"><code class="docutils literal notranslate"><span class="pre">RPMDIntegrator</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="customizing-integrator">
+<h2>Customizing <code class="docutils literal notranslate"><span class="pre">Integrator</span></code><a class="headerlink" href="#customizing-integrator" title="Permalink to this headline">Â¶</a></h2>
+<p>These classes facilitate customisation of the integrator. <code class="docutils literal notranslate"><span class="pre">CustomIntegrator</span></code>
+allows a wide variety of integration algorithms to be implemented efficiently
+without writing any low-level code. The integrator is built up as a series of
+steps, each defined as an algebraic expression. <code class="docutils literal notranslate"><span class="pre">CompoundIntegrator</span></code> allows
+different integrators to be combined by making it possible to switch the active
+integrator in the middle of a simulation.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="generated/CustomIntegrator.html"><code class="docutils literal notranslate"><span class="pre">CustomIntegrator</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="generated/CompoundIntegrator.html"><code class="docutils literal notranslate"><span class="pre">CompoundIntegrator</span></code></a></li>
+</ul>
+</div>
+</section>
+</section>
+</div>

@@ -1,0 +1,434 @@
+<div class="body" role="main">
+<section id="drudenosehooverintegrator">
+<h1>DrudeNoseHooverIntegrator<a class="headerlink" href="#drudenosehooverintegrator" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">DrudeNoseHooverIntegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This Integrator simulates systems that include Drude particles. It applies two different Nose-Hoover chain thermostats to the different parts of the system. The first is applied to ordinary particles (ones that are not part of a Drude particle pair), as well as to the center of mass of each Drude particle pair. A second thermostat, typically with a much lower temperature, is applied to the relative internal displacement of each pair.</p>
+<p>This integrator can optionally set an upper limit on how far any Drude particle is ever allowed to get from its parent particle. This can sometimes help to improve stability. The limit is enforced with a hard wall constraint. By default the limit is set to 0.02 nm.</p>
+<p>This Integrator requires the System to include a DrudeForce, which it uses to identify the Drude particles.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collisionFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drudeTemperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drudeCollisionFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numMTS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numYoshidaSuzuki</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator" title="openmm.openmm.DrudeNoseHooverIntegrator"><span class="pre">DrudeNoseHooverIntegrator</span></a><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator" title="openmm.openmm.DrudeNoseHooverIntegrator"><span class="pre">DrudeNoseHooverIntegrator</span></a></dt>
+<dd><p>Create a DrudeNoseHooverIntegrator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>double</em>) â the target temperature for the system (in Kelvin).</p></li>
+<li><p><strong>collisionFrequency</strong> (<em>double</em>) â the frequency of the systemâs interaction with the heat bath (in inverse picoseconds).</p></li>
+<li><p><strong>drudeTemperature</strong> (<em>double</em>) â the target temperature for the Drude particles, relative to their parent atom (in Kelvin).</p></li>
+<li><p><strong>drudeCollisionFrequency</strong> (<em>double</em>) â the frequency of the drude particlesâ interaction with the heat bath (in inverse picoseconds).</p></li>
+<li><p><strong>stepSize</strong> (<em>double</em>) â the step size with which to integrator the system (in picoseconds)</p></li>
+<li><p><strong>chainLength</strong> (<em>int</em>) â the number of beads in the Nose-Hoover chain.</p></li>
+<li><p><strong>numMTS</strong> (<em>int</em>) â the number of step in the multiple time step chain propagation algorithm.</p></li>
+<li><p><strong>numYoshidaSuzuki</strong> (<em>int</em>) â the number of terms in the Yoshida-Suzuki multi time step decomposition used in the chain propagation algorithm (must be 1, 3, or 5).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.__init__" title="openmm.openmm.DrudeNoseHooverIntegrator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â DrudeNoseHooverIntegrator)</p></td>
+<td><p>Create a DrudeNoseHooverIntegrator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.addSubsystemThermostat" title="openmm.openmm.DrudeNoseHooverIntegrator.addSubsystemThermostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addSubsystemThermostat</span></code></a>(self,Â â¦[,Â â¦])</p></td>
+<td><p>Add a Nose-Hoover Chain thermostat to control the temperature of a collection of atoms and/or pairs of connected atoms within the full system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.addThermostat" title="openmm.openmm.DrudeNoseHooverIntegrator.addThermostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addThermostat</span></code></a>(self,Â temperature,Â â¦)</p></td>
+<td><p>Add a simple Nose-Hoover Chain thermostat to control the temperature of the full system</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeKineticEnergy" title="openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeKineticEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeDrudeKineticEnergy</span></code></a>(self)</p></td>
+<td><p>Compute the kinetic energy of the drude particles at the current time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeTemperature" title="openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeDrudeTemperature</span></code></a>(self)</p></td>
+<td><p>Compute the instantaneous temperature of the Drude system, measured in Kelvin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeHeatBathEnergy" title="openmm.openmm.DrudeNoseHooverIntegrator.computeHeatBathEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeHeatBathEnergy</span></code></a>(self)</p></td>
+<td><p>Compute the total (potential + kinetic) heat bath energy for all heat baths associated with this integrator, at the current time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeSystemTemperature" title="openmm.openmm.DrudeNoseHooverIntegrator.computeSystemTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeSystemTemperature</span></code></a>(self)</p></td>
+<td><p>Compute the instantaneous temperature of the System, measured in Kelvin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeTotalKineticEnergy" title="openmm.openmm.DrudeNoseHooverIntegrator.computeTotalKineticEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeTotalKineticEnergy</span></code></a>(self)</p></td>
+<td><p>Compute the kinetic energy of all (real and drude) particles at the current time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getCollisionFrequency" title="openmm.openmm.DrudeNoseHooverIntegrator.getCollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCollisionFrequency</span></code></a>(self[,Â chainID])</p></td>
+<td><p>Get the collision frequency for absolute motion of the i-th chain (in 1/picosecond).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getConstraintTolerance" title="openmm.openmm.DrudeNoseHooverIntegrator.getConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConstraintTolerance</span></code></a>(self)</p></td>
+<td><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getIntegrationForceGroups" title="openmm.openmm.DrudeNoseHooverIntegrator.getIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntegrationForceGroups</span></code></a>(self)</p></td>
+<td><p>Get which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getMaxDrudeDistance" title="openmm.openmm.DrudeNoseHooverIntegrator.getMaxDrudeDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMaxDrudeDistance</span></code></a>(self)</p></td>
+<td><p>Get the maximum distance a Drude particle can ever move from its parent particle, measured in nm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getMaximumPairDistance" title="openmm.openmm.DrudeNoseHooverIntegrator.getMaximumPairDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getMaximumPairDistance</span></code></a>(self)</p></td>
+<td><p>Gets the maximum distance (in nm) that a connected pair may stray from each other.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getNumThermostats" title="openmm.openmm.DrudeNoseHooverIntegrator.getNumThermostats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumThermostats</span></code></a>(self)</p></td>
+<td><p>Get the number of Nose-Hoover chains registered with this integrator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getRelativeCollisionFrequency" title="openmm.openmm.DrudeNoseHooverIntegrator.getRelativeCollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRelativeCollisionFrequency</span></code></a>(self[,Â chainID])</p></td>
+<td><p>Get the collision frequency for pairsâ relative motion of the i-th chain (in 1/picosecond).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getRelativeTemperature" title="openmm.openmm.DrudeNoseHooverIntegrator.getRelativeTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRelativeTemperature</span></code></a>(self[,Â chainID])</p></td>
+<td><p>Get the temperature of the i-th chain for controling pairsâ relative particle motion (in Kelvin).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getStepSize" title="openmm.openmm.DrudeNoseHooverIntegrator.getStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getStepSize</span></code></a>(self)</p></td>
+<td><p>Get the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getTemperature" title="openmm.openmm.DrudeNoseHooverIntegrator.getTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTemperature</span></code></a>(self[,Â chainID])</p></td>
+<td><p>Get the temperature of the i-th chain for controling absolute particle motion (in Kelvin).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.getThermostat" title="openmm.openmm.DrudeNoseHooverIntegrator.getThermostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getThermostat</span></code></a>(self[,Â chainID])</p></td>
+<td><p>Get the NoseHooverChain thermostat</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.hasSubsystemThermostats" title="openmm.openmm.DrudeNoseHooverIntegrator.hasSubsystemThermostats"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hasSubsystemThermostats</span></code></a>(self)</p></td>
+<td><p>Return false, if this integrator was set up with the âdefault constructorâ that thermostats the whole system, true otherwise.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.initialize" title="openmm.openmm.DrudeNoseHooverIntegrator.initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize</span></code></a>(self,Â context)</p></td>
+<td><p>This will be called by the Context when it is created.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setCollisionFrequency" title="openmm.openmm.DrudeNoseHooverIntegrator.setCollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setCollisionFrequency</span></code></a>(self,Â frequency[,Â chainID])</p></td>
+<td><p>Set the collision frequency for absolute motion of the i-th chain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setConstraintTolerance" title="openmm.openmm.DrudeNoseHooverIntegrator.setConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setConstraintTolerance</span></code></a>(self,Â tol)</p></td>
+<td><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setIntegrationForceGroups" title="openmm.openmm.DrudeNoseHooverIntegrator.setIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setIntegrationForceGroups</span></code></a>(groups)</p></td>
+<td><p>Set which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setMaxDrudeDistance" title="openmm.openmm.DrudeNoseHooverIntegrator.setMaxDrudeDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setMaxDrudeDistance</span></code></a>(self,Â distance)</p></td>
+<td><p>Set the maximum distance a Drude particle can ever move from its parent particle, measured in nm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setMaximumPairDistance" title="openmm.openmm.DrudeNoseHooverIntegrator.setMaximumPairDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setMaximumPairDistance</span></code></a>(self,Â distance)</p></td>
+<td><p>Sets the maximum distance (in nm) that a connected pair may stray from each other, implemented using a hard wall.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setRelativeCollisionFrequency" title="openmm.openmm.DrudeNoseHooverIntegrator.setRelativeCollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRelativeCollisionFrequency</span></code></a>(self,Â frequency)</p></td>
+<td><p>Set the collision frequency for pairsâ relative motion of the i-th chain.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setRelativeTemperature" title="openmm.openmm.DrudeNoseHooverIntegrator.setRelativeTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRelativeTemperature</span></code></a>(self,Â temperature[,Â â¦])</p></td>
+<td><p>set the (relative pair motion) temperature of the i-th chain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setStepSize" title="openmm.openmm.DrudeNoseHooverIntegrator.setStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setStepSize</span></code></a>(self,Â size)</p></td>
+<td><p>Set the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.setTemperature" title="openmm.openmm.DrudeNoseHooverIntegrator.setTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setTemperature</span></code></a>(self,Â temperature[,Â chainID])</p></td>
+<td><p>set the (absolute motion) temperature of the i-th chain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.step" title="openmm.openmm.DrudeNoseHooverIntegrator.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>(self,Â steps)</p></td>
+<td><p>Advance a simulation through time by taking a series of time steps.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeNoseHooverIntegrator.thisown" title="openmm.openmm.DrudeNoseHooverIntegrator.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.initialize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This will be called by the Context when it is created. It informs the Integrator of what context it will be integrating, and gives it a chance to do any necessary initialization. It will also get called again if the application calls reinitialize() on the Context.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getMaxDrudeDistance">
+<span class="sig-name descname"><span class="pre">getMaxDrudeDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getMaxDrudeDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the maximum distance a Drude particle can ever move from its parent particle, measured in nm. This is implemented with a hard wall constraint. If this distance is set to 0 (the default), the hard wall constraint is omitted.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setMaxDrudeDistance">
+<span class="sig-name descname"><span class="pre">setMaxDrudeDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setMaxDrudeDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the maximum distance a Drude particle can ever move from its parent particle, measured in nm. This is implemented with a hard wall constraint. If this distance is set to 0 (the default), the hard wall constraint is omitted.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeKineticEnergy">
+<span class="sig-name descname"><span class="pre">computeDrudeKineticEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeKineticEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Compute the kinetic energy of the drude particles at the current time.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.computeTotalKineticEnergy">
+<span class="sig-name descname"><span class="pre">computeTotalKineticEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeTotalKineticEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Compute the kinetic energy of all (real and drude) particles at the current time.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.computeSystemTemperature">
+<span class="sig-name descname"><span class="pre">computeSystemTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeSystemTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Compute the instantaneous temperature of the System, measured in Kelvin. This is calculated based on the kinetic energy of the ordinary particles (ones not attached to a Drude particle), as well as the center of mass motion of the Drude particle pairs. It does not include the internal motion of the pairs. On average, this should be approximately equal to the value returned by getTemperature().</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeTemperature">
+<span class="sig-name descname"><span class="pre">computeDrudeTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeDrudeTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Compute the instantaneous temperature of the Drude system, measured in Kelvin. This is calculated based on the kinetic energy of the internal motion of Drude pairs and should remain close to the prescribed Drude temperature.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.addSubsystemThermostat">
+<span class="sig-name descname"><span class="pre">addSubsystemThermostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thermostatedParticles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thermostatedPairs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collisionFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relativeTemperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relativeCollisionFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainLength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numMTS</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numYoshidaSuzuki</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.addSubsystemThermostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a Nose-Hoover Chain thermostat to control the temperature of a collection of atoms and/or pairs of connected atoms within the full system. A list of atoms defining the atoms to be thermostated is provided and the thermostat will only control members of that list. Additionally a list of pairs of connected atoms may be provided; in this case both the center of mass absolute motion of each pair is controlled as well as their motion relative to each other, which is independently thermostated. If both the list of thermostated particles and thermostated pairs are empty all particles will be thermostated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>thermostatedParticles</strong> (<em>vector&lt; int &gt;</em>) â list of particle ids to be thermostated.</p></li>
+<li><p><strong>thermostatedPairs</strong> (<em>vector&lt; std::pair&lt; int</em><em>, </em><em>int &gt; &gt;</em>) â a list of pairs of connected atoms whose absolute center of mass motion and motion relative to one another will be independently thermostated.</p></li>
+<li><p><strong>temperature</strong> (<em>double</em>) â the target temperature for each pairâs absolute of center of mass motion.</p></li>
+<li><p><strong>collisionFrequency</strong> (<em>double</em>) â the frequency of the interaction with the heat bath for the pairsâ center of mass motion (in 1/ps).</p></li>
+<li><p><strong>relativeTemperature</strong> (<em>double</em>) â the target temperature for each pairâs relative motion.</p></li>
+<li><p><strong>relativeCollisionFrequency</strong> (<em>double</em>) â the frequency of the interaction with the heat bath for the pairsâ relative motion (in 1/ps).</p></li>
+<li><p><strong>chainLength</strong> (<em>int</em>) â the number of beads in the Nose-Hoover chain.</p></li>
+<li><p><strong>numMTS</strong> (<em>int</em>) â the number of step in the multiple time step chain propagation algorithm.</p></li>
+<li><p><strong>numYoshidaSuzuki</strong> (<em>int</em>) â the number of terms in the Yoshida-Suzuki multi time step decomposition used in the chain propagation algorithm (must be 1, 3, 5, or 7).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.addThermostat">
+<span class="sig-name descname"><span class="pre">addThermostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collisionFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainLength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numMTS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numYoshidaSuzuki</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.addThermostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a simple Nose-Hoover Chain thermostat to control the temperature of the full system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>double</em>) â the target temperature for the system.</p></li>
+<li><p><strong>collisionFrequency</strong> (<em>double</em>) â the frequency of the interaction with the heat bath (in 1/ps).</p></li>
+<li><p><strong>chainLength</strong> (<em>int</em>) â the number of beads in the Nose-Hoover chain</p></li>
+<li><p><strong>numMTS</strong> (<em>int</em>) â the number of step in the multiple time step chain propagation algorithm.</p></li>
+<li><p><strong>numYoshidaSuzuki</strong> (<em>int</em>) â the number of terms in the Yoshida-Suzuki multi time step decomposition used in the chain propagation algorithm (must be 1, 3, 5, or 7).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.computeHeatBathEnergy">
+<span class="sig-name descname"><span class="pre">computeHeatBathEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.computeHeatBathEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Compute the total (potential + kinetic) heat bath energy for all heat baths associated with this integrator, at the current time.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getCollisionFrequency">
+<span class="sig-name descname"><span class="pre">getCollisionFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getCollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the collision frequency for absolute motion of the i-th chain (in 1/picosecond).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the collision frequency.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getConstraintTolerance">
+<span class="sig-name descname"><span class="pre">getConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">getIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get which force groups to use for integration. By default, all force groups are included. This is interpreted as a set of bit flags: the forces from group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getMaximumPairDistance">
+<span class="sig-name descname"><span class="pre">getMaximumPairDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getMaximumPairDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Gets the maximum distance (in nm) that a connected pair may stray from each other. If zero, there are no constraints on the intra-pair separation.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getNumThermostats">
+<span class="sig-name descname"><span class="pre">getNumThermostats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getNumThermostats" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of Nose-Hoover chains registered with this integrator.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getRelativeCollisionFrequency">
+<span class="sig-name descname"><span class="pre">getRelativeCollisionFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getRelativeCollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the collision frequency for pairsâ relative motion of the i-th chain (in 1/picosecond).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the collision frequency.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getRelativeTemperature">
+<span class="sig-name descname"><span class="pre">getRelativeTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getRelativeTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the temperature of the i-th chain for controling pairsâ relative particle motion (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the temperature.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getStepSize">
+<span class="sig-name descname"><span class="pre">getStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the size of each time step, in picoseconds. If this integrator uses variable time steps, the size of the most recent step is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the step size, measured in ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getTemperature">
+<span class="sig-name descname"><span class="pre">getTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the temperature of the i-th chain for controling absolute particle motion (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the temperature.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.getThermostat">
+<span class="sig-name descname"><span class="pre">getThermostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="openmm.openmm.NoseHooverChain.html#openmm.openmm.NoseHooverChain" title="openmm.openmm.NoseHooverChain"><span class="pre">NoseHooverChain</span></a><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.getThermostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the NoseHooverChain thermostat</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.hasSubsystemThermostats">
+<span class="sig-name descname"><span class="pre">hasSubsystemThermostats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.hasSubsystemThermostats" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return false, if this integrator was set up with the âdefault constructorâ that thermostats the whole system, true otherwise. Required for serialization.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setCollisionFrequency">
+<span class="sig-name descname"><span class="pre">setCollisionFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setCollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the collision frequency for absolute motion of the i-th chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>double</em>) â the collision frequency in picosecond.</p></li>
+<li><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setConstraintTolerance">
+<span class="sig-name descname"><span class="pre">setConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">setIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set which force groups to use for integration.  By default, all force groups are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>groups</strong> (<em>set</em><em> or </em><em>int</em>) â a set of indices for which force groups to include when integrating the equations of motion.
+Alternatively, the groups can be passed as a single unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setMaximumPairDistance">
+<span class="sig-name descname"><span class="pre">setMaximumPairDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setMaximumPairDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Sets the maximum distance (in nm) that a connected pair may stray from each other, implemented using a hard wall. If set to zero, the hard wall constraint is omited and the pairs are free to be separated by any distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setRelativeCollisionFrequency">
+<span class="sig-name descname"><span class="pre">setRelativeCollisionFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setRelativeCollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the collision frequency for pairsâ relative motion of the i-th chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frequency</strong> (<em>double</em>) â the collision frequency in picosecond.</p></li>
+<li><p><strong>chainID</strong> (<em>int</em>) â the index of the Nose-Hoover chain thermostat (default=0).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setRelativeTemperature">
+<span class="sig-name descname"><span class="pre">setRelativeTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setRelativeTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>set the (relative pair motion) temperature of the i-th chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>double</em>) â the temperature for the Nose-Hoover chain thermostat (in Kelvin).</p></li>
+<li><p><strong>chainID</strong> (<em>int</em>) â The id of the Nose-Hoover chain thermostat for which the temperature is set (default=0).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setStepSize">
+<span class="sig-name descname"><span class="pre">setStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the size of each time step, in picoseconds. If this integrator uses variable time steps, the effect of calling this method is undefined, and it may simply be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>double</em>) â the step size, measured in ps</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.setTemperature">
+<span class="sig-name descname"><span class="pre">setTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chainID</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.setTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>set the (absolute motion) temperature of the i-th chain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>double</em>) â the temperature for the Nose-Hoover chain thermostat (in Kelvin).</p></li>
+<li><p><strong>chainID</strong> (<em>int</em>) â The id of the Nose-Hoover chain thermostat for which the temperature is set (default=0).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeNoseHooverIntegrator.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeNoseHooverIntegrator.step" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance a simulation through time by taking a series of time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> (<em>int</em>) â the number of time steps to take</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

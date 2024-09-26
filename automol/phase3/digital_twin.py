@@ -72,6 +72,7 @@ class DigitalTwinSimulator:
         # Reset the model to its original state
         self.reset_model()
         logging.info("Model reset to original state.")
+        self.emit_progress("Model reset to original state")
 
         # Apply drug effects
         for reaction_id, inhibition in drug_effects.items():
@@ -82,6 +83,7 @@ class DigitalTwinSimulator:
                 new_upper_bound = reaction.upper_bound * inhibition
                 reaction.bounds = (new_lower_bound, new_upper_bound)
                 logging.info(f"Applied drug effect: {reaction_id} bounds set to {reaction.bounds}")
+                self.emit_progress(f"Applied drug effect: {reaction_id}")
             except KeyError:
                 logging.warning(f"Reaction {reaction_id} not found.")
             except Exception as e:
@@ -95,6 +97,7 @@ class DigitalTwinSimulator:
                     gene = self.model.genes.get_by_id(gene_id)
                     cobra.manipulation.delete_model_genes(self.model, [gene])
                     logging.info(f"Knocked out gene: {gene_id}")
+                    self.emit_progress(f"Knocked out gene: {gene_id}")
                 except KeyError:
                     logging.warning(f"Gene {gene_id} not found.")
                 except Exception as e:
@@ -108,6 +111,7 @@ class DigitalTwinSimulator:
                     reaction = self.model.reactions.get_by_id(exchange_id)
                     reaction.lower_bound = flux_value
                     logging.info(f"Environmental condition changed: {exchange_id} lower bound set to {flux_value}")
+                    self.emit_progress(f"Environmental condition changed: {exchange_id}")
                 except KeyError:
                     logging.warning(f"Exchange reaction {exchange_id} not found.")
                 except Exception as e:
@@ -118,6 +122,7 @@ class DigitalTwinSimulator:
         try:
             fva_result = flux_variability_analysis(self.model, fraction_of_optimum=0.9)
             logging.info("Flux Variability Analysis completed.")
+            self.emit_progress("Flux Variability Analysis completed")
         except Exception as e:
             logging.error(f"Error performing Flux Variability Analysis: {e}")
             raise
@@ -126,6 +131,7 @@ class DigitalTwinSimulator:
         try:
             solution = self.model.optimize()
             logging.info(f"Simulated growth rate: {solution.objective_value}")
+            self.emit_progress(f"Simulated growth rate: {solution.objective_value}")
         except Exception as e:
             logging.error(f"Error optimizing model: {e}")
             raise
@@ -143,6 +149,7 @@ class DigitalTwinSimulator:
                 reaction = self.model.reactions.get_by_id(reaction_id)
                 reaction.bounds = bounds
                 logging.info(f"Applied perturbation: {reaction_id} new bounds set to {bounds}")
+                self.emit_progress(f"Applied perturbation: {reaction_id}")
             except KeyError:
                 logging.warning(f"Reaction {reaction_id} not found.")
             except Exception as e:
@@ -183,6 +190,7 @@ class DigitalTwinSimulator:
             "stem_cell_exhaustion": self._analyze_stem_cell_exhaustion(solution),
             "altered_intercellular_communication": self._analyze_altered_intercellular_communication(solution)
         }
+        self.emit_progress("Analyzed hallmarks of aging")
         return hallmarks
 
     def _analyze_genomic_instability(self, solution: cobra.Solution) -> float:
@@ -257,6 +265,7 @@ class DigitalTwinSimulator:
         ax.set_title("Hallmarks of Aging")
         ax.set_ylim(0, 1)
         plt.show()
+        self.emit_progress("Visualized hallmarks of aging")
 
     def simulate_aging(self, time_points: List[float], perturbations: Optional[List[Dict]] = None) -> Dict[float, Dict]:
         """
@@ -274,6 +283,7 @@ class DigitalTwinSimulator:
                 "growth_rate": solution.objective_value,
                 "hallmarks": hallmarks
             }
+            self.emit_progress(f"Simulated aging at time point {t}")
         
         return aging_results
 
@@ -296,6 +306,7 @@ class DigitalTwinSimulator:
             except Exception as e:
                 logging.error(f"Error analyzing pathway {group.id}: {e}")
                 raise
+        self.emit_progress("Analyzed pathway activities")
         return pathway_activities
 
     def simulate_time_series(
@@ -310,10 +321,12 @@ class DigitalTwinSimulator:
         results = {}
         metabolite_concentrations = {m.id: 0.0 for m in self.model.metabolites}
         logging.info("Initial metabolite concentrations set.")
+        self.emit_progress("Initial metabolite concentrations set")
 
         # Reset model to initial conditions
         self.reset_model()
         logging.info("Model reset to initial conditions.")
+        self.emit_progress("Model reset to initial conditions")
 
         # Apply initial conditions
         for reaction_id, bounds in initial_conditions.items():
@@ -326,11 +339,13 @@ class DigitalTwinSimulator:
             except Exception as e:
                 logging.error(f"Error setting initial condition for {reaction_id}: {e}")
                 raise
+        self.emit_progress("Applied initial conditions")
 
         perturbation_dict = {p["time"]: p["changes"] for p in perturbations}
 
         for t in time_points:
             logging.info(f"Simulating time point: {t}")
+            self.emit_progress(f"Simulating time point: {t}")
 
             # Apply perturbations if any at this time point
             if t in perturbation_dict:
@@ -362,6 +377,7 @@ class DigitalTwinSimulator:
                 "pathway_activities": pathway_activities,
             }
 
+        self.emit_progress("Time series simulation completed")
         return results
 
     def sensitivity_analysis(
@@ -391,6 +407,7 @@ class DigitalTwinSimulator:
                         )
                         parameter_sensitivities.append(None)
             sensitivities[parameter] = parameter_sensitivities
+            self.emit_progress(f"Completed sensitivity analysis for {parameter}")
         return sensitivities
 
 
@@ -415,6 +432,7 @@ class DigitalTwinSimulator:
             model = RandomForestRegressor()
             model.fit(X_train, y_train)
             logging.info("Machine learning model trained successfully.")
+            self.emit_progress("Machine learning model trained successfully")
 
             # Evaluate the model
             y_pred = model.predict(X_test)
@@ -423,10 +441,12 @@ class DigitalTwinSimulator:
 
             logging.info(f"Model Mean Squared Error: {mse}")
             logging.info(f"Model R² Score: {r2}")
+            self.emit_progress(f"Model evaluation - MSE: {mse}, R²: {r2}")
 
             # Save the trained model
             with open("trained_model.pkl", "wb") as f:
                 pickle.dump(model, f)
+            self.emit_progress("Trained model saved to file")
 
         except Exception as e:
             logging.error(f"Error training machine learning model: {e}")
@@ -446,6 +466,7 @@ class DigitalTwinSimulator:
         plt.xlabel("Reactions")
         plt.ylabel("Flux Value")
         plt.show()
+        self.emit_progress("Visualized flux distribution")
 
     def visualize_growth_rate(self, time_series_results: Dict[float, Dict]):
         times = sorted(time_series_results.keys())
@@ -458,6 +479,7 @@ class DigitalTwinSimulator:
         plt.ylabel("Growth Rate")
         plt.grid(True)
         plt.show()
+        self.emit_progress("Visualized growth rate over time")
 
     def plot_sensitivity_analysis(self, sensitivity_results: Dict[str, List[float]]):
         plt.figure(figsize=(10, 6))
@@ -469,6 +491,11 @@ class DigitalTwinSimulator:
         plt.legend()
         plt.grid(True)
         plt.show()
+        self.emit_progress("Plotted sensitivity analysis results")
+
+    def emit_progress(self, message: str):
+        """Emit progress updates."""
+        print(f"Progress: {message}")
 
 
 # Example usage

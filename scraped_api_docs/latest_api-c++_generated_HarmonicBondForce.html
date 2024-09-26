@@ -1,0 +1,94 @@
+<div class="body" role="main">
+<section id="harmonicbondforce">
+<span id="openmm-harmonicbondforce"></span><h1><code class="docutils literal notranslate"><span class="pre">HarmonicBondForce</span></code><a class="headerlink" href="#harmonicbondforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM17HarmonicBondForceE">
+<span id="_CPPv3N6OpenMM17HarmonicBondForceE"></span><span id="_CPPv2N6OpenMM17HarmonicBondForceE"></span><span id="OpenMM::HarmonicBondForce"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HarmonicBondForce</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">OpenMM</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Force.html#_CPPv4N6OpenMM5ForceE" title="OpenMM::Force"><span class="n"><span class="pre">Force</span></span></a><a class="headerlink" href="#_CPPv4N6OpenMM17HarmonicBondForceE" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>This class implements an interaction between pairs of particles that varies harmonically with the distance between them. To use it, create a <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce"><span class="std std-ref">HarmonicBondForce</span></a> object then call <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce_1a5c4d3a1141e09d1c8e3d1d18caac408c"><span class="std std-ref">addBond()</span></a> once for each bond. After a bond has been added, you can modify its force field parameters by calling <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce_1a519e89d09191c96a35ff7aa0b4592171"><span class="std std-ref">setBondParameters()</span></a>. This will have no effect on Contexts that already exist unless you call <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce_1a127b80645795287b080629e35292bd47"><span class="std std-ref">updateParametersInContext()</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM17HarmonicBondForce17HarmonicBondForceEv">
+<span id="_CPPv3N6OpenMM17HarmonicBondForce17HarmonicBondForceEv"></span><span id="_CPPv2N6OpenMM17HarmonicBondForce17HarmonicBondForceEv"></span><span id="OpenMM::HarmonicBondForce::HarmonicBondForce"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a4680213cfa8c079818b4d226de0ca038"></span><span class="sig-name descname"><span class="n"><span class="pre">HarmonicBondForce</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM17HarmonicBondForce17HarmonicBondForceEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Create a <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce"><span class="std std-ref">HarmonicBondForce</span></a>. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM17HarmonicBondForce11getNumBondsEv">
+<span id="_CPPv3NK6OpenMM17HarmonicBondForce11getNumBondsEv"></span><span id="_CPPv2NK6OpenMM17HarmonicBondForce11getNumBondsEv"></span><span id="OpenMM::HarmonicBondForce::getNumBondsC"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a8efed9b0e59dce60ab7ed40085258383"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getNumBonds</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM17HarmonicBondForce11getNumBondsEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the number of harmonic bond stretch terms in the potential function </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM17HarmonicBondForce7addBondEiidd">
+<span id="_CPPv3N6OpenMM17HarmonicBondForce7addBondEiidd"></span><span id="_CPPv2N6OpenMM17HarmonicBondForce7addBondEiidd"></span><span id="OpenMM::HarmonicBondForce::addBond__i.i.double.double"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a5c4d3a1141e09d1c8e3d1d18caac408c"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addBond</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">length</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM17HarmonicBondForce7addBondEiidd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Add a bond term to the force field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle1</strong> â the index of the first particle connected by the bond </p></li>
+<li><p><strong>particle2</strong> â the index of the second particle connected by the bond </p></li>
+<li><p><strong>length</strong> â the equilibrium length of the bond, measured in nm </p></li>
+<li><p><strong>k</strong> â the harmonic force constant for the bond, measured in kJ/mol/nm^2 </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the bond that was added </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM17HarmonicBondForce17getBondParametersEiRiRiRdRd">
+<span id="_CPPv3NK6OpenMM17HarmonicBondForce17getBondParametersEiRiRiRdRd"></span><span id="_CPPv2NK6OpenMM17HarmonicBondForce17getBondParametersEiRiRiRdRd"></span><span id="OpenMM::HarmonicBondForce::getBondParameters__i.iR.iR.doubleR.doubleRC"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1ab692f17514e713ef23995cf2b13769e3"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getBondParameters</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">particle1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">particle2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">length</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM17HarmonicBondForce17getBondParametersEiRiRiRdRd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the force field parameters for a bond term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> â the index of the bond for which to get parameters </p></li>
+<li><p><strong>particle1</strong> â <strong>[out]</strong> the index of the first particle connected by the bond </p></li>
+<li><p><strong>particle2</strong> â <strong>[out]</strong> the index of the second particle connected by the bond </p></li>
+<li><p><strong>length</strong> â <strong>[out]</strong> the equilibrium length of the bond, measured in nm </p></li>
+<li><p><strong>k</strong> â <strong>[out]</strong> the harmonic force constant for the bond, measured in kJ/mol/nm^2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM17HarmonicBondForce17setBondParametersEiiidd">
+<span id="_CPPv3N6OpenMM17HarmonicBondForce17setBondParametersEiiidd"></span><span id="_CPPv2N6OpenMM17HarmonicBondForce17setBondParametersEiiidd"></span><span id="OpenMM::HarmonicBondForce::setBondParameters__i.i.i.double.double"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a519e89d09191c96a35ff7aa0b4592171"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setBondParameters</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">length</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">k</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM17HarmonicBondForce17setBondParametersEiiidd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the force field parameters for a bond term.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> â the index of the bond for which to set parameters </p></li>
+<li><p><strong>particle1</strong> â the index of the first particle connected by the bond </p></li>
+<li><p><strong>particle2</strong> â the index of the second particle connected by the bond </p></li>
+<li><p><strong>length</strong> â the equilibrium length of the bond, measured in nm </p></li>
+<li><p><strong>k</strong> â the harmonic force constant for the bond, measured in kJ/mol/nm^2 </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM17HarmonicBondForce25updateParametersInContextER7Context">
+<span id="_CPPv3N6OpenMM17HarmonicBondForce25updateParametersInContextER7Context"></span><span id="_CPPv2N6OpenMM17HarmonicBondForce25updateParametersInContextER7Context"></span><span id="OpenMM::HarmonicBondForce::updateParametersInContext__ContextR"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a127b80645795287b080629e35292bd47"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">updateParametersInContext</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="Context.html#_CPPv4N6OpenMM7ContextE" title="OpenMM::Context"><span class="n"><span class="pre">Context</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">context</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM17HarmonicBondForce25updateParametersInContextER7Context" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Update the per-bond parameters in a <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a> to match those stored in this <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> object. This method provides an efficient method to update certain parameters in an existing <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a> without needing to reinitialize it. Simply call <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce_1a519e89d09191c96a35ff7aa0b4592171"><span class="std std-ref">setBondParameters()</span></a> to modify this objectâs parameters, then call <a class="reference internal" href="#classOpenMM_1_1HarmonicBondForce_1a127b80645795287b080629e35292bd47"><span class="std std-ref">updateParametersInContext()</span></a> to copy them over to the <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a>.</p>
+<p>The only information this method updates is the values of per-bond parameters. The set of particles involved in a bond cannot be changed, nor can new bonds be added. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM17HarmonicBondForce33setUsesPeriodicBoundaryConditionsEb">
+<span id="_CPPv3N6OpenMM17HarmonicBondForce33setUsesPeriodicBoundaryConditionsEb"></span><span id="_CPPv2N6OpenMM17HarmonicBondForce33setUsesPeriodicBoundaryConditionsEb"></span><span id="OpenMM::HarmonicBondForce::setUsesPeriodicBoundaryConditions__b"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a5f72d2e9c18ee65f2f53fb969572df36"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setUsesPeriodicBoundaryConditions</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">periodic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM17HarmonicBondForce33setUsesPeriodicBoundaryConditionsEb" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set whether this force should apply periodic boundary conditions when calculating displacements. Usually this is not appropriate for bonded forces, but there are situations when it can be useful. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM17HarmonicBondForce30usesPeriodicBoundaryConditionsEv">
+<span id="_CPPv3NK6OpenMM17HarmonicBondForce30usesPeriodicBoundaryConditionsEv"></span><span id="_CPPv2NK6OpenMM17HarmonicBondForce30usesPeriodicBoundaryConditionsEv"></span><span id="OpenMM::HarmonicBondForce::usesPeriodicBoundaryConditionsC"></span><span class="target" id="classOpenMM_1_1HarmonicBondForce_1a7abd68d505e4a4488ae10e0ea0325c5a"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">usesPeriodicBoundaryConditions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM17HarmonicBondForce30usesPeriodicBoundaryConditionsEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+</div>
+</dd></dl>
+</section>
+</div>

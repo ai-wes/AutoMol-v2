@@ -1,0 +1,93 @@
+<div class="body" role="main">
+<section id="minimizationreporter">
+<h1>MinimizationReporter<a class="headerlink" href="#minimizationreporter" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.MinimizationReporter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">MinimizationReporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MinimizationReporter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A MinimizationReporter can be passed to LocalEnergyMinimizer::minimize() to provide periodic information on the progress of minimization, and to give you the chance to stop minimization early. Define a subclass that overrides report() and implement it to take whatever action you want.</p>
+<p>To correctly interpret the information passed to the reporter, you need to know a bit about how the minimizer works. The L-BFGS algorithm used by the minimizer does not support constraints. The minimizer therefore replaces all constraints with harmonic restraints, then performs unconstrained minimization of a combined objective function that is the sum of the systemâs potential energy and the restraint energy. Once minimization completes, it checks whether all constraints are satisfied to an acceptable tolerance. It not, it increases the strength of the harmonic restraints and performs additional minimization. If the error in constrained distances is especially large, it may choose to throw out all work that has been done so far and start over with stronger restraints. This has several important consequences.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The objective function being minimized not actually the same as the potential energy.</p></li>
+<li><p>The objective function and the potential energy can both increase between iterations.</p></li>
+<li><p>The total number of iterations performed could be larger than the number specified by the maxIterations argument, if that many iterations leaves unacceptable constraint errors.</p></li>
+<li><p>All work is provisional. It is possible for the minimizer to throw it out and start over.</p></li>
+</ul>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MinimizationReporter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.MinimizationReporter" title="openmm.openmm.MinimizationReporter"><span class="pre">MinimizationReporter</span></a><a class="headerlink" href="#openmm.openmm.MinimizationReporter.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.MinimizationReporter" title="openmm.openmm.MinimizationReporter"><span class="pre">MinimizationReporter</span></a></dt>
+<dd><p>A MinimizationReporter can be passed to LocalEnergyMinimizer::minimize() to provide periodic information on the progress of minimization, and to give you the chance to stop minimization early. Define a subclass that overrides report() and implement it to take whatever action you want.</p>
+<p>To correctly interpret the information passed to the reporter, you need to know a bit about how the minimizer works. The L-BFGS algorithm used by the minimizer does not support constraints. The minimizer therefore replaces all constraints with harmonic restraints, then performs unconstrained minimization of a combined objective function that is the sum of the systemâs potential energy and the restraint energy. Once minimization completes, it checks whether all constraints are satisfied to an acceptable tolerance. It not, it increases the strength of the harmonic restraints and performs additional minimization. If the error in constrained distances is especially large, it may choose to throw out all work that has been done so far and start over with stronger restraints. This has several important consequences.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The objective function being minimized not actually the same as the potential energy.</p></li>
+<li><p>The objective function and the potential energy can both increase between iterations.</p></li>
+<li><p>The total number of iterations performed could be larger than the number specified by the maxIterations argument, if that many iterations leaves unacceptable constraint errors.</p></li>
+<li><p>All work is provisional. It is possible for the minimizer to throw it out and start over.</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MinimizationReporter.__init__" title="openmm.openmm.MinimizationReporter.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â MinimizationReporter)</p></td>
+<td><p>A MinimizationReporter can be passed to LocalEnergyMinimizer::minimize() to provide periodic information on the progress of minimization, and to give you the chance to stop minimization early.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MinimizationReporter.report" title="openmm.openmm.MinimizationReporter.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>(self,Â iteration,Â x,Â grad)</p></td>
+<td><p>This is called after each iteration to provide information about the current status of minimization.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MinimizationReporter.thisown" title="openmm.openmm.MinimizationReporter.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.MinimizationReporter.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.MinimizationReporter.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MinimizationReporter.report">
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.MinimizationReporter.report" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is called after each iteration to provide information about the current status of minimization. It receives the current particle coordinates, the gradient of the objective function with respect to them, and a set of useful statistics. In particular, args contains these values:</p>
+<p>âsystem energyâ: the current potential energy of the system</p>
+<p>ârestraint energyâ: the energy of the harmonic restraints</p>
+<p>ârestraint strengthâ: the force constant of the restraints (in kJ/mol/nm^2)</p>
+<p>âmax constraint errorâ: the maximum relative error in the length of any constraint</p>
+<p>If this function returns true, it will cause the L-BFGS optimizer to immediately exit. If all constrained distances are sufficiently close to their target values, minimize() will return. If any constraint error is unacceptably large, it will instead cause the minimizer to immediately increase the strength of the harmonic restraints and perform additional optimization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>iteration</strong> (<em>int</em>) â the index of the current iteration. This refers to the current call to the L-BFGS optimizer. Each time the minimizer increases the restraint strength, the iteration index is reset to 0.</p></li>
+<li><p><strong>x</strong> (<em>vector&lt; double &gt;</em>) â the current particle positions in flattened order: the three coordinates of the first particle, then the three coordinates of the second particle, etc.</p></li>
+<li><p><strong>grad</strong> (<em>vector&lt; double &gt;</em>) â the current gradient of the objective function (potential energy plus restraint energy) with respect to the particle coordinates, in flattened order</p></li>
+<li><p><strong>args</strong> (<em>map&lt; std::string</em><em>, </em><em>double &gt;</em>) â additional statistics described above about the current state of minimization</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>whether to immediately stop minimization</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

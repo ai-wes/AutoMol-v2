@@ -1,0 +1,80 @@
+<div class="body" role="main">
+<section id="dcdreporter">
+<h1>DCDReporter<a class="headerlink" href="#dcdreporter" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.dcdreporter.DCDReporter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.dcdreporter.</span></span><span class="sig-name descname"><span class="pre">DCDReporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reportInterval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforcePeriodicBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdreporter.DCDReporter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>DCDReporter outputs a series of frames from a Simulation to a DCD file.</p>
+<p>To use it, create a DCDReporter, then add it to the Simulationâs list of reporters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.dcdreporter.DCDReporter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reportInterval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforcePeriodicBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdreporter.DCDReporter.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a DCDReporter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>string</em>) â The file to write to</p></li>
+<li><p><strong>reportInterval</strong> (<em>int</em>) â The interval (in time steps) at which to write frames</p></li>
+<li><p><strong>append</strong> (<em>bool=False</em>) â If True, open an existing DCD file to append to.  If False, create a new file.</p></li>
+<li><p><strong>enforcePeriodicBox</strong> (<em>bool</em>) â Specifies whether particle positions should be translated so the center of every molecule
+lies in the same periodic box.  If None (the default), it will automatically decide whether
+to translate molecules based on whether the system being simulated uses periodic boundary
+conditions.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.dcdreporter.DCDReporter.__init__" title="openmm.app.dcdreporter.DCDReporter.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(file,Â reportInterval[,Â append,Â â¦])</p></td>
+<td><p>Create a DCDReporter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.dcdreporter.DCDReporter.describeNextReport" title="openmm.app.dcdreporter.DCDReporter.describeNextReport"><code class="xref py py-obj docutils literal notranslate"><span class="pre">describeNextReport</span></code></a>(simulation)</p></td>
+<td><p>Get information about the next report this object will generate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.dcdreporter.DCDReporter.report" title="openmm.app.dcdreporter.DCDReporter.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>(simulation,Â state)</p></td>
+<td><p>Generate a report.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.dcdreporter.DCDReporter.describeNextReport">
+<span class="sig-name descname"><span class="pre">describeNextReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdreporter.DCDReporter.describeNextReport" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get information about the next report this object will generate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>simulation</strong> (<a class="reference internal" href="openmm.app.simulation.Simulation.html#openmm.app.simulation.Simulation" title="openmm.app.simulation.Simulation"><em>Simulation</em></a>) â The Simulation to generate a report for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A six element tuple. The first element is the number of steps
+until the next report. The next four elements specify whether
+that report will require positions, velocities, forces, and
+energies respectively.  The final element specifies whether
+positions should be wrapped to lie in a single periodic box.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.dcdreporter.DCDReporter.report">
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdreporter.DCDReporter.report" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Generate a report.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>simulation</strong> (<a class="reference internal" href="openmm.app.simulation.Simulation.html#openmm.app.simulation.Simulation" title="openmm.app.simulation.Simulation"><em>Simulation</em></a>) â The Simulation to generate a report for</p></li>
+<li><p><strong>state</strong> (<a class="reference internal" href="openmm.openmm.State.html#openmm.openmm.State" title="openmm.openmm.State"><em>State</em></a>) â The current state of the simulation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

@@ -1,0 +1,320 @@
+<div class="body" role="main">
+<section id="rpmdintegrator">
+<h1>RPMDIntegrator<a class="headerlink" href="#rpmdintegrator" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">RPMDIntegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is an Integrator which simulates a System using ring polymer molecular dynamics (RPMD). It simulates many copies of the System, with successive copies connected by harmonic springs to form a ring. This allows certain quantum mechanical effects to be efficiently simulated.</p>
+<p>By default this Integrator applies a PILE thermostat to the system to simulate constant temperature dynamics. You can disable the thermostat by calling setApplyThermostat(false).</p>
+<p>Because this Integrator simulates many copies of the System at once, it must be used differently from other Integrators. Instead of setting positions and velocities by calling methods of the Context, you should use the corresponding methods of the Integrator to set them for specific copies of the System. Similarly, you should retrieve state information for particular copies by calling getState() on the Integrator. Do not query the Context for state information.</p>
+<p>You can optionally specify a set of âring polymer contractionsâ, by which different force groups are evaluated on different numbers of copies, instead of computing every force on every copy. This can be much more efficient, since different forces may vary widely in how many times they must be evaluated to produce sufficient accuracy. For example, you might simulate a 32 copy ring polymer and evaluate bonded forces on every copy, but contract it down to only 6 copies for computing nonbonded interactions, and down to only a single copy (the centroid) for computing the reciprocal space part of PME.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numCopies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frictionCoeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepSize</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RPMDIntegrator" title="openmm.openmm.RPMDIntegrator"><span class="pre">RPMDIntegrator</span></a><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numCopies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frictionCoeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contractions</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RPMDIntegrator" title="openmm.openmm.RPMDIntegrator"><span class="pre">RPMDIntegrator</span></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RPMDIntegrator" title="openmm.openmm.RPMDIntegrator"><span class="pre">RPMDIntegrator</span></a></dt>
+<dd><p>Create a RPMDIntegrator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numCopies</strong> (<em>int</em>) â the number of copies of the system that should be simulated</p></li>
+<li><p><strong>temperature</strong> (<em>double</em>) â the temperature of the heat bath (in Kelvin)</p></li>
+<li><p><strong>frictionCoeff</strong> (<em>double</em>) â the friction coefficient which couples the system to the heat bath (in inverse picoseconds)</p></li>
+<li><p><strong>stepSize</strong> (<em>double</em>) â the step size with which to integrator the system (in picoseconds)</p></li>
+<li><p><strong>contractions</strong> (<em>map&lt; int</em><em>, </em><em>int &gt;</em>) â the ring polymer contractions to use for evaluating different force groups. Each key in the map is the index of a force group, and the corresponding value is the number of copies to evaluate that force group on. If no entry is provided for a force group (the default), it is evaluated independently on every copy.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.__init__" title="openmm.openmm.RPMDIntegrator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â RPMDIntegrator
+Â -&gt;Â RPMDIntegrator)</p></td>
+<td><p>Create a RPMDIntegrator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getApplyThermostat" title="openmm.openmm.RPMDIntegrator.getApplyThermostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getApplyThermostat</span></code></a>(self)</p></td>
+<td><p>Get whether a thermostat is applied to the system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getConstraintTolerance" title="openmm.openmm.RPMDIntegrator.getConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConstraintTolerance</span></code></a>(self)</p></td>
+<td><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getContractions" title="openmm.openmm.RPMDIntegrator.getContractions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getContractions</span></code></a>(self)</p></td>
+<td><p>Get the ring polymer contractions to use for evaluating different force groups.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getFriction" title="openmm.openmm.RPMDIntegrator.getFriction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFriction</span></code></a>(self)</p></td>
+<td><p>Get the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getIntegrationForceGroups" title="openmm.openmm.RPMDIntegrator.getIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntegrationForceGroups</span></code></a>(self)</p></td>
+<td><p>Get which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getNumCopies" title="openmm.openmm.RPMDIntegrator.getNumCopies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumCopies</span></code></a>(self)</p></td>
+<td><p>Get the number of copies of the system being simulated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getRandomNumberSeed" title="openmm.openmm.RPMDIntegrator.getRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRandomNumberSeed</span></code></a>(self)</p></td>
+<td><p>Get the random number seed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getState" title="openmm.openmm.RPMDIntegrator.getState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getState</span></code></a>(copy[,Â getPositions,Â â¦])</p></td>
+<td><p>Get a State object recording the current state information about one copy of the system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getStepSize" title="openmm.openmm.RPMDIntegrator.getStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getStepSize</span></code></a>(self)</p></td>
+<td><p>Get the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getTemperature" title="openmm.openmm.RPMDIntegrator.getTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTemperature</span></code></a>(self)</p></td>
+<td><p>Get the temperature of the heat bath (in Kelvin).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.getTotalEnergy" title="openmm.openmm.RPMDIntegrator.getTotalEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTotalEnergy</span></code></a>(self)</p></td>
+<td><p>Get the total energy of the ring polymer.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setApplyThermostat" title="openmm.openmm.RPMDIntegrator.setApplyThermostat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setApplyThermostat</span></code></a>(self,Â apply)</p></td>
+<td><p>Set whether a thermostat is applied to the system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setConstraintTolerance" title="openmm.openmm.RPMDIntegrator.setConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setConstraintTolerance</span></code></a>(self,Â tol)</p></td>
+<td><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setFriction" title="openmm.openmm.RPMDIntegrator.setFriction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setFriction</span></code></a>(self,Â coeff)</p></td>
+<td><p>Set the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setIntegrationForceGroups" title="openmm.openmm.RPMDIntegrator.setIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setIntegrationForceGroups</span></code></a>(groups)</p></td>
+<td><p>Set which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setPositions" title="openmm.openmm.RPMDIntegrator.setPositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPositions</span></code></a>(self,Â copy,Â positions)</p></td>
+<td><p>Set the positions of all particles in one copy of the system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setRandomNumberSeed" title="openmm.openmm.RPMDIntegrator.setRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRandomNumberSeed</span></code></a>(self,Â seed)</p></td>
+<td><p>Set the random number seed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setStepSize" title="openmm.openmm.RPMDIntegrator.setStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setStepSize</span></code></a>(self,Â size)</p></td>
+<td><p>Set the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setTemperature" title="openmm.openmm.RPMDIntegrator.setTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setTemperature</span></code></a>(self,Â temp)</p></td>
+<td><p>Set the temperature of the heat bath (in Kelvin).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.setVelocities" title="openmm.openmm.RPMDIntegrator.setVelocities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setVelocities</span></code></a>(self,Â copy,Â velocities)</p></td>
+<td><p>Get the velocities of all particles in one copy of the system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.step" title="openmm.openmm.RPMDIntegrator.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>(self,Â steps)</p></td>
+<td><p>Advance a simulation through time by taking a series of time steps.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDIntegrator.thisown" title="openmm.openmm.RPMDIntegrator.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getNumCopies">
+<span class="sig-name descname"><span class="pre">getNumCopies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getNumCopies" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of copies of the system being simulated.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getTemperature">
+<span class="sig-name descname"><span class="pre">getTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the temperature of the heat bath, measured in Kelvin</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setTemperature">
+<span class="sig-name descname"><span class="pre">setTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temp</strong> (<em>double</em>) â the temperature of the heat bath, measured in Kelvin</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getFriction">
+<span class="sig-name descname"><span class="pre">getFriction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getFriction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the friction coefficient, measured in 1/ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setFriction">
+<span class="sig-name descname"><span class="pre">setFriction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setFriction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coeff</strong> (<em>double</em>) â the friction coefficient, measured in 1/ps</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getApplyThermostat">
+<span class="sig-name descname"><span class="pre">getApplyThermostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getApplyThermostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether a thermostat is applied to the system.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setApplyThermostat">
+<span class="sig-name descname"><span class="pre">setApplyThermostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setApplyThermostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set whether a thermostat is applied to the system.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">getRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the random number seed. See setRandomNumberSeed() for details.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">setRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a Context is created from this Force. This is done to ensure that each Context receives unique random seeds without you needing to set them explicitly.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getContractions">
+<span class="sig-name descname"><span class="pre">getContractions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">mapii</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getContractions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the ring polymer contractions to use for evaluating different force groups. Each key in the map is the index of a force group, and the corresponding value is the number of copies to evaluate that force group on. If no entry is provided for a force group, it is evaluated independently on every copy.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setPositions">
+<span class="sig-name descname"><span class="pre">setPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setPositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the positions of all particles in one copy of the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>copy</strong> (<em>int</em>) â the index of the copy for which to set positions</p></li>
+<li><p><strong>positions</strong> (<em>vector&lt; Vec3 &gt;</em>) â the positions of all particles in the system</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setVelocities">
+<span class="sig-name descname"><span class="pre">setVelocities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocities</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setVelocities" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the velocities of all particles in one copy of the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>copy</strong> (<em>int</em>) â the index of the copy for which to set velocities</p></li>
+<li><p><strong>velocities</strong> (<em>vector&lt; Vec3 &gt;</em>) â the velocities of all particles in the system</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getTotalEnergy">
+<span class="sig-name descname"><span class="pre">getTotalEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getTotalEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the total energy of the ring polymer. This includes the potential and kinetic energies of all copies, plus the potential energy of the harmonic springs that link copies together.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.step" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance a simulation through time by taking a series of time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> (<em>int</em>) â the number of time steps to take</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getState">
+<span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">copy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getPositions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getVelocities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getForces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getEnergy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getParameterDerivatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enforcePeriodicBox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getState" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get a State object recording the current state information about one copy of the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>copy</strong> (<em>int</em>) â the index of the copy for which to retrieve state information</p></li>
+<li><p><strong>getPositions</strong> (<em>bool=False</em>) â whether to store particle positions in the State</p></li>
+<li><p><strong>getVelocities</strong> (<em>bool=False</em>) â whether to store particle velocities in the State</p></li>
+<li><p><strong>getForces</strong> (<em>bool=False</em>) â whether to store the forces acting on particles in the State</p></li>
+<li><p><strong>getEnergy</strong> (<em>bool=False</em>) â whether to store potential and kinetic energy in the State</p></li>
+<li><p><strong>getParameters</strong> (<em>bool=False</em>) â whether to store context parameters in the State</p></li>
+<li><p><strong>getParameterDerivatives</strong> (<em>bool=False</em>) â whether to store parameter derivatives in the State</p></li>
+<li><p><strong>enforcePeriodicBox</strong> (<em>bool=False</em>) â if false, the position of each particle will be whatever position
+is stored in the Context, regardless of periodic boundary conditions.
+If true, particle positions will be translated so the center of
+every molecule lies in the same periodic box.</p></li>
+<li><p><strong>groups</strong> (<em>set={0</em><em>,</em><em>1</em><em>,</em><em>2</em><em>,</em><em>...</em><em>,</em><em>31}</em>) â a set of indices for which force groups to include when computing
+forces and energies. The default value includes all groups. groups
+can also be passed as an unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getConstraintTolerance">
+<span class="sig-name descname"><span class="pre">getConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">getIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get which force groups to use for integration. By default, all force groups are included. This is interpreted as a set of bit flags: the forces from group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.getStepSize">
+<span class="sig-name descname"><span class="pre">getStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.getStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the size of each time step, in picoseconds. If this integrator uses variable time steps, the size of the most recent step is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the step size, measured in ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setConstraintTolerance">
+<span class="sig-name descname"><span class="pre">setConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">setIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set which force groups to use for integration.  By default, all force groups are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>groups</strong> (<em>set</em><em> or </em><em>int</em>) â a set of indices for which force groups to include when integrating the equations of motion.
+Alternatively, the groups can be passed as a single unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDIntegrator.setStepSize">
+<span class="sig-name descname"><span class="pre">setStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDIntegrator.setStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the size of each time step, in picoseconds. If this integrator uses variable time steps, the effect of calling this method is undefined, and it may simply be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>double</em>) â the step size, measured in ps</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

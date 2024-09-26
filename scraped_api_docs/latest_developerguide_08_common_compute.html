@@ -1,0 +1,230 @@
+<div class="body" role="main">
+<style> .code {font-family:monospace;} </style>
+<style> .caption {text-align:center;} </style><section id="common-compute">
+<span id="id1"></span><h1><span class="section-number">8. </span>Common Compute<a class="headerlink" href="#common-compute" title="Permalink to this headline">Â¶</a></h1>
+<p>Common Compute is not a platform, but it shares many elements of one.  It exists
+to reduce code duplication between the OpenCL and CUDA platforms.  It allows a
+single implementation to be written for most kernels that can be used by both
+platforms.</p>
+<p>OpenCL and CUDA are very similar to each other.  Their computational models are
+nearly identical.  For example, each is based around launching kernels that are
+executed in parallel by many threads.  Each of them groups threads into blocks,
+with more communication and synchronization permitted between the threads
+in a block than between ones in different blocks.  They have very similar memory
+hierarchies: high latency global memory, low latency local/shared memory that
+can be used for communication between the threads of a block, and local variables
+that are visible only to a single thread.</p>
+<p>Even their languages for writing kernels are very similar.  Here is an OpenCL
+kernel that adds two arrays together, storing the result in a third array.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">__kernel</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">addArrays</span><span class="p">(</span><span class="n">__global</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="kr">restrict</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">__global</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="kr">restrict</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">__global</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="kr">restrict</span><span class="w"> </span><span class="n">c</span>
+<span class="w">                        </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_global_id</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">get_global_size</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+<span class="w">        </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here is the corresponding CUDA kernel.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">__extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">addArrays</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">__restrict__</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                                       </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">__restrict__</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                                       </span><span class="n">_float</span><span class="o">*</span><span class="w"> </span><span class="n">__restrict__</span><span class="w"> </span><span class="n">c</span>
+<span class="w">                                       </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="o">+</span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="n">gridDim</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>
+<span class="w">        </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The difference between them is largely just a mechanical find-and-replace.
+After many years of writing and maintaining nearly identical kernels by hand,
+it finally occurred to us that the translation could be done automatically by
+the compiler.  Simply by defining a few preprocessor macros, the following
+kernel can be compiled equally well either as OpenCL or as CUDA.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">KERNEL</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">addArrays</span><span class="p">(</span><span class="n">GLOBAL</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">RESTRICT</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">GLOBAL</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">RESTRICT</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">GLOBAL</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">RESTRICT</span><span class="w"> </span><span class="n">c</span>
+<span class="w">                      </span><span class="kt">int</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GLOBAL_ID</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">GLOBAL_SIZE</span><span class="p">)</span>
+<span class="w">        </span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="writing-device-code">
+<h2><span class="section-number">8.1. </span>Writing Device Code<a class="headerlink" href="#writing-device-code" title="Permalink to this headline">Â¶</a></h2>
+<p>When compiling kernels with the Common Compute API, the following macros are
+defined.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%"/>
+<col style="width: 44%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Macro</p></th>
+<th class="head"><p>OpenCL Definition</p></th>
+<th class="head"><p>CUDA Definition</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code>KERNEL</code></p></td>
+<td><p><code>__kernel</code></p></td>
+<td><p><code>extern âCâ __global__</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>DEVICE</code></p></td>
+<td></td>
+<td><p><code>__device__</code></p></td>
+</tr>
+<tr class="row-even"><td><p><code>LOCAL</code></p></td>
+<td><p><code>__local</code></p></td>
+<td><p><code>__shared__</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>LOCAL_ARG</code></p></td>
+<td><p><code>__local</code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><code>GLOBAL</code></p></td>
+<td><p><code>__global</code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><code>RESTRICT</code></p></td>
+<td><p><code>restrict</code></p></td>
+<td><p><code>__restrict__</code></p></td>
+</tr>
+<tr class="row-even"><td><p><code>LOCAL_ID</code></p></td>
+<td><p><code>get_local_id(0)</code></p></td>
+<td><p><code>threadIdx.x</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>LOCAL_SIZE</code></p></td>
+<td><p><code>get_local_size(0)</code></p></td>
+<td><p><code>blockDim.x</code></p></td>
+</tr>
+<tr class="row-even"><td><p><code>GLOBAL_ID</code></p></td>
+<td><p><code>get_global_id(0)</code></p></td>
+<td><p><code>(blockIdx.x*blockDim.x+threadIdx.x)</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>GLOBAL_SIZE</code></p></td>
+<td><p><code>get_global_size(0)</code></p></td>
+<td><p><code>(blockDim.x*gridDim.x)</code></p></td>
+</tr>
+<tr class="row-even"><td><p><code>GROUP_ID</code></p></td>
+<td><p><code>get_group_id(0)</code></p></td>
+<td><p><code>blockIdx.x</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>NUM_GROUPS</code></p></td>
+<td><p><code>get_num_groups(0)</code></p></td>
+<td><p><code>gridDim.x</code></p></td>
+</tr>
+<tr class="row-even"><td><p><code>SYNC_THREADS</code></p></td>
+<td><p><code>barrier(CLK_LOCAL_MEM_FENCE+CLK_GLOBAL_MEM_FENCE);</code></p></td>
+<td><p><code>__syncthreads();</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>SYNC_WARPS</code></p></td>
+<td><div class="line-block">
+<div class="line">if SIMT width &gt;= 32:</div>
+<div class="line"><code>mem_fence(CLK_LOCAL_MEM_FENCE)</code></div>
+<div class="line">otherwise:</div>
+<div class="line"><code>barrier(CLK_LOCAL_MEM_FENCE)</code></div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">if compute capability &gt;= 7.0:</div>
+<div class="line"><code>__syncwarp();</code></div>
+<div class="line">otherwise empty</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><code>MEM_FENCE</code></p></td>
+<td><p><code>mem_fence(CLK_LOCAL_MEM_FENCE+CLK_GLOBAL_MEM_FENCE);</code></p></td>
+<td><p><code>__threadfence_block();</code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code>ATOMIC_ADD(dest, value)</code></p></td>
+<td><p><code>atom_add(dest, value)</code></p></td>
+<td><p><code>atomicAdd(dest, value)</code></p></td>
+</tr>
+</tbody>
+</table>
+<p>A few other symbols may or may not be defined based on the device you are running on:
+<code>SUPPORTS_DOUBLE_PRECISION</code> and <code>SUPPORTS_64_BIT_ATOMICS</code>.  You
+can use <code>#ifdef</code> blocks with these symbols to conditionally compile code
+based on the features supported by the device.  In addition, the CUDA compiler
+defines the symbol <code>__CUDA_ARCH__</code>, so you can check for this symbol if
+you want to have different code blocks for CUDA and OpenCL.</p>
+<p>Both OpenCL and CUDA define vector types like <code>int2</code> and <code>float4</code>.
+The types they support are different but overlapping.  When writing common code,
+use only the vector types that are supported by both OpenCL and CUDA: 2, 3, and 4
+element vectors of type <code>short</code>, <code>int</code>, <code>float</code>, and
+<code>double</code>.</p>
+<p>CUDA uses functions to construct vector values, such as <code>make_float2(x, y)</code>.
+OpenCL instead uses a typecast like syntax: <code>(float2) (x, y)</code>.  In common
+code, use the CUDA style <code>make_</code> functions.  OpenMM provides definitions
+of these functions when compiling as OpenCL.</p>
+<p>In CUDA, vector types are simply data structures.  You can access their elements,
+but not do much more with them.  In contrast, OpenCLâs vectors are mathematical
+types.  All standard math operators are defined for them, as well as geometrical
+functions like <code>dot()</code> and <code>cross()</code>.  When compiling kernels as
+CUDA, OpenMM provides definitions of these operators and functions.</p>
+<p>OpenCL also supports âswizzleâ notation for vectors.  For example, if <code>f</code>
+is a <code>float4</code> you can construct a vector of its first three elements
+by writing <code>f.xyz</code>, or you can swap its first two elements by writing
+<code>f.xy = f.yx</code>.  Unfortunately, there is no practical way to support this
+in CUDA, so swizzle notation cannot be used in common code.  Because stripping
+the final element from a four component vector is such a common operation, OpenMM
+provides a special function for doing it: <code>trimTo3(f)</code> is a vector of its
+first three elements.</p>
+<p>64 bit integers are another data type that needs special handling.  Both OpenCL
+and CUDA support them, but they use different names for them: <code>long</code> in OpenCL,
+<code>long long</code> in CUDA.  To work around this inconsistency, OpenMM provides
+the typedefs <code>mm_long</code> and <code>mm_ulong</code> for signed and unsigned 64 bit
+integers in device code.</p>
+</section>
+<section id="writing-host-code">
+<h2><span class="section-number">8.2. </span>Writing Host Code<a class="headerlink" href="#writing-host-code" title="Permalink to this headline">Â¶</a></h2>
+<p>Host code for Common Compute is very similar to host code for OpenCL or CUDA.
+In fact, most of the classes provided by the OpenCL and CUDA platforms are
+subclasses of Common Compute classes.  For example, OpenCLContext and
+CudaContext are both subclasses of ComputeContext.  When writing common code,
+each KernelImpl should expect a ComputeContext to be passed to its constructor.
+By using the common API provided by that abstract class, it can be used for
+either OpenCL or CUDA just based on the particular context passed to it at
+runtime.  Similarly, OpenCLNonbondedUtilities and CudaNonbondedUtilities are
+subclasses of the abstract NonbondedUtilities class, and so on.</p>
+<p>ArrayInterface is an abstract class defining the interface for arrays stored on
+the device.  OpenCLArray and CudaArray are both subclasses of it.  To simplify
+code that creates and uses arrays, there is also a third subclass called
+ComputeArray.  It acts as a wrapper around an OpenCLArray or CudaArray,
+automatically creating an array of the appropriate type for the current
+platform.  In practice, just follow these rules:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Whenever you need to create an array, make it a ComputeArray.</p></li>
+<li><p>Whenever you write a function that expects an array to be passed to it,
+declare the type to be ArrayInterface.</p></li>
+</ol>
+</div></blockquote>
+<p>If you do these two things, all differences between platforms will be handled
+automatically.</p>
+<p>OpenCL and CUDA have quite different APIs for compiling and invoking kernels.
+To hide these differences, OpenMM provides a set of abstract classes.  To compile
+device code, pass the source code to <code>compileProgram()</code> on the ComputeContext.
+This returns a ComputeProgram.  You can then call its <code>createKernel()</code>
+method to get a ComputeKernel object, which has methods for setting arguments
+and invoking the kernel.</p>
+<p>Sometimes you need to refer to vector types in host code, such as to set the
+value for a kernel argument or to access the elements of an array.  OpenCL and
+CUDA both define types for them, but they have different names, and in any case
+you want to avoid using OpenCL-specific or CUDA-specific types in common code.
+OpenMM therefore defines types for vectors in host code.  They have the same
+names as the corresponding types in device code, only with the prefix <code>mm_</code>,
+for example <code>mm_int2</code> and <code>mm_float4</code>.</p>
+<p>Three component vectors need special care in this context, because the platforms
+define them differently.  In OpenCL, a three component vector is essentially a
+four component vector whose last component is ignored.  For example,
+<code>sizeof(float3)</code> is 12 in CUDA but 16 in OpenCL.  Within a kernel this
+distinction can usually be ignored, but when communicating between host and
+device it becomes vitally important.  It is generally best to avoid storing
+three component vectors in arrays or passing them as arguments.  There are no
+<code>mm_</code> host types defined for three component vectors, because CUDA and
+OpenCL would require them to be defined in different ways.</p>
+</section>
+</section>
+</div>

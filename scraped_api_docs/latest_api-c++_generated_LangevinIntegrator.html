@@ -1,0 +1,88 @@
+<div class="body" role="main">
+<section id="langevinintegrator">
+<span id="openmm-langevinintegrator"></span><h1><code class="docutils literal notranslate"><span class="pre">LangevinIntegrator</span></code><a class="headerlink" href="#langevinintegrator" title="Permalink to this headline">Â¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM18LangevinIntegratorE">
+<span id="_CPPv3N6OpenMM18LangevinIntegratorE"></span><span id="_CPPv2N6OpenMM18LangevinIntegratorE"></span><span id="OpenMM::LangevinIntegrator"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LangevinIntegrator</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">OpenMM</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Integrator.html#_CPPv4N6OpenMM10IntegratorE" title="OpenMM::Integrator"><span class="n"><span class="pre">Integrator</span></span></a><a class="headerlink" href="#_CPPv4N6OpenMM18LangevinIntegratorE" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>This is an <a class="reference internal" href="Integrator.html#classOpenMM_1_1Integrator"><span class="std std-ref">Integrator</span></a> which simulates a <a class="reference internal" href="System.html#classOpenMM_1_1System"><span class="std std-ref">System</span></a> using Langevin dynamics. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM18LangevinIntegrator18LangevinIntegratorEddd">
+<span id="_CPPv3N6OpenMM18LangevinIntegrator18LangevinIntegratorEddd"></span><span id="_CPPv2N6OpenMM18LangevinIntegrator18LangevinIntegratorEddd"></span><span id="OpenMM::LangevinIntegrator::LangevinIntegrator__double.double.double"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a4e1217456a209e73d3c6cfe5369865e0"></span><span class="sig-name descname"><span class="n"><span class="pre">LangevinIntegrator</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temperature</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">frictionCoeff</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stepSize</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM18LangevinIntegrator18LangevinIntegratorEddd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Create a <a class="reference internal" href="#classOpenMM_1_1LangevinIntegrator"><span class="std std-ref">LangevinIntegrator</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> â the temperature of the heat bath (in Kelvin) </p></li>
+<li><p><strong>frictionCoeff</strong> â the friction coefficient which couples the system to the heat bath (in inverse picoseconds) </p></li>
+<li><p><strong>stepSize</strong> â the step size with which to integrate the system (in picoseconds) </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM18LangevinIntegrator14getTemperatureEv">
+<span id="_CPPv3NK6OpenMM18LangevinIntegrator14getTemperatureEv"></span><span id="_CPPv2NK6OpenMM18LangevinIntegrator14getTemperatureEv"></span><span id="OpenMM::LangevinIntegrator::getTemperatureC"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a3f7b09682275c52db8e6e0cd5169c3e4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getTemperature</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM18LangevinIntegrator14getTemperatureEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the temperature of the heat bath, measured in Kelvin </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM18LangevinIntegrator14setTemperatureEd">
+<span id="_CPPv3N6OpenMM18LangevinIntegrator14setTemperatureEd"></span><span id="_CPPv2N6OpenMM18LangevinIntegrator14setTemperatureEd"></span><span id="OpenMM::LangevinIntegrator::setTemperature__double"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a48d50866f3aa416265d451a6ca998453"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setTemperature</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temp</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM18LangevinIntegrator14setTemperatureEd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temp</strong> â the temperature of the heat bath, measured in Kelvin </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM18LangevinIntegrator11getFrictionEv">
+<span id="_CPPv3NK6OpenMM18LangevinIntegrator11getFrictionEv"></span><span id="_CPPv2NK6OpenMM18LangevinIntegrator11getFrictionEv"></span><span id="OpenMM::LangevinIntegrator::getFrictionC"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1af6f3e8b1e72ea08712dedf8f6683393a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getFriction</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM18LangevinIntegrator11getFrictionEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the friction coefficient, measured in 1/ps </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM18LangevinIntegrator11setFrictionEd">
+<span id="_CPPv3N6OpenMM18LangevinIntegrator11setFrictionEd"></span><span id="_CPPv2N6OpenMM18LangevinIntegrator11setFrictionEd"></span><span id="OpenMM::LangevinIntegrator::setFriction__double"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a4665defbba18ee1d4a9682fa6b79c597"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setFriction</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">coeff</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM18LangevinIntegrator11setFrictionEd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coeff</strong> â the friction coefficient, measured in 1/ps </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM18LangevinIntegrator19getRandomNumberSeedEv">
+<span id="_CPPv3NK6OpenMM18LangevinIntegrator19getRandomNumberSeedEv"></span><span id="_CPPv2NK6OpenMM18LangevinIntegrator19getRandomNumberSeedEv"></span><span id="OpenMM::LangevinIntegrator::getRandomNumberSeedC"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a94cfcca72eeab105307419d7ef8e0690"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getRandomNumberSeed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM18LangevinIntegrator19getRandomNumberSeedEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the random number seed. See <a class="reference internal" href="#classOpenMM_1_1LangevinIntegrator_1a928bbada2fc53c36aa456d4fb7e9f773"><span class="std std-ref">setRandomNumberSeed()</span></a> for details. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM18LangevinIntegrator19setRandomNumberSeedEi">
+<span id="_CPPv3N6OpenMM18LangevinIntegrator19setRandomNumberSeedEi"></span><span id="_CPPv2N6OpenMM18LangevinIntegrator19setRandomNumberSeedEi"></span><span id="OpenMM::LangevinIntegrator::setRandomNumberSeed__i"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a928bbada2fc53c36aa456d4fb7e9f773"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setRandomNumberSeed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM18LangevinIntegrator19setRandomNumberSeedEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each <a class="reference internal" href="Platform.html#classOpenMM_1_1Platform"><span class="std std-ref">Platform</span></a> to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a> is created from this <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a>. This is done to ensure that each <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a> receives unique random seeds without you needing to set them explicitly. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM18LangevinIntegrator4stepEi">
+<span id="_CPPv3N6OpenMM18LangevinIntegrator4stepEi"></span><span id="_CPPv2N6OpenMM18LangevinIntegrator4stepEi"></span><span id="OpenMM::LangevinIntegrator::step__i"></span><span class="target" id="classOpenMM_1_1LangevinIntegrator_1a7b8c533776000a6c360eb8112dc8123c"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">step</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">steps</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM18LangevinIntegrator4stepEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Advance a simulation through time by taking a series of time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> â the number of time steps to take </p>
+</dd>
+</dl>
+</dd></dl>
+</div>
+</dd></dl>
+</section>
+</div>

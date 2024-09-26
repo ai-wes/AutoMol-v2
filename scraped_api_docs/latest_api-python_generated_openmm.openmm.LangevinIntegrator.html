@@ -1,0 +1,211 @@
+<div class="body" role="main">
+<section id="langevinintegrator">
+<h1>LangevinIntegrator<a class="headerlink" href="#langevinintegrator" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">LangevinIntegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is an Integrator which simulates a System using Langevin dynamics.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frictionCoeff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepSize</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.LangevinIntegrator" title="openmm.openmm.LangevinIntegrator"><span class="pre">LangevinIntegrator</span></a><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.LangevinIntegrator" title="openmm.openmm.LangevinIntegrator"><span class="pre">LangevinIntegrator</span></a></dt>
+<dd><p>Create a LangevinIntegrator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temperature</strong> (<em>double</em>) â the temperature of the heat bath (in Kelvin)</p></li>
+<li><p><strong>frictionCoeff</strong> (<em>double</em>) â the friction coefficient which couples the system to the heat bath (in inverse picoseconds)</p></li>
+<li><p><strong>stepSize</strong> (<em>double</em>) â the step size with which to integrate the system (in picoseconds)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.__init__" title="openmm.openmm.LangevinIntegrator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â LangevinIntegrator)</p></td>
+<td><p>Create a LangevinIntegrator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.getConstraintTolerance" title="openmm.openmm.LangevinIntegrator.getConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConstraintTolerance</span></code></a>(self)</p></td>
+<td><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.getFriction" title="openmm.openmm.LangevinIntegrator.getFriction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFriction</span></code></a>(self)</p></td>
+<td><p>Get the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.getIntegrationForceGroups" title="openmm.openmm.LangevinIntegrator.getIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntegrationForceGroups</span></code></a>(self)</p></td>
+<td><p>Get which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.getRandomNumberSeed" title="openmm.openmm.LangevinIntegrator.getRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRandomNumberSeed</span></code></a>(self)</p></td>
+<td><p>Get the random number seed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.getStepSize" title="openmm.openmm.LangevinIntegrator.getStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getStepSize</span></code></a>(self)</p></td>
+<td><p>Get the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.getTemperature" title="openmm.openmm.LangevinIntegrator.getTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTemperature</span></code></a>(self)</p></td>
+<td><p>Get the temperature of the heat bath (in Kelvin).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.setConstraintTolerance" title="openmm.openmm.LangevinIntegrator.setConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setConstraintTolerance</span></code></a>(self,Â tol)</p></td>
+<td><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.setFriction" title="openmm.openmm.LangevinIntegrator.setFriction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setFriction</span></code></a>(self,Â coeff)</p></td>
+<td><p>Set the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.setIntegrationForceGroups" title="openmm.openmm.LangevinIntegrator.setIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setIntegrationForceGroups</span></code></a>(groups)</p></td>
+<td><p>Set which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.setRandomNumberSeed" title="openmm.openmm.LangevinIntegrator.setRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRandomNumberSeed</span></code></a>(self,Â seed)</p></td>
+<td><p>Set the random number seed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.setStepSize" title="openmm.openmm.LangevinIntegrator.setStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setStepSize</span></code></a>(self,Â size)</p></td>
+<td><p>Set the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.setTemperature" title="openmm.openmm.LangevinIntegrator.setTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setTemperature</span></code></a>(self,Â temp)</p></td>
+<td><p>Set the temperature of the heat bath (in Kelvin).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.step" title="openmm.openmm.LangevinIntegrator.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>(self,Â steps)</p></td>
+<td><p>Advance a simulation through time by taking a series of time steps.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.LangevinIntegrator.thisown" title="openmm.openmm.LangevinIntegrator.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.getTemperature">
+<span class="sig-name descname"><span class="pre">getTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.getTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the temperature of the heat bath, measured in Kelvin</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.setTemperature">
+<span class="sig-name descname"><span class="pre">setTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.setTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temp</strong> (<em>double</em>) â the temperature of the heat bath, measured in Kelvin</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.getFriction">
+<span class="sig-name descname"><span class="pre">getFriction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.getFriction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the friction coefficient, measured in 1/ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.setFriction">
+<span class="sig-name descname"><span class="pre">setFriction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.setFriction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the friction coefficient which determines how strongly the system is coupled to the heat bath (in inverse ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coeff</strong> (<em>double</em>) â the friction coefficient, measured in 1/ps</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.getRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">getRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.getRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the random number seed. See setRandomNumberSeed() for details.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.setRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">setRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.setRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random forces will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a Context is created from this Force. This is done to ensure that each Context receives unique random seeds without you needing to set them explicitly.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.step" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance a simulation through time by taking a series of time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> (<em>int</em>) â the number of time steps to take</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.getConstraintTolerance">
+<span class="sig-name descname"><span class="pre">getConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.getConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.getIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">getIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.getIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get which force groups to use for integration. By default, all force groups are included. This is interpreted as a set of bit flags: the forces from group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.getStepSize">
+<span class="sig-name descname"><span class="pre">getStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.getStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the size of each time step, in picoseconds. If this integrator uses variable time steps, the size of the most recent step is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the step size, measured in ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.setConstraintTolerance">
+<span class="sig-name descname"><span class="pre">setConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.setConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.setIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">setIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.setIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set which force groups to use for integration.  By default, all force groups are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>groups</strong> (<em>set</em><em> or </em><em>int</em>) â a set of indices for which force groups to include when integrating the equations of motion.
+Alternatively, the groups can be passed as a single unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.LangevinIntegrator.setStepSize">
+<span class="sig-name descname"><span class="pre">setStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.LangevinIntegrator.setStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the size of each time step, in picoseconds. If this integrator uses variable time steps, the effect of calling this method is undefined, and it may simply be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>double</em>) â the step size, measured in ps</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

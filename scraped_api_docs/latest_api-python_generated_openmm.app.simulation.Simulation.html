@@ -1,0 +1,201 @@
+<div class="body" role="main">
+<section id="simulation">
+<h1>Simulation<a class="headerlink" href="#simulation" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.simulation.</span></span><span class="sig-name descname"><span class="pre">Simulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platformProperties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Simulation provides a simplified API for running simulations with OpenMM and reporting results.</p>
+<p>A Simulation ties together various objects used for running a simulation: a Topology, System,
+Integrator, and Context.  To use it, you provide the Topology, System, and Integrator, and it
+creates the Context automatically.</p>
+<p>Simulation also maintains a list of âreporterâ objects that record or analyze data as the simulation
+runs, such as writing coordinates to files or displaying structures on the screen.  For example,
+the following line will cause a file called âoutput.pdbâ to be created, and a structure written to
+it every 1000 time steps:</p>
+<p>simulation.reporters.append(PDBReporter(âoutput.pdbâ, 1000))</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platformProperties</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a Simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>topology</strong> (<a class="reference internal" href="openmm.app.topology.Topology.html#openmm.app.topology.Topology" title="openmm.app.topology.Topology"><em>Topology</em></a>) â A Topology describing the the system to simulate</p></li>
+<li><p><strong>system</strong> (<a class="reference internal" href="openmm.openmm.System.html#openmm.openmm.System" title="openmm.openmm.System"><em>System</em></a><em> or </em><em>XML file name</em>) â The OpenMM System object to simulate (or the name of an XML file
+with a serialized System)</p></li>
+<li><p><strong>integrator</strong> (<a class="reference internal" href="openmm.openmm.Integrator.html#openmm.openmm.Integrator" title="openmm.openmm.Integrator"><em>Integrator</em></a><em> or </em><em>XML file name</em>) â The OpenMM Integrator to use for simulating the System (or the name
+of an XML file with a serialized System)</p></li>
+<li><p><strong>platform</strong> (<em>Platform=None</em>) â If not None, the OpenMM Platform to use</p></li>
+<li><p><strong>platformProperties</strong> (<em>map=None</em>) â If not None, a set of platform-specific properties to pass to the
+Contextâs constructor.  This argument may only be used if a specific
+Platform is specified.</p></li>
+<li><p><strong>state</strong> (<em>XML file name=None</em>) â The name of an XML file containing a serialized State. If not None,
+the information stored in state will be transferred to the generated
+Simulation object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.__init__" title="openmm.app.simulation.Simulation.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(topology,Â system,Â integrator[,Â â¦])</p></td>
+<td><p>Create a Simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.loadCheckpoint" title="openmm.app.simulation.Simulation.loadCheckpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadCheckpoint</span></code></a>(file)</p></td>
+<td><p>Load a checkpoint file that was created with saveCheckpoint().</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.loadState" title="openmm.app.simulation.Simulation.loadState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadState</span></code></a>(file)</p></td>
+<td><p>Load a State file that was created with saveState().</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.minimizeEnergy" title="openmm.app.simulation.Simulation.minimizeEnergy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minimizeEnergy</span></code></a>([tolerance,Â maxIterations,Â â¦])</p></td>
+<td><p>Perform a local energy minimization on the system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.runForClockTime" title="openmm.app.simulation.Simulation.runForClockTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">runForClockTime</span></code></a>(time[,Â checkpointFile,Â â¦])</p></td>
+<td><p>Advance the simulation by integrating time steps until a fixed amount of clock time has elapsed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.saveCheckpoint" title="openmm.app.simulation.Simulation.saveCheckpoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saveCheckpoint</span></code></a>(file)</p></td>
+<td><p>Save a checkpoint of the simulation to a file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.saveState" title="openmm.app.simulation.Simulation.saveState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saveState</span></code></a>(file)</p></td>
+<td><p>Save the current state of the simulation to a file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.step" title="openmm.app.simulation.Simulation.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>(steps)</p></td>
+<td><p>Advance the simulation by integrating a specified number of time steps.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.simulation.Simulation.currentStep" title="openmm.app.simulation.Simulation.currentStep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">currentStep</span></code></a></p></td>
+<td><p>The index of the current time step.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.currentStep">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">currentStep</span></span><a class="headerlink" href="#openmm.app.simulation.Simulation.currentStep" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The index of the current time step.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.minimizeEnergy">
+<span class="sig-name descname"><span class="pre">minimizeEnergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=10,</span> <span class="pre">unit=kilojoule</span> <span class="pre">/</span> <span class="pre">nanometer</span> <span class="pre">*</span> <span class="pre">mole)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxIterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reporter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.minimizeEnergy" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Perform a local energy minimization on the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tolerance</strong> (<em>force</em>) â This specifies how precisely the energy minimum must be located.  Minimization
+is halted once the root-mean-square value of all force components reaches
+this tolerance.</p></li>
+<li><p><strong>maxIterations</strong> (<em>int</em>) â The maximum number of iterations to perform.  If this is 0,
+minimization is continued until the results converge without regard
+to how many iterations it takes.</p></li>
+<li><p><strong>reporter</strong> (<em>MinimizationReporter = None</em>) â an optional reporter to invoke after each iteration.  This can be used to monitor the progress
+of minimization or to stop minimization early.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.step" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance the simulation by integrating a specified number of time steps.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.runForClockTime">
+<span class="sig-name descname"><span class="pre">runForClockTime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpointFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stateFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkpointInterval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.runForClockTime" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance the simulation by integrating time steps until a fixed amount of clock time has elapsed.</p>
+<p>This is useful when you have a limited amount of computer time available, and want to run the longest simulation
+possible in that time.  This method will continue taking time steps until the specified clock time has elapsed,
+then return.  It also can automatically write out a checkpoint and/or state file before returning, so you can
+later resume the simulation.  Another option allows it to write checkpoints or states at regular intervals, so
+you can resume even if the simulation is interrupted before the time limit is reached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>time</strong> (<em>time</em>) â the amount of time to run for.  If no units are specified, it is
+assumed to be a number of hours.</p></li>
+<li><p><strong>checkpointFile</strong> (<em>string</em><em> or </em><em>file=None</em>) â if specified, a checkpoint file will be written at the end of the
+simulation (and optionally at regular intervals before then) by
+passing this to saveCheckpoint().</p></li>
+<li><p><strong>stateFile</strong> (<em>string</em><em> or </em><em>file=None</em>) â if specified, a state file will be written at the end of the
+simulation (and optionally at regular intervals before then) by
+passing this to saveState().</p></li>
+<li><p><strong>checkpointInterval</strong> (<em>time=None</em>) â if specified, checkpoints and/or states will be written at regular
+intervals during the simulation, in addition to writing a final
+version at the end.  If no units are specified, this is assumed to
+be in hours.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.saveCheckpoint">
+<span class="sig-name descname"><span class="pre">saveCheckpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.saveCheckpoint" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Save a checkpoint of the simulation to a file.</p>
+<p>The output is a binary file that contains a complete representation of the current state of the Simulation.
+It includes both publicly visible data such as the particle positions and velocities, and also internal data
+such as the states of random number generators.  Reloading the checkpoint will put the Simulation back into
+precisely the same state it had before, so it can be exactly continued.</p>
+<p>A checkpoint file is highly specific to the Simulation it was created from.  It can only be loaded into
+another Simulation that has an identical System, uses the same Platform and OpenMM version, and is running on
+identical hardware.  If you need a more portable way to resume simulations, consider using saveState() instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>string</em><em> or </em><em>file</em>) â a File-like object to write the checkpoint to, or alternatively a
+filename</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.loadCheckpoint">
+<span class="sig-name descname"><span class="pre">loadCheckpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.loadCheckpoint" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load a checkpoint file that was created with saveCheckpoint().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>string</em><em> or </em><em>file</em>) â a File-like object to load the checkpoint from, or alternatively a
+filename</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.saveState">
+<span class="sig-name descname"><span class="pre">saveState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.saveState" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Save the current state of the simulation to a file.</p>
+<p>The output is an XML file containing a serialized State object.  It includes all publicly visible data,
+including positions, velocities, and parameters.  Reloading the State will put the Simulation back into
+approximately the same state it had before.</p>
+<p>Unlike saveCheckpoint(), this does not store internal data such as the states of random number generators.
+Therefore, you should not expect the following trajectory to be identical to what would have been produced
+with the original Simulation.  On the other hand, this means it is portable across different Platforms or
+hardware.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>string</em><em> or </em><em>file</em>) â a File-like object to write the state to, or alternatively a
+filename</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.simulation.Simulation.loadState">
+<span class="sig-name descname"><span class="pre">loadState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.simulation.Simulation.loadState" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load a State file that was created with saveState().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>string</em><em> or </em><em>file</em>) â a File-like object to load the state from, or alternatively a
+filename</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

@@ -1,0 +1,251 @@
+<div class="body" role="main">
+<section id="system">
+<span id="openmm-system"></span><h1><code class="docutils literal notranslate"><span class="pre">System</span></code><a class="headerlink" href="#system" title="Permalink to this headline">Â¶</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6SystemE">
+<span id="_CPPv3N6OpenMM6SystemE"></span><span id="_CPPv2N6OpenMM6SystemE"></span><span id="OpenMM::System"></span><span class="target" id="classOpenMM_1_1System"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">System</span></span></span><a class="headerlink" href="#_CPPv4N6OpenMM6SystemE" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>This class represents a molecular system. The definition of a <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> involves four elements:</p>
+<p><ul class="simple">
+<li><p>The set of particles in the system </p></li>
+<li><p>The forces acting on them </p></li>
+<li><p>Pairs of particles whose separation should be constrained to a fixed value </p></li>
+<li><p>For periodic systems, the dimensions of the periodic box </p></li>
+</ul>
+</p>
+<p>The particles and constraints are defined directly by the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> object, while forces are defined by objects that extend the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> class. After creating a <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>, call <a class="reference internal" href="#classOpenMM_1_1System_1aae6118863f6c8fbe30302e822533fe3c"><span class="std std-ref">addParticle()</span></a> once for each particle, <a class="reference internal" href="#classOpenMM_1_1System_1ac7954622e5cbc748b0be105440e0db13"><span class="std std-ref">addConstraint()</span></a> for each constraint, and <a class="reference internal" href="#classOpenMM_1_1System_1a81ecfca155ae08b322d967cba5c55a49"><span class="std std-ref">addForce()</span></a> for each <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a>.</p>
+<p>In addition, particles may be designated as âvirtual sitesâ. These are particles whose positions are computed automatically based on the positions of other particles. To define a virtual site, call <a class="reference internal" href="#classOpenMM_1_1System_1acf473152bc3dc656cecefe9e40ee1843"><span class="std std-ref">setVirtualSite()</span></a>, passing in a <a class="reference internal" href="VirtualSite.html#classOpenMM_1_1VirtualSite"><span class="std std-ref">VirtualSite</span></a> object that defines the rules for computing its position. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System6SystemEv">
+<span id="_CPPv3N6OpenMM6System6SystemEv"></span><span id="_CPPv2N6OpenMM6System6SystemEv"></span><span id="OpenMM::System::System"></span><span class="target" id="classOpenMM_1_1System_1a6e9a2c6b5e4ef0ceabf527b931cf9384"></span><span class="sig-name descname"><span class="n"><span class="pre">System</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System6SystemEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Create a new <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System15getNumParticlesEv">
+<span id="_CPPv3NK6OpenMM6System15getNumParticlesEv"></span><span id="_CPPv2NK6OpenMM6System15getNumParticlesEv"></span><span id="OpenMM::System::getNumParticlesC"></span><span class="target" id="classOpenMM_1_1System_1aed1f47f0656d0f47e48f7e7326b602cc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getNumParticles</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System15getNumParticlesEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the number of particles in this <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System11addParticleEd">
+<span id="_CPPv3N6OpenMM6System11addParticleEd"></span><span id="_CPPv2N6OpenMM6System11addParticleEd"></span><span id="OpenMM::System::addParticle__double"></span><span class="target" id="classOpenMM_1_1System_1aae6118863f6c8fbe30302e822533fe3c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addParticle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mass</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System11addParticleEd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Add a particle to the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. If the mass is 0, Integrators will ignore the particle and not modify its position or velocity. This is most often used for virtual sites, but can also be used as a way to prevent a particle from moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mass</strong> â the mass of the particle (in atomic mass units) </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the particle that was added </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System15getParticleMassEi">
+<span id="_CPPv3NK6OpenMM6System15getParticleMassEi"></span><span id="_CPPv2NK6OpenMM6System15getParticleMassEi"></span><span id="OpenMM::System::getParticleMass__iC"></span><span class="target" id="classOpenMM_1_1System_1a719c872bfb4f243f6026218211355104"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getParticleMass</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System15getParticleMassEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the mass (in atomic mass units) of a particle. If the mass is 0, Integrators will ignore the particle and not modify its position or velocity. This is most often used for virtual sites, but can also be used as a way to prevent a particle from moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the particle for which to get the mass </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System15setParticleMassEid">
+<span id="_CPPv3N6OpenMM6System15setParticleMassEid"></span><span id="_CPPv2N6OpenMM6System15setParticleMassEid"></span><span id="OpenMM::System::setParticleMass__i.double"></span><span class="target" id="classOpenMM_1_1System_1aa6825ecda53830570bb00a14ace51047"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setParticleMass</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mass</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System15setParticleMassEid" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the mass (in atomic mass units) of a particle. If the mass is 0, Integrators will ignore the particle and not modify its position or velocity. This is most often used for virtual sites, but can also be used as a way to prevent a particle from moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> â the index of the particle for which to set the mass </p></li>
+<li><p><strong>mass</strong> â the mass of the particle </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System14setVirtualSiteEiP11VirtualSite">
+<span id="_CPPv3N6OpenMM6System14setVirtualSiteEiP11VirtualSite"></span><span id="_CPPv2N6OpenMM6System14setVirtualSiteEiP11VirtualSite"></span><span id="OpenMM::System::setVirtualSite__i.VirtualSiteP"></span><span class="target" id="classOpenMM_1_1System_1acf473152bc3dc656cecefe9e40ee1843"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setVirtualSite</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <a class="reference internal" href="VirtualSite.html#_CPPv4N6OpenMM11VirtualSiteE" title="OpenMM::VirtualSite"><span class="n"><span class="pre">VirtualSite</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">virtualSite</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System14setVirtualSiteEiP11VirtualSite" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set a particle to be a virtual site. The <a class="reference internal" href="VirtualSite.html#classOpenMM_1_1VirtualSite"><span class="std std-ref">VirtualSite</span></a> object should have been created on the heap with the ânewâ operator. The <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> takes over ownership of it, and deletes it when the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> itself is deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> â the index of the particle that should be treated as a virtual site </p></li>
+<li><p><strong>virtualSite</strong> â a pointer to the <a class="reference internal" href="VirtualSite.html#classOpenMM_1_1VirtualSite"><span class="std std-ref">VirtualSite</span></a> object describing it </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System13isVirtualSiteEi">
+<span id="_CPPv3NK6OpenMM6System13isVirtualSiteEi"></span><span id="_CPPv2NK6OpenMM6System13isVirtualSiteEi"></span><span id="OpenMM::System::isVirtualSite__iC"></span><span class="target" id="classOpenMM_1_1System_1a2843f244875f7b498ec691364b893610"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isVirtualSite</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System13isVirtualSiteEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get whether a particle is a <a class="reference internal" href="VirtualSite.html#classOpenMM_1_1VirtualSite"><span class="std std-ref">VirtualSite</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the particle to check </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System14getVirtualSiteEi">
+<span id="_CPPv3NK6OpenMM6System14getVirtualSiteEi"></span><span id="_CPPv2NK6OpenMM6System14getVirtualSiteEi"></span><span id="OpenMM::System::getVirtualSite__iC"></span><span class="target" id="classOpenMM_1_1System_1ada4f231be40e3175b37f01b079c2e2f5"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="VirtualSite.html#_CPPv4N6OpenMM11VirtualSiteE" title="OpenMM::VirtualSite"><span class="n"><span class="pre">VirtualSite</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getVirtualSite</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System14getVirtualSiteEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get <a class="reference internal" href="VirtualSite.html#classOpenMM_1_1VirtualSite"><span class="std std-ref">VirtualSite</span></a> object for a particle. If the particle is not a virtual site, this throws an exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the particle to get </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System17getNumConstraintsEv">
+<span id="_CPPv3NK6OpenMM6System17getNumConstraintsEv"></span><span id="_CPPv2NK6OpenMM6System17getNumConstraintsEv"></span><span id="OpenMM::System::getNumConstraintsC"></span><span class="target" id="classOpenMM_1_1System_1a6cef1bf52850f99440d53de973760f4d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getNumConstraints</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System17getNumConstraintsEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the number of distance constraints in this <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System13addConstraintEiid">
+<span id="_CPPv3N6OpenMM6System13addConstraintEiid"></span><span id="_CPPv2N6OpenMM6System13addConstraintEiid"></span><span id="OpenMM::System::addConstraint__i.i.double"></span><span class="target" id="classOpenMM_1_1System_1ac7954622e5cbc748b0be105440e0db13"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addConstraint</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">distance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System13addConstraintEiid" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Add a constraint to the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. Particles whose mass is 0 cannot participate in constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle1</strong> â the index of the first particle involved in the constraint </p></li>
+<li><p><strong>particle2</strong> â the index of the second particle involved in the constraint </p></li>
+<li><p><strong>distance</strong> â the required distance between the two particles, measured in nm </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the constraint that was added </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System23getConstraintParametersEiRiRiRd">
+<span id="_CPPv3NK6OpenMM6System23getConstraintParametersEiRiRiRd"></span><span id="_CPPv2NK6OpenMM6System23getConstraintParametersEiRiRiRd"></span><span id="OpenMM::System::getConstraintParameters__i.iR.iR.doubleRC"></span><span class="target" id="classOpenMM_1_1System_1a568a66e7cd358c0d1c6e9a310f5fa1c9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getConstraintParameters</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">particle1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">particle2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">distance</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System23getConstraintParametersEiRiRiRd" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the parameters defining a distance constraint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> â the index of the constraint for which to get parameters </p></li>
+<li><p><strong>particle1</strong> â <strong>[out]</strong> the index of the first particle involved in the constraint </p></li>
+<li><p><strong>particle2</strong> â <strong>[out]</strong> the index of the second particle involved in the constraint </p></li>
+<li><p><strong>distance</strong> â <strong>[out]</strong> the required distance between the two particles, measured in nm </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System23setConstraintParametersEiiid">
+<span id="_CPPv3N6OpenMM6System23setConstraintParametersEiiid"></span><span id="_CPPv2N6OpenMM6System23setConstraintParametersEiiid"></span><span id="OpenMM::System::setConstraintParameters__i.i.i.double"></span><span class="target" id="classOpenMM_1_1System_1a3c019d63e9b52d1322cf87468624e28a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setConstraintParameters</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">particle2</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">distance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System23setConstraintParametersEiiid" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the parameters defining a distance constraint. Particles whose mass is 0 cannot participate in constraints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> â the index of the constraint for which to set parameters </p></li>
+<li><p><strong>particle1</strong> â the index of the first particle involved in the constraint </p></li>
+<li><p><strong>particle2</strong> â the index of the second particle involved in the constraint </p></li>
+<li><p><strong>distance</strong> â the required distance between the two particles, measured in nm </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System16removeConstraintEi">
+<span id="_CPPv3N6OpenMM6System16removeConstraintEi"></span><span id="_CPPv2N6OpenMM6System16removeConstraintEi"></span><span id="OpenMM::System::removeConstraint__i"></span><span class="target" id="classOpenMM_1_1System_1a03d315df5502b7cd1f133aac7d2c4841"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">removeConstraint</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System16removeConstraintEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Remove a constraint from the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the constraint to remove </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System8addForceEP5Force">
+<span id="_CPPv3N6OpenMM6System8addForceEP5Force"></span><span id="_CPPv2N6OpenMM6System8addForceEP5Force"></span><span id="OpenMM::System::addForce__ForceP"></span><span class="target" id="classOpenMM_1_1System_1a81ecfca155ae08b322d967cba5c55a49"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addForce</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="Force.html#_CPPv4N6OpenMM5ForceE" title="OpenMM::Force"><span class="n"><span class="pre">Force</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">force</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System8addForceEP5Force" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Add a <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> to the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. The <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> should have been created on the heap with the ânewâ operator. The <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> takes over ownership of it, and deletes the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> when the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> itself is deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force</strong> â a pointer to the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> object to be added </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index within the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> of the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> that was added </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System12getNumForcesEv">
+<span id="_CPPv3NK6OpenMM6System12getNumForcesEv"></span><span id="_CPPv2NK6OpenMM6System12getNumForcesEv"></span><span id="OpenMM::System::getNumForcesC"></span><span class="target" id="classOpenMM_1_1System_1adcceed517d879c3db62c4832271fd56f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getNumForces</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System12getNumForcesEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the number of <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> objects that have been added to the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. </p>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System8getForceEi">
+<span id="_CPPv3NK6OpenMM6System8getForceEi"></span><span id="_CPPv2NK6OpenMM6System8getForceEi"></span><span id="OpenMM::System::getForce__iC"></span><span class="target" id="classOpenMM_1_1System_1a0118588f5e80e26ce0491b0d354e3265"></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="Force.html#_CPPv4N6OpenMM5ForceE" title="OpenMM::Force"><span class="n"><span class="pre">Force</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getForce</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System8getForceEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get a const reference to one of the Forces in this <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> to get </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System8getForceEi">
+<span id="_CPPv3N6OpenMM6System8getForceEi"></span><span id="_CPPv2N6OpenMM6System8getForceEi"></span><span id="OpenMM::System::getForce__i"></span><span class="target" id="classOpenMM_1_1System_1ae719a5347f72a7bea25805e6be54f023"></span><a class="reference internal" href="Force.html#_CPPv4N6OpenMM5ForceE" title="OpenMM::Force"><span class="n"><span class="pre">Force</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">getForce</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System8getForceEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get a writable reference to one of the Forces in this <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> to get </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System11removeForceEi">
+<span id="_CPPv3N6OpenMM6System11removeForceEi"></span><span id="_CPPv2N6OpenMM6System11removeForceEi"></span><span id="OpenMM::System::removeForce__i"></span><span class="target" id="classOpenMM_1_1System_1ac9d520811fa98939b7046adbaf960a58"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">removeForce</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System11removeForceEi" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Remove a <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> from the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a>. The memory associated with the removed <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> object is deleted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> â the index of the <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> to remove </p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System28getDefaultPeriodicBoxVectorsER4Vec3R4Vec3R4Vec3">
+<span id="_CPPv3NK6OpenMM6System28getDefaultPeriodicBoxVectorsER4Vec3R4Vec3R4Vec3"></span><span id="_CPPv2NK6OpenMM6System28getDefaultPeriodicBoxVectorsER4Vec3R4Vec3R4Vec3"></span><span id="OpenMM::System::getDefaultPeriodicBoxVectors__Vec3R.Vec3R.Vec3RC"></span><span class="target" id="classOpenMM_1_1System_1a7a405cde4745c18d98c7e3f1075e3620"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getDefaultPeriodicBoxVectors</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="Vec3.html#_CPPv4N6OpenMM4Vec3E" title="OpenMM::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <a class="reference internal" href="Vec3.html#_CPPv4N6OpenMM4Vec3E" title="OpenMM::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span>, <a class="reference internal" href="Vec3.html#_CPPv4N6OpenMM4Vec3E" title="OpenMM::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System28getDefaultPeriodicBoxVectorsER4Vec3R4Vec3R4Vec3" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Get the default values of the vectors defining the axes of the periodic box (measured in nm). Any newly created <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a> will have its box vectors set to these. They will affect any <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> added to the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> that uses periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> â <strong>[out]</strong> the vector defining the first edge of the periodic box </p></li>
+<li><p><strong>b</strong> â <strong>[out]</strong> the vector defining the second edge of the periodic box </p></li>
+<li><p><strong>c</strong> â <strong>[out]</strong> the vector defining the third edge of the periodic box </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6OpenMM6System28setDefaultPeriodicBoxVectorsERK4Vec3RK4Vec3RK4Vec3">
+<span id="_CPPv3N6OpenMM6System28setDefaultPeriodicBoxVectorsERK4Vec3RK4Vec3RK4Vec3"></span><span id="_CPPv2N6OpenMM6System28setDefaultPeriodicBoxVectorsERK4Vec3RK4Vec3RK4Vec3"></span><span id="OpenMM::System::setDefaultPeriodicBoxVectors__Vec3CR.Vec3CR.Vec3CR"></span><span class="target" id="classOpenMM_1_1System_1a1efec68d2f68ab5b3860099158148c31"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setDefaultPeriodicBoxVectors</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="Vec3.html#_CPPv4N6OpenMM4Vec3E" title="OpenMM::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="Vec3.html#_CPPv4N6OpenMM4Vec3E" title="OpenMM::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="Vec3.html#_CPPv4N6OpenMM4Vec3E" title="OpenMM::Vec3"><span class="n"><span class="pre">Vec3</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6OpenMM6System28setDefaultPeriodicBoxVectorsERK4Vec3RK4Vec3RK4Vec3" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Set the default values of the vectors defining the axes of the periodic box (measured in nm). Any newly created <a class="reference internal" href="Context.html#classOpenMM_1_1Context"><span class="std std-ref">Context</span></a> will have its box vectors set to these. They will affect any <a class="reference internal" href="Force.html#classOpenMM_1_1Force"><span class="std std-ref">Force</span></a> added to the <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> that uses periodic boundary conditions.</p>
+<p>Triclinic boxes are supported, but the vectors must satisfy certain requirements. In particular, a must point in the x direction, b must point âmostlyâ in the y direction, and c must point âmostlyâ in the z direction. See the documentation for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> â the vector defining the first edge of the periodic box </p></li>
+<li><p><strong>b</strong> â the vector defining the second edge of the periodic box </p></li>
+<li><p><strong>c</strong> â the vector defining the third edge of the periodic box </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6OpenMM6System30usesPeriodicBoundaryConditionsEv">
+<span id="_CPPv3NK6OpenMM6System30usesPeriodicBoundaryConditionsEv"></span><span id="_CPPv2NK6OpenMM6System30usesPeriodicBoundaryConditionsEv"></span><span id="OpenMM::System::usesPeriodicBoundaryConditionsC"></span><span class="target" id="classOpenMM_1_1System_1a2d101a3581e46bb20ead7a1947026166"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">usesPeriodicBoundaryConditions</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6OpenMM6System30usesPeriodicBoundaryConditionsEv" title="Permalink to this definition">Â¶</a><br/></dt>
+<dd><p>Returns whether or not any forces in this <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> use periodic boundaries.</p>
+<p>If a force in this <a class="reference internal" href="#classOpenMM_1_1System"><span class="std std-ref">System</span></a> does not implement usesPeriodicBoundaryConditions a <a class="reference internal" href="OpenMMException.html#classOpenMM_1_1OpenMMException"><span class="std std-ref">OpenMM::OpenMMException</span></a> is thrown</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if at least one force uses PBC and false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+</div>
+</dd></dl>
+</section>
+</div>

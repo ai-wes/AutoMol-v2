@@ -14,6 +14,7 @@ from sentence_transformers import SentenceTransformer
 from nltk.stem import WordNetLemmatizer
 import string
 from typing import Dict, Any, List
+from server.app import emit_progress
 
 from openai import OpenAI
 from colorama import Fore, Style, init

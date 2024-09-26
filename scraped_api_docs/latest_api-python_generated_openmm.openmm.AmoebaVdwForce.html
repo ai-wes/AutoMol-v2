@@ -1,0 +1,612 @@
+<div class="body" role="main">
+<section id="amoebavdwforce">
+<h1>AmoebaVdwForce<a class="headerlink" href="#amoebavdwforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">AmoebaVdwForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class models van der Waals forces in the AMOEBA force field. It can use either buffered 14-7 potential or a Lennard-Jones 12-6 potential.</p>
+<p>This class can operate in two different modes. In one mode, force field parameters are defined for each particle. When two particles interact, a combining rule is used to calculate the interaction parameters based on the parameters for the two particles. To use the class in this mode, call the version of addParticle() that takes sigma and epsilon values. It should be called once for each particle in the System.</p>
+<p>In the other mode, each particle has a type index, and parameters are specified for each type rather than each individual particle. By default this mode also uses a combining rule, but you can override it by defining alternate parameters to use for specific pairs of particle types. To use the class in this mode, call the version of addParticle() that takes a type index. It should be called once for each particle in the System. You also must call addParticleType() once for each type. If you wish to override the combining for particular pairs of types, do so by calling addTypePair().</p>
+<p>A unique feature of this class is that the interaction site for a particle does not need to be exactly at the particleâs location. Instead, it can be placed a fraction of the distance from that particle to another one. This is typically done for hydrogens to place the interaction site slightly closer to the parent atom. The fraction is known as the âreduction factorâ, since it reduces the distance from the parent atom to the interaction site.</p>
+<p>Support is also available for softcore interactions based on setting a per particle alchemical flag and setting the AmoebaVdwForce to use an âAlchemicalMethodâ  either Decouple or Annihilate. For Decouple, two alchemical atoms interact normally. For Annihilate, all interactions involving an alchemical atom are influenced. The softcore state is specified by setting a single Context parameter âAmoebaVdwLambdaâ between 0.0 and 1.0.</p>
+<p>The softcore functional form can be modified by setting the softcore power (default of 5) and the softcore alpha (default of 0,7). For more information on the softcore functional form see Eq. 2 from: Jiao, D.; Golubkov, P. A.; Darden, T. A.; Ren, P., Calculation of protein-ligand binding free energy by using a polarizable potential. Proc. Natl. Acad. Sci. U.S.A. 2008, 105 (17), 6290-6295. .</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.AmoebaVdwForce" title="openmm.openmm.AmoebaVdwForce"><span class="pre">AmoebaVdwForce</span></a><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.AmoebaVdwForce" title="openmm.openmm.AmoebaVdwForce"><span class="pre">AmoebaVdwForce</span></a></dt>
+<dd><p>Create an Amoeba VdwForce.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.Lambda" title="openmm.openmm.AmoebaVdwForce.Lambda"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Lambda</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current Amoeba vdW lambda value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.__init__" title="openmm.openmm.AmoebaVdwForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â AmoebaVdwForce)</p></td>
+<td><p>Create an Amoeba VdwForce.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.addParticle" title="openmm.openmm.AmoebaVdwForce.addParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticle</span></code></a>(-&gt;Â int)</p></td>
+<td><p>Add the force field parameters for a vdw particle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.addParticleType" title="openmm.openmm.AmoebaVdwForce.addParticleType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticleType</span></code></a>(self,Â sigma,Â epsilon)</p></td>
+<td><p>Add a particle type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.addTypePair" title="openmm.openmm.AmoebaVdwForce.addTypePair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addTypePair</span></code></a>(self,Â type1,Â type2,Â sigma,Â epsilon)</p></td>
+<td><p>Add a type pair.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getAlchemicalMethod" title="openmm.openmm.AmoebaVdwForce.getAlchemicalMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAlchemicalMethod</span></code></a>(self)</p></td>
+<td><p>Get the method used for alchemical interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getCutoff" title="openmm.openmm.AmoebaVdwForce.getCutoff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCutoff</span></code></a>(self)</p></td>
+<td><p>Get the cutoff distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getCutoffDistance" title="openmm.openmm.AmoebaVdwForce.getCutoffDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCutoffDistance</span></code></a>(self)</p></td>
+<td><p>Get the cutoff distance (in nm) being used for nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getEpsilonCombiningRule" title="openmm.openmm.AmoebaVdwForce.getEpsilonCombiningRule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEpsilonCombiningRule</span></code></a>(self)</p></td>
+<td><p>Get epsilon combining rule</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getForceGroup" title="openmm.openmm.AmoebaVdwForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getName" title="openmm.openmm.AmoebaVdwForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getNonbondedMethod" title="openmm.openmm.AmoebaVdwForce.getNonbondedMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNonbondedMethod</span></code></a>(self)</p></td>
+<td><p>Get the method used for handling long range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getNumParticleTypes" title="openmm.openmm.AmoebaVdwForce.getNumParticleTypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticleTypes</span></code></a>(self)</p></td>
+<td><p>Get the number of particle types.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getNumParticles" title="openmm.openmm.AmoebaVdwForce.getNumParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticles</span></code></a>(self)</p></td>
+<td><p>Get the number of particles</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getNumTypePairs" title="openmm.openmm.AmoebaVdwForce.getNumTypePairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumTypePairs</span></code></a>(self)</p></td>
+<td><p>Get the number of type pairs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getParticleExclusions" title="openmm.openmm.AmoebaVdwForce.getParticleExclusions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleExclusions</span></code></a>(self,Â particleIndex)</p></td>
+<td><p>Get exclusions for specified particle</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getParticleParameters" title="openmm.openmm.AmoebaVdwForce.getParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleParameters</span></code></a>(self,Â particleIndex)</p></td>
+<td><p>Get the force field parameters for a vdw particle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getParticleTypeParameters" title="openmm.openmm.AmoebaVdwForce.getParticleTypeParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleTypeParameters</span></code></a>(self,Â typeIndex)</p></td>
+<td><p>Get the force field parameters for a particle type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getPotentialFunction" title="openmm.openmm.AmoebaVdwForce.getPotentialFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPotentialFunction</span></code></a>(self)</p></td>
+<td><p>Get the potential function to use.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getSigmaCombiningRule" title="openmm.openmm.AmoebaVdwForce.getSigmaCombiningRule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSigmaCombiningRule</span></code></a>(self)</p></td>
+<td><p>Get sigma combining rule</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getSoftcoreAlpha" title="openmm.openmm.AmoebaVdwForce.getSoftcoreAlpha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSoftcoreAlpha</span></code></a>(self)</p></td>
+<td><p>Get the softcore alpha value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getSoftcorePower" title="openmm.openmm.AmoebaVdwForce.getSoftcorePower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSoftcorePower</span></code></a>(self)</p></td>
+<td><p>Get the softcore power on lambda.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getTypePairParameters" title="openmm.openmm.AmoebaVdwForce.getTypePairParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTypePairParameters</span></code></a>(self,Â pairIndex)</p></td>
+<td><p>Get the force field parameters for a type pair.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getUseDispersionCorrection" title="openmm.openmm.AmoebaVdwForce.getUseDispersionCorrection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUseDispersionCorrection</span></code></a>(self)</p></td>
+<td><p>Get whether to add a contribution to the energy that approximately represents the effect of VdW interactions beyond the cutoff distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.getUseParticleTypes" title="openmm.openmm.AmoebaVdwForce.getUseParticleTypes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUseParticleTypes</span></code></a>(self)</p></td>
+<td><p>Get whether parameters were specified by particle or by particle type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setAlchemicalMethod" title="openmm.openmm.AmoebaVdwForce.setAlchemicalMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setAlchemicalMethod</span></code></a>(self,Â method)</p></td>
+<td><p>Set the method used for handling long range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setCutoff" title="openmm.openmm.AmoebaVdwForce.setCutoff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setCutoff</span></code></a>(self,Â cutoff)</p></td>
+<td><p>Set the cutoff distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setCutoffDistance" title="openmm.openmm.AmoebaVdwForce.setCutoffDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setCutoffDistance</span></code></a>(self,Â distance)</p></td>
+<td><p>Set the cutoff distance (in nm) being used for nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setEpsilonCombiningRule" title="openmm.openmm.AmoebaVdwForce.setEpsilonCombiningRule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setEpsilonCombiningRule</span></code></a>(self,Â â¦)</p></td>
+<td><p>Set epsilon combining rule</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setForceGroup" title="openmm.openmm.AmoebaVdwForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setName" title="openmm.openmm.AmoebaVdwForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setNonbondedMethod" title="openmm.openmm.AmoebaVdwForce.setNonbondedMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setNonbondedMethod</span></code></a>(self,Â method)</p></td>
+<td><p>Set the method used for handling long range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setParticleExclusions" title="openmm.openmm.AmoebaVdwForce.setParticleExclusions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleExclusions</span></code></a>(self,Â particleIndex,Â â¦)</p></td>
+<td><p>Set exclusions for specified particle</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setParticleParameters" title="openmm.openmm.AmoebaVdwForce.setParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleParameters</span></code></a>(self,Â particleIndex,Â â¦)</p></td>
+<td><p>Set the force field parameters for a vdw particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setParticleTypeParameters" title="openmm.openmm.AmoebaVdwForce.setParticleTypeParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleTypeParameters</span></code></a>(self,Â typeIndex,Â â¦)</p></td>
+<td><p>Set the force field parameters for a particle type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setPotentialFunction" title="openmm.openmm.AmoebaVdwForce.setPotentialFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPotentialFunction</span></code></a>(self,Â potential)</p></td>
+<td><p>Set the potential function to use.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setSigmaCombiningRule" title="openmm.openmm.AmoebaVdwForce.setSigmaCombiningRule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSigmaCombiningRule</span></code></a>(self,Â sigmaCombiningRule)</p></td>
+<td><p>Set sigma combining rule</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setSoftcoreAlpha" title="openmm.openmm.AmoebaVdwForce.setSoftcoreAlpha"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSoftcoreAlpha</span></code></a>(self,Â alpha)</p></td>
+<td><p>Set the softcore alpha value (default = 0.7).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setSoftcorePower" title="openmm.openmm.AmoebaVdwForce.setSoftcorePower"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSoftcorePower</span></code></a>(self,Â n)</p></td>
+<td><p>Set the softcore power on lambda (default = 5).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setTypePairParameters" title="openmm.openmm.AmoebaVdwForce.setTypePairParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setTypePairParameters</span></code></a>(self,Â pairIndex,Â â¦)</p></td>
+<td><p>Set the force field parameters for a type pair.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.setUseDispersionCorrection" title="openmm.openmm.AmoebaVdwForce.setUseDispersionCorrection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setUseDispersionCorrection</span></code></a>(self,Â useCorrection)</p></td>
+<td><p>Set whether to add a contribution to the energy that approximately represents the effect of VdW interactions beyond the cutoff distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.updateParametersInContext" title="openmm.openmm.AmoebaVdwForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the per-particle parameters in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.usesPeriodicBoundaryConditions" title="openmm.openmm.AmoebaVdwForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Annihilate</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Buffered147</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CutoffPeriodic</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Decouple</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LennardJones</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoCutoff</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaVdwForce.thisown" title="openmm.openmm.AmoebaVdwForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.Lambda">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">Lambda</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.Lambda" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current Amoeba vdW lambda value.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getNumParticles">
+<span class="sig-name descname"><span class="pre">getNumParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getNumParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particles</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getNumParticleTypes">
+<span class="sig-name descname"><span class="pre">getNumParticleTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getNumParticleTypes" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particle types.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getNumTypePairs">
+<span class="sig-name descname"><span class="pre">getNumTypePairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getNumTypePairs" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of type pairs.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setParticleParameters">
+<span class="sig-name descname"><span class="pre">setParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particleIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parentIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reductionFactor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isAlchemical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typeIndex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a vdw particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particleIndex</strong> (<em>int</em>) â the particle index</p></li>
+<li><p><strong>parentIndex</strong> (<em>int</em>) â the index of the parent particle</p></li>
+<li><p><strong>sigma</strong> (<em>double</em>) â vdw sigma</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â vdw epsilon</p></li>
+<li><p><strong>reductionFactor</strong> (<em>double</em>) â the fraction of the distance along the line from the parent particle to this particle at which the interaction site should be placed</p></li>
+<li><p><strong>isAlchemical</strong> (<em>bool</em>) â if true, this vdW particle is undergoing an alchemical change.</p></li>
+<li><p><strong>typeIndex</strong> (<em>int</em>) â the index of the particle type for this particle</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getParticleParameters">
+<span class="sig-name descname"><span class="pre">getParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particleIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for a vdw particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>particleIndex</strong> (<em>int</em>) â the particle index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>parentIndex</strong> (<em>int</em>) â the index of the parent particle</p></li>
+<li><p><strong>sigma</strong> (<em>double</em>) â vdw sigma</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â vdw epsilon</p></li>
+<li><p><strong>reductionFactor</strong> (<em>double</em>) â the fraction of the distance along the line from the parent particle to this particle at which the interaction site should be placed</p></li>
+<li><p><strong>isAlchemical</strong> (<em>bool</em>) â if true, this vdW particle is undergoing an alchemical change.</p></li>
+<li><p><strong>typeIndex</strong> (<em>int</em>) â the index of the particle type for this particle</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.addParticle">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parentIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reductionFactor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isAlchemical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.addParticle" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parentIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typeIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reductionFactor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isAlchemical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span></dt>
+<dd><p>Add the force field parameters for a vdw particle. This version is used when parameters are defined by particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parentIndex</strong> (<em>int</em>) â the index of the parent particle</p></li>
+<li><p><strong>typeIndex</strong> (<em>int</em>) â the index of the particle type for this particle</p></li>
+<li><p><strong>reductionFactor</strong> (<em>double</em>) â the fraction of the distance along the line from the parent particle to this particle at which the interaction site should be placed</p></li>
+<li><p><strong>isAlchemical</strong> (<em>bool</em>) â if true, this vdW particle is undergoing an alchemical change.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>index of added particle</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.addParticleType">
+<span class="sig-name descname"><span class="pre">addParticleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.addParticleType" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sigma</strong> (<em>double</em>) â the sigma value for particles of this type</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â the epsilon value for particles of this type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the particle type that was just added.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getParticleTypeParameters">
+<span class="sig-name descname"><span class="pre">getParticleTypeParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typeIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getParticleTypeParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for a particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>typeIndex</strong> (<em>int</em>) â the index of the particle type</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>sigma</strong> (<em>double</em>) â the sigma value for particles of this type</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â the epsilon value for particles of this type</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setParticleTypeParameters">
+<span class="sig-name descname"><span class="pre">setParticleTypeParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typeIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setParticleTypeParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a particle type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>typeIndex</strong> (<em>int</em>) â the index of the particle type</p></li>
+<li><p><strong>sigma</strong> (<em>double</em>) â the sigma value for particles of this type</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â the epsilon value for particles of this type</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.addTypePair">
+<span class="sig-name descname"><span class="pre">addTypePair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.addTypePair" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a type pair. This overrides the standard combining rule for interactions between particles of two particular types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type1</strong> (<em>int</em>) â the index of the first particle type</p></li>
+<li><p><strong>type2</strong> (<em>int</em>) â the index of the second particle type</p></li>
+<li><p><strong>sigma</strong> (<em>double</em>) â the sigma value for interactions between particles of these two types</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â the epsilon value for interactions between particles of these two types</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the type pair that was just added.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getTypePairParameters">
+<span class="sig-name descname"><span class="pre">getTypePairParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getTypePairParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for a type pair. This overrides the standard combining rule for interactions between particles of two particular types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pairIndex</strong> (<em>int</em>) â the index of the type pair</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>type1</strong> (<em>int</em>) â the index of the first particle type</p></li>
+<li><p><strong>type2</strong> (<em>int</em>) â the index of the second particle type</p></li>
+<li><p><strong>sigma</strong> (<em>double</em>) â the sigma value for interactions between particles of these two types</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â the epsilon value for interactions between particles of these two types</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setTypePairParameters">
+<span class="sig-name descname"><span class="pre">setTypePairParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setTypePairParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a type pair. This overrides the standard combining rule for interactions between particles of two particular types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pairIndex</strong> (<em>int</em>) â the index of the type pair</p></li>
+<li><p><strong>type1</strong> (<em>int</em>) â the index of the first particle type</p></li>
+<li><p><strong>type2</strong> (<em>int</em>) â the index of the second particle type</p></li>
+<li><p><strong>sigma</strong> (<em>double</em>) â the sigma value for interactions between particles of these two types</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â the epsilon value for interactions between particles of these two types</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setSigmaCombiningRule">
+<span class="sig-name descname"><span class="pre">setSigmaCombiningRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigmaCombiningRule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setSigmaCombiningRule" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set sigma combining rule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sigmaCombiningRule</strong> (<em>string</em>) â sigma combining rule: âARITHMETICâ, âGEOMETRICâ. âCUBIC-MEANâ</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getSigmaCombiningRule">
+<span class="sig-name descname"><span class="pre">getSigmaCombiningRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getSigmaCombiningRule" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get sigma combining rule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sigmaCombiningRule sigma combining rule: âARITHMETICâ, âGEOMETRICâ. âCUBIC-MEANâ</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setEpsilonCombiningRule">
+<span class="sig-name descname"><span class="pre">setEpsilonCombiningRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilonCombiningRule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setEpsilonCombiningRule" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set epsilon combining rule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>epsilonCombiningRule</strong> (<em>string</em>) â epsilon combining rule: âARITHMETICâ, âGEOMETRICâ. âHARMONICâ, âW-Hâ, âHHGâ</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getEpsilonCombiningRule">
+<span class="sig-name descname"><span class="pre">getEpsilonCombiningRule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getEpsilonCombiningRule" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get epsilon combining rule</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>epsilonCombiningRule epsilon combining rule: âARITHMETICâ, âGEOMETRICâ. âHARMONICâ, âW-Hâ, âHHGâ</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getUseDispersionCorrection">
+<span class="sig-name descname"><span class="pre">getUseDispersionCorrection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getUseDispersionCorrection" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether to add a contribution to the energy that approximately represents the effect of VdW interactions beyond the cutoff distance. The energy depends on the volume of the periodic box, and is only applicable when periodic boundary conditions are used. When running simulations at constant pressure, adding this contribution can improve the quality of results.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setUseDispersionCorrection">
+<span class="sig-name descname"><span class="pre">setUseDispersionCorrection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">useCorrection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setUseDispersionCorrection" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set whether to add a contribution to the energy that approximately represents the effect of VdW interactions beyond the cutoff distance. The energy depends on the volume of the periodic box, and is only applicable when periodic boundary conditions are used. When running simulations at constant pressure, adding this contribution can improve the quality of results.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getUseParticleTypes">
+<span class="sig-name descname"><span class="pre">getUseParticleTypes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getUseParticleTypes" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether parameters were specified by particle or by particle type.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setParticleExclusions">
+<span class="sig-name descname"><span class="pre">setParticleExclusions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particleIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclusions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setParticleExclusions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set exclusions for specified particle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particleIndex</strong> (<em>int</em>) â particle index</p></li>
+<li><p><strong>exclusions</strong> (<em>vector&lt; int &gt;</em>) â vector of exclusions</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getParticleExclusions">
+<span class="sig-name descname"><span class="pre">getParticleExclusions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particleIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getParticleExclusions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get exclusions for specified particle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>particleIndex</strong> (<em>int</em>) â particle index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>exclusions</strong> â vector of exclusions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector&lt; int &gt;</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getCutoffDistance">
+<span class="sig-name descname"><span class="pre">getCutoffDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getCutoffDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the cutoff distance (in nm) being used for nonbonded interactions. If the NonbondedMethod in use is NoCutoff, this value will have no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the cutoff distance, measured in nm</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setCutoffDistance">
+<span class="sig-name descname"><span class="pre">setCutoffDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setCutoffDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the cutoff distance (in nm) being used for nonbonded interactions. If the NonbondedMethod in use is NoCutoff, this value will have no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distance</strong> (<em>double</em>) â the cutoff distance, measured in nm</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setCutoff">
+<span class="sig-name descname"><span class="pre">setCutoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setCutoff" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the cutoff distance.</p>
+<div class="admonition-deprecated admonition">
+<p class="admonition-title">Deprecated</p>
+<blockquote>
+<div><p>This method exists only for backward compatibility. Use setCutoffDistance() instead.</p>
+</div></blockquote>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getCutoff">
+<span class="sig-name descname"><span class="pre">getCutoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getCutoff" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the cutoff distance.</p>
+<div class="admonition-deprecated admonition">
+<p class="admonition-title">Deprecated</p>
+<blockquote>
+<div><p>This method exists only for backward compatibility. Use getCutoffDistance() instead.</p>
+</div></blockquote>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getNonbondedMethod">
+<span class="sig-name descname"><span class="pre">getNonbondedMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">OpenMM::AmoebaVdwForce::NonbondedMethod</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getNonbondedMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the method used for handling long range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setNonbondedMethod">
+<span class="sig-name descname"><span class="pre">setNonbondedMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setNonbondedMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the method used for handling long range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getPotentialFunction">
+<span class="sig-name descname"><span class="pre">getPotentialFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">OpenMM::AmoebaVdwForce::PotentialFunction</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getPotentialFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the potential function to use.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setPotentialFunction">
+<span class="sig-name descname"><span class="pre">setPotentialFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">potential</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setPotentialFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the potential function to use.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setSoftcorePower">
+<span class="sig-name descname"><span class="pre">setSoftcorePower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setSoftcorePower" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the softcore power on lambda (default = 5).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getSoftcorePower">
+<span class="sig-name descname"><span class="pre">getSoftcorePower</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getSoftcorePower" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the softcore power on lambda.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setSoftcoreAlpha">
+<span class="sig-name descname"><span class="pre">setSoftcoreAlpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setSoftcoreAlpha" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the softcore alpha value (default = 0.7).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getSoftcoreAlpha">
+<span class="sig-name descname"><span class="pre">getSoftcoreAlpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getSoftcoreAlpha" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the softcore alpha value.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getAlchemicalMethod">
+<span class="sig-name descname"><span class="pre">getAlchemicalMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">OpenMM::AmoebaVdwForce::AlchemicalMethod</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getAlchemicalMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the method used for alchemical interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setAlchemicalMethod">
+<span class="sig-name descname"><span class="pre">setAlchemicalMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setAlchemicalMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the method used for handling long range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the per-particle parameters in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setParticleParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>The only information this method updates is the values of per-particle parameters. All other aspects of the Force (the nonbonded method, the cutoff distance, etc.) are unaffected and can only be changed by reinitializing the Context.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if nonbondedMethod uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaVdwForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaVdwForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

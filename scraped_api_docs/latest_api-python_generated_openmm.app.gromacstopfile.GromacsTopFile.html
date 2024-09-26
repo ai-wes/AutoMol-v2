@@ -1,0 +1,80 @@
+<div class="body" role="main">
+<section id="gromacstopfile">
+<h1>GromacsTopFile<a class="headerlink" href="#gromacstopfile" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.gromacstopfile.GromacsTopFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.gromacstopfile.</span></span><span class="sig-name descname"><span class="pre">GromacsTopFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitCellDimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacstopfile.GromacsTopFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>GromacsTopFile parses a Gromacs top file and constructs a Topology and (optionally) an OpenMM System from it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacstopfile.GromacsTopFile.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitCellDimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includeDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacstopfile.GromacsTopFile.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load a top file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) â the name of the file to load</p></li>
+<li><p><strong>periodicBoxVectors</strong> (<em>tuple of Vec3=None</em>) â the vectors defining the periodic box</p></li>
+<li><p><strong>unitCellDimensions</strong> (<em>Vec3=None</em>) â the dimensions of the crystallographic unit cell.  For
+non-rectangular unit cells, specify periodicBoxVectors instead.</p></li>
+<li><p><strong>includeDir</strong> (<em>string=None</em>) â A directory in which to look for other files included from the
+top file. If not specified, we will attempt to locate a gromacs
+installation on your system. When gromacs is installed in
+/usr/local, this will resolve to /usr/local/gromacs/share/gromacs/top</p></li>
+<li><p><strong>defines</strong> (<em>dict={}</em>) â preprocessor definitions that should be predefined when parsing the file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.gromacstopfile.GromacsTopFile.__init__" title="openmm.app.gromacstopfile.GromacsTopFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(file[,Â periodicBoxVectors,Â â¦])</p></td>
+<td><p>Load a top file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.gromacstopfile.GromacsTopFile.createSystem" title="openmm.app.gromacstopfile.GromacsTopFile.createSystem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createSystem</span></code></a>([nonbondedMethod,Â â¦])</p></td>
+<td><p>Construct an OpenMM System representing the topology described by this top file.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacstopfile.GromacsTopFile.createSystem">
+<span class="sig-name descname"><span class="pre">createSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nonbondedMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NoCutoff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonbondedCutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=1.0,</span> <span class="pre">unit=nanometer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigidWater</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ewaldErrorTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removeCMMotion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydrogenMass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">switchDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacstopfile.GromacsTopFile.createSystem" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Construct an OpenMM System representing the topology described by this
+top file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nonbondedMethod</strong> (<em>object=NoCutoff</em>) â The method to use for nonbonded interactions.  Allowed values are
+NoCutoff, CutoffNonPeriodic, CutoffPeriodic, Ewald, PME, or LJPME.</p></li>
+<li><p><strong>nonbondedCutoff</strong> (<em>distance=1*nanometer</em>) â The cutoff distance to use for nonbonded interactions</p></li>
+<li><p><strong>constraints</strong> (<em>object=None</em>) â Specifies which bonds and angles should be implemented with
+constraints. Allowed values are None, HBonds, AllBonds, or HAngles.
+Regardless of this value, constraints that are explicitly specified
+in the top file will always be included.</p></li>
+<li><p><strong>rigidWater</strong> (<em>boolean=True</em>) â If true, water molecules will be fully rigid regardless of the value
+passed for the constraints argument</p></li>
+<li><p><strong>ewaldErrorTolerance</strong> (<em>float=0.0005</em>) â The error tolerance to use if nonbondedMethod is Ewald, PME or LJPME.</p></li>
+<li><p><strong>removeCMMotion</strong> (<em>boolean=True</em>) â If true, a CMMotionRemover will be added to the System</p></li>
+<li><p><strong>hydrogenMass</strong> (<em>mass=None</em>) â The mass to use for hydrogen atoms bound to heavy atoms.  Any mass
+added to a hydrogen is subtracted from the heavy atom to keep their
+total mass the same.  If rigidWater is used to make water molecules
+rigid, then water hydrogens are not altered.</p></li>
+<li><p><strong>switchDistance</strong> (<em>float=None</em>) â The distance at which the potential energy switching function is turned on for
+Lennard-Jones interactions. If this is None, no switching function will be used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the newly created System</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="openmm.openmm.System.html#openmm.openmm.System" title="openmm.openmm.System">System</a></p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

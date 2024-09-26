@@ -1,0 +1,59 @@
+<div class="body" role="main">
+<section id="residue">
+<h1>Residue<a class="headerlink" href="#residue" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.topology.Residue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.topology.</span></span><span class="sig-name descname"><span class="pre">Residue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insertionCode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.topology.Residue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A Residue object represents a residue within a Topology.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.topology.Residue.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">insertionCode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.topology.Residue.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Construct a new Residue.  You should call addResidue() on the Topology instead of calling this directly.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.topology.Residue.__init__" title="openmm.app.topology.Residue.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(name,Â index,Â chain,Â id,Â insertionCode)</p></td>
+<td><p>Construct a new Residue.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.topology.Residue.atoms" title="openmm.app.topology.Residue.atoms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">atoms</span></code></a>()</p></td>
+<td><p>Iterate over all Atoms in the Residue.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.topology.Residue.bonds" title="openmm.app.topology.Residue.bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bonds</span></code></a>()</p></td>
+<td><p>Iterate over all Bonds involving any atom in this residue.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.topology.Residue.external_bonds" title="openmm.app.topology.Residue.external_bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">external_bonds</span></code></a>()</p></td>
+<td><p>Iterate over all Bonds to external atoms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.topology.Residue.internal_bonds" title="openmm.app.topology.Residue.internal_bonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">internal_bonds</span></code></a>()</p></td>
+<td><p>Iterate over all internal Bonds.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.topology.Residue.atoms">
+<span class="sig-name descname"><span class="pre">atoms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.topology.Residue.atoms" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Iterate over all Atoms in the Residue.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.topology.Residue.bonds">
+<span class="sig-name descname"><span class="pre">bonds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.topology.Residue.bonds" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Iterate over all Bonds involving any atom in this residue.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.topology.Residue.internal_bonds">
+<span class="sig-name descname"><span class="pre">internal_bonds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.topology.Residue.internal_bonds" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Iterate over all internal Bonds.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.topology.Residue.external_bonds">
+<span class="sig-name descname"><span class="pre">external_bonds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.topology.Residue.external_bonds" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Iterate over all Bonds to external atoms.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

@@ -1,0 +1,69 @@
+<div class="body" role="main">
+<section id="dcdfile">
+<h1>DCDFile<a class="headerlink" href="#dcdfile" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.dcdfile.DCDFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.dcdfile.</span></span><span class="sig-name descname"><span class="pre">DCDFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstStep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdfile.DCDFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>DCDFile provides methods for creating DCD files.</p>
+<p>DCD is a file format for storing simulation trajectories.  It is supported by many programs, such
+as CHARMM, NAMD, and X-PLOR.  Note, however, that different programs produce subtly different
+versions of the format.  This class generates the CHARMM version.  Also note that there is no
+standard byte ordering (big-endian or little-endian) for this format.  This class always generates
+files with little-endian ordering.</p>
+<p>To use this class, create a DCDFile object, then call writeModel() once for each model in the file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.dcdfile.DCDFile.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topology</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">firstStep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdfile.DCDFile.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a DCD file and write out the header, or open an existing file to append.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>file</em>) â A file to write to</p></li>
+<li><p><strong>topology</strong> (<a class="reference internal" href="openmm.app.topology.Topology.html#openmm.app.topology.Topology" title="openmm.app.topology.Topology"><em>Topology</em></a>) â The Topology defining the molecular system being written</p></li>
+<li><p><strong>dt</strong> (<em>time</em>) â The time step used in the trajectory</p></li>
+<li><p><strong>firstStep</strong> (<em>int=0</em>) â The index of the first step in the trajectory</p></li>
+<li><p><strong>interval</strong> (<em>int=1</em>) â The frequency (measured in time steps) at which states are written
+to the trajectory</p></li>
+<li><p><strong>append</strong> (<em>bool=False</em>) â If True, open an existing DCD file to append to.  If False, create a new file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.dcdfile.DCDFile.__init__" title="openmm.app.dcdfile.DCDFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(file,Â topology,Â dt[,Â firstStep,Â â¦])</p></td>
+<td><p>Create a DCD file and write out the header, or open an existing file to append.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.dcdfile.DCDFile.writeModel" title="openmm.app.dcdfile.DCDFile.writeModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">writeModel</span></code></a>(positions[,Â unitCellDimensions,Â â¦])</p></td>
+<td><p>Write out a model to the DCD file.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.dcdfile.DCDFile.writeModel">
+<span class="sig-name descname"><span class="pre">writeModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitCellDimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.dcdfile.DCDFile.writeModel" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Write out a model to the DCD file.</p>
+<p>The periodic box can be specified either by the unit cell dimensions
+(for a rectangular box), or the full set of box vectors (for an
+arbitrary triclinic box).  If neither is specified, the box vectors
+specified in the Topology will be used. Regardless of the value
+specified, no dimensions will be written if the Topology does not
+represent a periodic system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>positions</strong> (<em>list</em>) â The list of atomic positions to write</p></li>
+<li><p><strong>unitCellDimensions</strong> (<em>Vec3=None</em>) â The dimensions of the crystallographic unit cell.</p></li>
+<li><p><strong>periodicBoxVectors</strong> (<em>tuple of Vec3=None</em>) â The vectors defining the periodic box.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

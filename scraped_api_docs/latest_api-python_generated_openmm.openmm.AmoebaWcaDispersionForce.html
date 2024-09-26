@@ -1,0 +1,288 @@
+<div class="body" role="main">
+<section id="amoebawcadispersionforce">
+<h1>AmoebaWcaDispersionForce<a class="headerlink" href="#amoebawcadispersionforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">AmoebaWcaDispersionForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class implements a nonbonded interaction between pairs of particles typically used along with AmoebaGeneralizedKirkwoodForce as part of an implicit solvent model.</p>
+<p>To use it, create an AmoebaWcaDispersionForce object then call addParticle() once for each particle. After a particle has been added, you can modify its force field parameters by calling setParticleParameters(). This will have no effect on Contexts that already exist unless you call updateParametersInContext().</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce" title="openmm.openmm.AmoebaWcaDispersionForce"><span class="pre">AmoebaWcaDispersionForce</span></a><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce" title="openmm.openmm.AmoebaWcaDispersionForce"><span class="pre">AmoebaWcaDispersionForce</span></a></dt>
+<dd><p>Create an AmoebaWcaDispersionForce.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.__init__" title="openmm.openmm.AmoebaWcaDispersionForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â AmoebaWcaDispersionForce)</p></td>
+<td><p>Create an AmoebaWcaDispersionForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.addParticle" title="openmm.openmm.AmoebaWcaDispersionForce.addParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticle</span></code></a>(self,Â radius,Â epsilon)</p></td>
+<td><p>Set the force field parameters for a WCA dispersion particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getAwater" title="openmm.openmm.AmoebaWcaDispersionForce.getAwater"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getAwater</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getDispoff" title="openmm.openmm.AmoebaWcaDispersionForce.getDispoff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDispoff</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getEpsh" title="openmm.openmm.AmoebaWcaDispersionForce.getEpsh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEpsh</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getEpso" title="openmm.openmm.AmoebaWcaDispersionForce.getEpso"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEpso</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getForceGroup" title="openmm.openmm.AmoebaWcaDispersionForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getName" title="openmm.openmm.AmoebaWcaDispersionForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getNumParticles" title="openmm.openmm.AmoebaWcaDispersionForce.getNumParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticles</span></code></a>(self)</p></td>
+<td><p>Get the number of particles</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getParticleParameters" title="openmm.openmm.AmoebaWcaDispersionForce.getParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleParameters</span></code></a>(self,Â particleIndex)</p></td>
+<td><p>Get the force field parameters for a WCA dispersion particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getRminh" title="openmm.openmm.AmoebaWcaDispersionForce.getRminh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRminh</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getRmino" title="openmm.openmm.AmoebaWcaDispersionForce.getRmino"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRmino</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getShctd" title="openmm.openmm.AmoebaWcaDispersionForce.getShctd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getShctd</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.getSlevy" title="openmm.openmm.AmoebaWcaDispersionForce.getSlevy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSlevy</span></code></a>(self)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setAwater" title="openmm.openmm.AmoebaWcaDispersionForce.setAwater"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setAwater</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setDispoff" title="openmm.openmm.AmoebaWcaDispersionForce.setDispoff"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDispoff</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setEpsh" title="openmm.openmm.AmoebaWcaDispersionForce.setEpsh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setEpsh</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setEpso" title="openmm.openmm.AmoebaWcaDispersionForce.setEpso"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setEpso</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setForceGroup" title="openmm.openmm.AmoebaWcaDispersionForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setName" title="openmm.openmm.AmoebaWcaDispersionForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setParticleParameters" title="openmm.openmm.AmoebaWcaDispersionForce.setParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleParameters</span></code></a>(self,Â particleIndex,Â â¦)</p></td>
+<td><p>Set the force field parameters for a WCA dispersion particle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setRminh" title="openmm.openmm.AmoebaWcaDispersionForce.setRminh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRminh</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setRmino" title="openmm.openmm.AmoebaWcaDispersionForce.setRmino"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRmino</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setShctd" title="openmm.openmm.AmoebaWcaDispersionForce.setShctd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setShctd</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.setSlevy" title="openmm.openmm.AmoebaWcaDispersionForce.setSlevy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSlevy</span></code></a>(self,Â inputValue)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.updateParametersInContext" title="openmm.openmm.AmoebaWcaDispersionForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the per-particle parameters in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.usesPeriodicBoundaryConditions" title="openmm.openmm.AmoebaWcaDispersionForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AmoebaWcaDispersionForce.thisown" title="openmm.openmm.AmoebaWcaDispersionForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getNumParticles">
+<span class="sig-name descname"><span class="pre">getNumParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getNumParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particles</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setParticleParameters">
+<span class="sig-name descname"><span class="pre">setParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particleIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a WCA dispersion particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particleIndex</strong> (<em>int</em>) â the particle index</p></li>
+<li><p><strong>radius</strong> (<em>double</em>) â radius</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â epsilon</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getParticleParameters">
+<span class="sig-name descname"><span class="pre">getParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particleIndex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for a WCA dispersion particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>particleIndex</strong> (<em>int</em>) â the particle index</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>radius</strong> (<em>double</em>) â radius</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â epsilon</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.addParticle">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.addParticle" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for a WCA dispersion particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> (<em>double</em>) â radius</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â epsilon</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>index of added particle</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the per-particle parameters in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setParticleParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>The only information this method updates is the values of per-particle parameters. All other aspects of the Force are unaffected and can only be changed by reinitializing the Context.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getEpso">
+<span class="sig-name descname"><span class="pre">getEpso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getEpso" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getEpsh">
+<span class="sig-name descname"><span class="pre">getEpsh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getEpsh" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getRmino">
+<span class="sig-name descname"><span class="pre">getRmino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getRmino" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getRminh">
+<span class="sig-name descname"><span class="pre">getRminh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getRminh" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getAwater">
+<span class="sig-name descname"><span class="pre">getAwater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getAwater" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getShctd">
+<span class="sig-name descname"><span class="pre">getShctd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getShctd" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getDispoff">
+<span class="sig-name descname"><span class="pre">getDispoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getDispoff" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getSlevy">
+<span class="sig-name descname"><span class="pre">getSlevy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getSlevy" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setEpso">
+<span class="sig-name descname"><span class="pre">setEpso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setEpso" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setEpsh">
+<span class="sig-name descname"><span class="pre">setEpsh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setEpsh" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setRmino">
+<span class="sig-name descname"><span class="pre">setRmino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setRmino" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setRminh">
+<span class="sig-name descname"><span class="pre">setRminh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setRminh" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setAwater">
+<span class="sig-name descname"><span class="pre">setAwater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setAwater" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setShctd">
+<span class="sig-name descname"><span class="pre">setShctd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setShctd" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setDispoff">
+<span class="sig-name descname"><span class="pre">setDispoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setDispoff" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setSlevy">
+<span class="sig-name descname"><span class="pre">setSlevy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setSlevy" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if nonbondedMethod uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AmoebaWcaDispersionForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AmoebaWcaDispersionForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

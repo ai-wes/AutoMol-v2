@@ -1,0 +1,64 @@
+<div class="body" role="main">
+<section id="charmmcrdfile">
+<h1>CharmmCrdFile<a class="headerlink" href="#charmmcrdfile" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.charmmcrdfiles.CharmmCrdFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.charmmcrdfiles.</span></span><span class="sig-name descname"><span class="pre">CharmmCrdFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmcrdfiles.CharmmCrdFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Reads and parses a CHARMM coordinate file (.crd) into its components,
+namely the coordinates, CHARMM atom types, resname, etc.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openmm.app.charmmcrdfiles.CharmmCrdFile.natom">
+<span class="sig-name descname"><span class="pre">natom</span></span><a class="headerlink" href="#openmm.app.charmmcrdfiles.CharmmCrdFile.natom" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Number of atoms in the system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openmm.app.charmmcrdfiles.CharmmCrdFile.resname">
+<span class="sig-name descname"><span class="pre">resname</span></span><a class="headerlink" href="#openmm.app.charmmcrdfiles.CharmmCrdFile.resname" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Names of all residues</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="openmm.app.charmmcrdfiles.CharmmCrdFile.positions">
+<span class="sig-name descname"><span class="pre">positions</span></span><a class="headerlink" href="#openmm.app.charmmcrdfiles.CharmmCrdFile.positions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>All cartesian coordinates [x1, y1, z1, x2, â¦]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">chm</span> <span class="o">=</span> <span class="n">CharmmCrdFile</span><span class="p">(</span><span class="s1">'testfiles/1tnm.crd'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="s1">'</span><span class="si">%d</span><span class="s1"> atoms; </span><span class="si">%d</span><span class="s1"> coords'</span> <span class="o">%</span> <span class="p">(</span><span class="n">chm</span><span class="o">.</span><span class="n">natom</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">chm</span><span class="o">.</span><span class="n">positions</span><span class="p">))</span>
+<span class="go">1414 atoms; 1414 coords</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmcrdfiles.CharmmCrdFile.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmcrdfiles.CharmmCrdFile.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmcrdfiles.CharmmCrdFile.__init__" title="openmm.app.charmmcrdfiles.CharmmCrdFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(fname)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+</section>
+</div>

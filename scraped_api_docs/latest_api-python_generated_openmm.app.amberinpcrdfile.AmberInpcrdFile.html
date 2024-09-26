@@ -1,0 +1,79 @@
+<div class="body" role="main">
+<section id="amberinpcrdfile">
+<h1>AmberInpcrdFile<a class="headerlink" href="#amberinpcrdfile" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.amberinpcrdfile.AmberInpcrdFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.amberinpcrdfile.</span></span><span class="sig-name descname"><span class="pre">AmberInpcrdFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loadVelocities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loadBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>AmberInpcrdFile parses an AMBER inpcrd file and loads the data stored in it.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.amberinpcrdfile.AmberInpcrdFile.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loadVelocities</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loadBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load an inpcrd file.</p>
+<p>An inpcrd file contains atom positions and, optionally, velocities and
+periodic box dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) â The name of the file to load</p></li>
+<li><p><strong>loadVelocities</strong> (<em>bool</em>) â Deprecated. Velocities are loaded automatically if present</p></li>
+<li><p><strong>loadBoxVectors</strong> (<em>bool</em>) â Deprecated. Box vectors are loaded automatically if present</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.__init__" title="openmm.app.amberinpcrdfile.AmberInpcrdFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(file[,Â loadVelocities,Â loadBoxVectors])</p></td>
+<td><p>Load an inpcrd file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.getBoxVectors" title="openmm.app.amberinpcrdfile.AmberInpcrdFile.getBoxVectors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getBoxVectors</span></code></a>([asNumpy])</p></td>
+<td><p>Get the periodic box vectors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.getPositions" title="openmm.app.amberinpcrdfile.AmberInpcrdFile.getPositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPositions</span></code></a>([asNumpy])</p></td>
+<td><p>Get the atomic positions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.getVelocities" title="openmm.app.amberinpcrdfile.AmberInpcrdFile.getVelocities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getVelocities</span></code></a>([asNumpy])</p></td>
+<td><p>Get the atomic velocities.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.amberinpcrdfile.AmberInpcrdFile.getPositions">
+<span class="sig-name descname"><span class="pre">getPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asNumpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.getPositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the atomic positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asNumpy</strong> (<em>bool=False</em>) â if true, the values are returned as a numpy array instead of a list
+of Vec3s</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.amberinpcrdfile.AmberInpcrdFile.getVelocities">
+<span class="sig-name descname"><span class="pre">getVelocities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asNumpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.getVelocities" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the atomic velocities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asNumpy</strong> (<em>bool=False</em>) â if true, the vectors are returned as numpy arrays instead of Vec3s</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.amberinpcrdfile.AmberInpcrdFile.getBoxVectors">
+<span class="sig-name descname"><span class="pre">getBoxVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asNumpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.amberinpcrdfile.AmberInpcrdFile.getBoxVectors" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the periodic box vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>asNumpy</strong> (<em>bool=False</em>) â if true, the values are returned as a numpy array instead of a list
+of Vec3s</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

@@ -1,0 +1,716 @@
+<div class="body" role="main">
+<section id="mtsintegrator">
+<h1>MTSIntegrator<a class="headerlink" href="#mtsintegrator" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.mtsintegrator.</span></span><span class="sig-name descname"><span class="pre">MTSIntegrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>MTSIntegrator implements the rRESPA multiple time step integration algorithm.</p>
+<p>This integrator allows different forces to be evaluated at different frequencies,
+for example to evaluate the expensive, slowly changing forces less frequently than
+the inexpensive, quickly changing forces.</p>
+<p>To use it, you must first divide your forces into two or more groups (by calling
+setForceGroup() on them) that should be evaluated at different frequencies.  When
+you create the integrator, you provide a tuple for each group specifying the index
+of the force group and the frequency (as a fraction of the outermost time step) at
+which to evaluate it.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">integrator</span> <span class="o">=</span> <span class="n">MTSIntegrator</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">femtoseconds</span><span class="p">,</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">8</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>This specifies that the outermost time step is 4 fs, so each step of the integrator
+will advance time by that much.  It also says that force group 0 should be evaluated
+once per time step, force group 1 should be evaluated twice per time step (every 2 fs),
+and force group 2 should be evaluated eight times per time step (every 0.5 fs).</p>
+<p>A common use of this algorithm is to evaluate reciprocal space nonbonded interactions
+less often than the bonded and direct space nonbonded interactions.  The following
+example looks up the NonbondedForce, sets the reciprocal space interactions to their
+own force group, and then creates an integrator that evaluates them once every 4 fs,
+but all other interactions every 2 fs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">nonbonded</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">getForces</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">NonbondedForce</span><span class="p">)][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">nonbonded</span><span class="o">.</span><span class="n">setReciprocalSpaceForceGroup</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">integrator</span> <span class="o">=</span> <span class="n">MTSIntegrator</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">femtoseconds</span><span class="p">,</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>For details, see Tuckerman et al., J. Chem. Phys. 97(3) pp. 1990-2001 (1992).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create an MTSIntegrator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> (<em>time</em>) â The largest (outermost) integration time step to use</p></li>
+<li><p><strong>groups</strong> (<em>list</em>) â A list of tuples defining the force groups.  The first element of
+each tuple is the force group index, and the second element is the
+number of times that force group should be evaluated in one time step.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.__init__" title="openmm.mtsintegrator.MTSIntegrator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(dt,Â groups)</p></td>
+<td><p>Create an MTSIntegrator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addComputeGlobal" title="openmm.mtsintegrator.MTSIntegrator.addComputeGlobal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addComputeGlobal</span></code></a>(self,Â variable,Â expression)</p></td>
+<td><p>Add a step to the integration algorithm that computes a global value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addComputePerDof" title="openmm.mtsintegrator.MTSIntegrator.addComputePerDof"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addComputePerDof</span></code></a>(self,Â variable,Â expression)</p></td>
+<td><p>Add a step to the integration algorithm that computes a per-DOF value.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addComputeSum" title="openmm.mtsintegrator.MTSIntegrator.addComputeSum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addComputeSum</span></code></a>(self,Â variable,Â expression)</p></td>
+<td><p>Add a step to the integration algorithm that computes a sum over degrees of freedom.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addConstrainPositions" title="openmm.mtsintegrator.MTSIntegrator.addConstrainPositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addConstrainPositions</span></code></a>(self)</p></td>
+<td><p>Add a step to the integration algorithm that updates particle positions so all constraints are satisfied.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addConstrainVelocities" title="openmm.mtsintegrator.MTSIntegrator.addConstrainVelocities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addConstrainVelocities</span></code></a>(self)</p></td>
+<td><p>Add a step to the integration algorithm that updates particle velocities so the net velocity along all constraints is 0.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addGlobalVariable" title="openmm.mtsintegrator.MTSIntegrator.addGlobalVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addGlobalVariable</span></code></a>(self,Â name,Â initialValue)</p></td>
+<td><p>Define a new global variable.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addPerDofVariable" title="openmm.mtsintegrator.MTSIntegrator.addPerDofVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addPerDofVariable</span></code></a>(self,Â name,Â initialValue)</p></td>
+<td><p>Define a new per-DOF variable.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addTabulatedFunction" title="openmm.mtsintegrator.MTSIntegrator.addTabulatedFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addTabulatedFunction</span></code></a>(self,Â name,Â function)</p></td>
+<td><p>Add a tabulated function that may appear in expressions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.addUpdateContextState" title="openmm.mtsintegrator.MTSIntegrator.addUpdateContextState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addUpdateContextState</span></code></a>(self)</p></td>
+<td><p>Add a step to the integration algorithm that allows Forces to update the context state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.beginIfBlock" title="openmm.mtsintegrator.MTSIntegrator.beginIfBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beginIfBlock</span></code></a>(self,Â condition)</p></td>
+<td><p>Add a step which begins a new âifâ block.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.beginWhileBlock" title="openmm.mtsintegrator.MTSIntegrator.beginWhileBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">beginWhileBlock</span></code></a>(self,Â condition)</p></td>
+<td><p>Add a step which begins a new âwhileâ block.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.endBlock" title="openmm.mtsintegrator.MTSIntegrator.endBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">endBlock</span></code></a>(self)</p></td>
+<td><p>Add a step which marks the end of the most recently begun âifâ or âwhileâ block.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getComputationStep" title="openmm.mtsintegrator.MTSIntegrator.getComputationStep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getComputationStep</span></code></a>(self,Â index)</p></td>
+<td><p>Get the details of a computation step that has been added to the integration algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getConstraintTolerance" title="openmm.mtsintegrator.MTSIntegrator.getConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getConstraintTolerance</span></code></a>(self)</p></td>
+<td><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getGlobalVariable" title="openmm.mtsintegrator.MTSIntegrator.getGlobalVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalVariable</span></code></a>(self,Â index)</p></td>
+<td><p>Get the current value of a global variable.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getGlobalVariableByName" title="openmm.mtsintegrator.MTSIntegrator.getGlobalVariableByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalVariableByName</span></code></a>(self,Â name)</p></td>
+<td><p>Get the current value of a global variable, specified by name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getGlobalVariableName" title="openmm.mtsintegrator.MTSIntegrator.getGlobalVariableName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalVariableName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a global variable.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getIntegrationForceGroups" title="openmm.mtsintegrator.MTSIntegrator.getIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getIntegrationForceGroups</span></code></a>(self)</p></td>
+<td><p>Get which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getKineticEnergyExpression" title="openmm.mtsintegrator.MTSIntegrator.getKineticEnergyExpression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getKineticEnergyExpression</span></code></a>(self)</p></td>
+<td><p>Get the expression to use for computing the kinetic energy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getNumComputations" title="openmm.mtsintegrator.MTSIntegrator.getNumComputations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumComputations</span></code></a>(self)</p></td>
+<td><p>Get the number of computation steps that have been added.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getNumGlobalVariables" title="openmm.mtsintegrator.MTSIntegrator.getNumGlobalVariables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumGlobalVariables</span></code></a>(self)</p></td>
+<td><p>Get the number of global variables that have been defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getNumPerDofVariables" title="openmm.mtsintegrator.MTSIntegrator.getNumPerDofVariables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumPerDofVariables</span></code></a>(self)</p></td>
+<td><p>Get the number of per-DOF variables that have been defined.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getNumTabulatedFunctions" title="openmm.mtsintegrator.MTSIntegrator.getNumTabulatedFunctions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumTabulatedFunctions</span></code></a>(self)</p></td>
+<td><p>Get the number of tabulated functions that have been defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getPerDofVariable" title="openmm.mtsintegrator.MTSIntegrator.getPerDofVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPerDofVariable</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getPerDofVariableByName" title="openmm.mtsintegrator.MTSIntegrator.getPerDofVariableByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPerDofVariableByName</span></code></a>(self,Â name)</p></td>
+<td><p>Get the value of a per-DOF variable, specified by name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getPerDofVariableName" title="openmm.mtsintegrator.MTSIntegrator.getPerDofVariableName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPerDofVariableName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a per-DOF variable.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getRandomNumberSeed" title="openmm.mtsintegrator.MTSIntegrator.getRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRandomNumberSeed</span></code></a>(self)</p></td>
+<td><p>Get the random number seed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getStepSize" title="openmm.mtsintegrator.MTSIntegrator.getStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getStepSize</span></code></a>(self)</p></td>
+<td><p>Get the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getTabulatedFunction" title="openmm.mtsintegrator.MTSIntegrator.getTabulatedFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTabulatedFunction</span></code></a>(-&gt;Â TabulatedFunction)</p></td>
+<td><p>Get a reference to a tabulated function that may appear in expressions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.getTabulatedFunctionName" title="openmm.mtsintegrator.MTSIntegrator.getTabulatedFunctionName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTabulatedFunctionName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a tabulated function that may appear in expressions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setConstraintTolerance" title="openmm.mtsintegrator.MTSIntegrator.setConstraintTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setConstraintTolerance</span></code></a>(self,Â tol)</p></td>
+<td><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setGlobalVariable" title="openmm.mtsintegrator.MTSIntegrator.setGlobalVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGlobalVariable</span></code></a>(self,Â index,Â value)</p></td>
+<td><p>Set the value of a global variable.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setGlobalVariableByName" title="openmm.mtsintegrator.MTSIntegrator.setGlobalVariableByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGlobalVariableByName</span></code></a>(self,Â name,Â value)</p></td>
+<td><p>Set the value of a global variable, specified by name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setIntegrationForceGroups" title="openmm.mtsintegrator.MTSIntegrator.setIntegrationForceGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setIntegrationForceGroups</span></code></a>(groups)</p></td>
+<td><p>Set which force groups to use for integration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setKineticEnergyExpression" title="openmm.mtsintegrator.MTSIntegrator.setKineticEnergyExpression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setKineticEnergyExpression</span></code></a>(self,Â expression)</p></td>
+<td><p>Set the expression to use for computing the kinetic energy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setPerDofVariable" title="openmm.mtsintegrator.MTSIntegrator.setPerDofVariable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPerDofVariable</span></code></a>(self,Â index,Â values)</p></td>
+<td><p>Set the value of a per-DOF variable.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setPerDofVariableByName" title="openmm.mtsintegrator.MTSIntegrator.setPerDofVariableByName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPerDofVariableByName</span></code></a>(self,Â name,Â values)</p></td>
+<td><p>Set the value of a per-DOF variable, specified by name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setRandomNumberSeed" title="openmm.mtsintegrator.MTSIntegrator.setRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRandomNumberSeed</span></code></a>(self,Â seed)</p></td>
+<td><p>Set the random number seed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.setStepSize" title="openmm.mtsintegrator.MTSIntegrator.setStepSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setStepSize</span></code></a>(self,Â size)</p></td>
+<td><p>Set the size of each time step, in picoseconds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.step" title="openmm.mtsintegrator.MTSIntegrator.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>(self,Â steps)</p></td>
+<td><p>Advance a simulation through time by taking a series of time steps.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BlockEnd</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeGlobal</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputePerDof</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeSum</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstrainPositions</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConstrainVelocities</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IfBlockStart</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateContextState</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">WhileBlockStart</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.mtsintegrator.MTSIntegrator.thisown" title="openmm.mtsintegrator.MTSIntegrator.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addComputeGlobal">
+<span class="sig-name descname"><span class="pre">addComputeGlobal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addComputeGlobal" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step to the integration algorithm that computes a global value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) â the global variable to store the computed value into</p></li>
+<li><p><strong>expression</strong> (<em>string</em>) â a mathematical expression involving only global variables. In each integration step, its value is computed and stored into the specified variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addComputePerDof">
+<span class="sig-name descname"><span class="pre">addComputePerDof</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addComputePerDof" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step to the integration algorithm that computes a per-DOF value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) â the per-DOF variable to store the computed value into</p></li>
+<li><p><strong>expression</strong> (<em>string</em>) â a mathematical expression involving both global and per-DOF variables. In each integration step, its value is computed for every degree of freedom and stored into the specified variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addComputeSum">
+<span class="sig-name descname"><span class="pre">addComputeSum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addComputeSum" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step to the integration algorithm that computes a sum over degrees of freedom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> (<em>string</em>) â the global variable to store the computed value into</p></li>
+<li><p><strong>expression</strong> (<em>string</em>) â a mathematical expression involving both global and per-DOF variables. In each integration step, its value is computed for every degree of freedom. Those values are then added together, and the sum is stored in the specified variable.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addConstrainPositions">
+<span class="sig-name descname"><span class="pre">addConstrainPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addConstrainPositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step to the integration algorithm that updates particle positions so all constraints are satisfied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addConstrainVelocities">
+<span class="sig-name descname"><span class="pre">addConstrainVelocities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addConstrainVelocities" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step to the integration algorithm that updates particle velocities so the net velocity along all constraints is 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addGlobalVariable">
+<span class="sig-name descname"><span class="pre">addGlobalVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialValue</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addGlobalVariable" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Define a new global variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the variable</p></li>
+<li><p><strong>initialValue</strong> (<em>double</em>) â the variable will initially be set to this value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the variable that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addPerDofVariable">
+<span class="sig-name descname"><span class="pre">addPerDofVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initialValue</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addPerDofVariable" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Define a new per-DOF variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the variable</p></li>
+<li><p><strong>initialValue</strong> (<em>double</em>) â the variable will initially be set to this value for all degrees of freedom</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the variable that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addTabulatedFunction">
+<span class="sig-name descname"><span class="pre">addTabulatedFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addTabulatedFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a tabulated function that may appear in expressions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the function as it appears in expressions</p></li>
+<li><p><strong>function</strong> (<em>TabulatedFunction *</em>) â a TabulatedFunction object defining the function. The TabulatedFunction should have been created on the heap with the ânewâ operator. The integrator takes over ownership of it, and deletes it when the integrator itself is deleted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the function that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.addUpdateContextState">
+<span class="sig-name descname"><span class="pre">addUpdateContextState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.addUpdateContextState" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step to the integration algorithm that allows Forces to update the context state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.beginIfBlock">
+<span class="sig-name descname"><span class="pre">beginIfBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.beginIfBlock" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step which begins a new âifâ block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>condition</strong> (<em>string</em>) â a mathematical expression involving a comparison operator and global variables. All steps between this one and the end of the block are executed only if the condition is true.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.beginWhileBlock">
+<span class="sig-name descname"><span class="pre">beginWhileBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.beginWhileBlock" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step which begins a new âwhileâ block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>condition</strong> (<em>string</em>) â a mathematical expression involving a comparison operator and global variables. All steps between this one and the end of the block are executed repeatedly as long as the condition remains true.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.endBlock">
+<span class="sig-name descname"><span class="pre">endBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.endBlock" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a step which marks the end of the most recently begun âifâ or âwhileâ block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the index of the step that was added</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getComputationStep">
+<span class="sig-name descname"><span class="pre">getComputationStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getComputationStep" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the details of a computation step that has been added to the integration algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the computation step to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>type</strong> (<em>ComputationType</em>) â the type of computation this step performs</p></li>
+<li><p><strong>variable</strong> (<em>string</em>) â the variable into which this step stores its result. If this step does not store a result in a variable, this will be an empty string.</p></li>
+<li><p><strong>expression</strong> (<em>string</em>) â the expression this step evaluates. If this step does not evaluate an expression, this will be an empty string.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getConstraintTolerance">
+<span class="sig-name descname"><span class="pre">getConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getGlobalVariable">
+<span class="sig-name descname"><span class="pre">getGlobalVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getGlobalVariable" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the current value of a global variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the variable to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the current value of the variable</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getGlobalVariableByName">
+<span class="sig-name descname"><span class="pre">getGlobalVariableByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getGlobalVariableByName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the current value of a global variable, specified by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>string</em>) â the name of the variable to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the current value of the parameter</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getGlobalVariableName">
+<span class="sig-name descname"><span class="pre">getGlobalVariableName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getGlobalVariableName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a global variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the variable to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the name of the variable</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">getIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get which force groups to use for integration. By default, all force groups are included. This is interpreted as a set of bit flags: the forces from group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getKineticEnergyExpression">
+<span class="sig-name descname"><span class="pre">getKineticEnergyExpression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getKineticEnergyExpression" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the expression to use for computing the kinetic energy. The expression is evaluated for every degree of freedom. Those values are then added together, and the sum is reported as the current kinetic energy.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getNumComputations">
+<span class="sig-name descname"><span class="pre">getNumComputations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getNumComputations" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of computation steps that have been added.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getNumGlobalVariables">
+<span class="sig-name descname"><span class="pre">getNumGlobalVariables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getNumGlobalVariables" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of global variables that have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getNumPerDofVariables">
+<span class="sig-name descname"><span class="pre">getNumPerDofVariables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getNumPerDofVariables" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of per-DOF variables that have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getNumTabulatedFunctions">
+<span class="sig-name descname"><span class="pre">getNumTabulatedFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getNumTabulatedFunctions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of tabulated functions that have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getPerDofVariable">
+<span class="sig-name descname"><span class="pre">getPerDofVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getPerDofVariable" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">getPerDofVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">PyObject</span> <span class="pre">*</span></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getPerDofVariableByName">
+<span class="sig-name descname"><span class="pre">getPerDofVariableByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getPerDofVariableByName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the value of a per-DOF variable, specified by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>string</em>) â the name of the variable to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>values</strong> â the values of the variable for all degrees of freedom are stored into this</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector&lt; Vec3 &gt;</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getPerDofVariableName">
+<span class="sig-name descname"><span class="pre">getPerDofVariableName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getPerDofVariableName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a per-DOF variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the variable to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the name of the variable</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">getRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the random number seed. See setRandomNumberSeed() for details.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getStepSize">
+<span class="sig-name descname"><span class="pre">getStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the size of each time step, in picoseconds. If this integrator uses variable time steps, the size of the most recent step is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the step size, measured in ps</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getTabulatedFunction">
+<span class="sig-name descname"><span class="pre">getTabulatedFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">TabulatedFunction</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getTabulatedFunction" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">getTabulatedFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">TabulatedFunction</span></dt>
+<dd><p>Get a reference to a tabulated function that may appear in expressions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the function to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the TabulatedFunction object defining the function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="openmm.openmm.TabulatedFunction.html#openmm.openmm.TabulatedFunction" title="openmm.openmm.TabulatedFunction">TabulatedFunction</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.getTabulatedFunctionName">
+<span class="sig-name descname"><span class="pre">getTabulatedFunctionName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.getTabulatedFunctionName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a tabulated function that may appear in expressions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the function to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the name of the function as it appears in expressions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setConstraintTolerance">
+<span class="sig-name descname"><span class="pre">setConstraintTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setConstraintTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the distance tolerance within which constraints are maintained, as a fraction of the constrained distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setGlobalVariable">
+<span class="sig-name descname"><span class="pre">setGlobalVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setGlobalVariable" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the value of a global variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the variable to set</p></li>
+<li><p><strong>value</strong> (<em>double</em>) â the new value of the variable</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setGlobalVariableByName">
+<span class="sig-name descname"><span class="pre">setGlobalVariableByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setGlobalVariableByName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the value of a global variable, specified by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the variable to set</p></li>
+<li><p><strong>value</strong> (<em>double</em>) â the new value of the variable</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setIntegrationForceGroups">
+<span class="sig-name descname"><span class="pre">setIntegrationForceGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setIntegrationForceGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set which force groups to use for integration.  By default, all force groups are included.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>groups</strong> (<em>set</em><em> or </em><em>int</em>) â a set of indices for which force groups to include when integrating the equations of motion.
+Alternatively, the groups can be passed as a single unsigned integer interpreted as a bitmask,
+in which case group i will be included if (groups&amp;(1&lt;&lt;i)) != 0.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setKineticEnergyExpression">
+<span class="sig-name descname"><span class="pre">setKineticEnergyExpression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setKineticEnergyExpression" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the expression to use for computing the kinetic energy. The expression is evaluated for every degree of freedom. Those values are then added together, and the sum is reported as the current kinetic energy.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setPerDofVariable">
+<span class="sig-name descname"><span class="pre">setPerDofVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setPerDofVariable" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the value of a per-DOF variable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the variable to set</p></li>
+<li><p><strong>values</strong> (<em>vector&lt; Vec3 &gt;</em>) â the new values of the variable for all degrees of freedom</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setPerDofVariableByName">
+<span class="sig-name descname"><span class="pre">setPerDofVariableByName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setPerDofVariableByName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the value of a per-DOF variable, specified by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the variable to set</p></li>
+<li><p><strong>values</strong> (<em>vector&lt; Vec3 &gt;</em>) â the new values of the variable for all degrees of freedom</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">setRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of random numbers will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a Context is created from this Force. This is done to ensure that each Context receives unique random seeds without you needing to set them explicitly.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.setStepSize">
+<span class="sig-name descname"><span class="pre">setStepSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.setStepSize" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the size of each time step, in picoseconds. If this integrator uses variable time steps, the effect of calling this method is undefined, and it may simply be ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>size</strong> (<em>double</em>) â the step size, measured in ps</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.step" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Advance a simulation through time by taking a series of time steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> (<em>int</em>) â the number of time steps to take</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.mtsintegrator.MTSIntegrator.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.mtsintegrator.MTSIntegrator.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

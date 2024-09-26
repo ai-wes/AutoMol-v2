@@ -1,0 +1,198 @@
+<div class="body" role="main">
+<section id="andersenthermostat">
+<h1>AndersenThermostat<a class="headerlink" href="#andersenthermostat" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">AndersenThermostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class uses the Andersen method to maintain constant temperature.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultTemperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultCollisionFrequency</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.AndersenThermostat" title="openmm.openmm.AndersenThermostat"><span class="pre">AndersenThermostat</span></a><a class="headerlink" href="#openmm.openmm.AndersenThermostat.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.AndersenThermostat" title="openmm.openmm.AndersenThermostat"><span class="pre">AndersenThermostat</span></a></dt>
+<dd><p>Create an AndersenThermostat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>defaultTemperature</strong> (<em>double</em>) â the default temperature of the heat bath (in Kelvin)</p></li>
+<li><p><strong>defaultCollisionFrequency</strong> (<em>double</em>) â the default collision frequency (in 1/ps)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.CollisionFrequency" title="openmm.openmm.AndersenThermostat.CollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CollisionFrequency</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which store the current collision frequency (in 1/ps).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.Temperature" title="openmm.openmm.AndersenThermostat.Temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Temperature</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current temperature of the heat bath (in Kelvin).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.__init__" title="openmm.openmm.AndersenThermostat.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â AndersenThermostat)</p></td>
+<td><p>Create an AndersenThermostat.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.getDefaultCollisionFrequency" title="openmm.openmm.AndersenThermostat.getDefaultCollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDefaultCollisionFrequency</span></code></a>(self)</p></td>
+<td><p>Get the default collision frequency (in 1/ps).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.getDefaultTemperature" title="openmm.openmm.AndersenThermostat.getDefaultTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDefaultTemperature</span></code></a>(self)</p></td>
+<td><p>Get the default temperature of the heat bath (in Kelvin).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.getForceGroup" title="openmm.openmm.AndersenThermostat.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.getName" title="openmm.openmm.AndersenThermostat.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.getRandomNumberSeed" title="openmm.openmm.AndersenThermostat.getRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRandomNumberSeed</span></code></a>(self)</p></td>
+<td><p>Get the random number seed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.setDefaultCollisionFrequency" title="openmm.openmm.AndersenThermostat.setDefaultCollisionFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDefaultCollisionFrequency</span></code></a>(self,Â frequency)</p></td>
+<td><p>Set the default collision frequency.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.setDefaultTemperature" title="openmm.openmm.AndersenThermostat.setDefaultTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDefaultTemperature</span></code></a>(self,Â temperature)</p></td>
+<td><p>Set the default temperature of the heat bath.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.setForceGroup" title="openmm.openmm.AndersenThermostat.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.setName" title="openmm.openmm.AndersenThermostat.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.setRandomNumberSeed" title="openmm.openmm.AndersenThermostat.setRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRandomNumberSeed</span></code></a>(self,Â seed)</p></td>
+<td><p>Set the random number seed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.usesPeriodicBoundaryConditions" title="openmm.openmm.AndersenThermostat.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.AndersenThermostat.thisown" title="openmm.openmm.AndersenThermostat.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.Temperature">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">Temperature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.Temperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current temperature of the heat bath (in Kelvin).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.CollisionFrequency">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">CollisionFrequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.CollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which store the current collision frequency (in 1/ps).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.getDefaultTemperature">
+<span class="sig-name descname"><span class="pre">getDefaultTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.getDefaultTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default temperature of the heat bath (in Kelvin).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the default temperature of the heat bath, measured in Kelvin.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.setDefaultTemperature">
+<span class="sig-name descname"><span class="pre">setDefaultTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.setDefaultTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default temperature of the heat bath. This will affect any new Contexts you create, but not ones that already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temperature</strong> (<em>double</em>) â the default temperature of the heat bath (in Kelvin)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.getDefaultCollisionFrequency">
+<span class="sig-name descname"><span class="pre">getDefaultCollisionFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.getDefaultCollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default collision frequency (in 1/ps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the default collision frequency, measured in 1/ps.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.setDefaultCollisionFrequency">
+<span class="sig-name descname"><span class="pre">setDefaultCollisionFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.setDefaultCollisionFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default collision frequency. This will affect any new Contexts you create, but not ones that already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>frequency</strong> (<em>double</em>) â the default collision frequency (in 1/ps)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.getRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">getRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.getRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the random number seed. See setRandomNumberSeed() for details.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.setRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">setRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.setRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the random number seed. The precise meaning of this parameter is undefined, and is left up to each Platform to interpret in an appropriate way. It is guaranteed that if two simulations are run with different random number seeds, the sequence of collisions will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a Context is created from this Force. This is done to ensure that each Context receives unique random seeds without you needing to set them explicitly.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.AndersenThermostat.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.AndersenThermostat.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

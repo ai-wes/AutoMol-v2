@@ -1,0 +1,106 @@
+<div class="body" role="main">
+<section id="baseunit">
+<h1>BaseUnit<a class="headerlink" href="#baseunit" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.unit.baseunit.</span></span><span class="sig-name descname"><span class="pre">BaseUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Physical unit expressed in exactly one BaseDimension.</p>
+<p>For example, meter_base_unit could be a BaseUnit for the length dimension.
+The BaseUnit class is used internally in the more general Unit class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Creates a new BaseUnit.</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><ul class="simple">
+<li><p>self: The newly created BaseUnit.</p></li>
+<li><p>base_dim: (BaseDimension) The dimension of the new unit, e.g. âmassâ</p></li>
+<li><p>name: (string) Name of the unit, e.g. âkilogramâ</p></li>
+<li><dl class="simple">
+<dt>symbol: (string) Symbol for the unit, e.g. âkgâ.  This symbol will appear in</dt><dd><p>Quantity string descriptions.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.baseunit.BaseUnit.__init__" title="openmm.unit.baseunit.BaseUnit.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(base_dim,Â name,Â symbol)</p></td>
+<td><p>Creates a new BaseUnit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.baseunit.BaseUnit.conversion_factor_to" title="openmm.unit.baseunit.BaseUnit.conversion_factor_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conversion_factor_to</span></code></a>(other)</p></td>
+<td><p>Returns a conversion factor from this BaseUnit to another BaseUnit.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.baseunit.BaseUnit.define_conversion_factor_to" title="openmm.unit.baseunit.BaseUnit.define_conversion_factor_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_conversion_factor_to</span></code></a>(other,Â factor)</p></td>
+<td><p>Defines a conversion factor between two BaseUnits.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.baseunit.BaseUnit.get_dimension_tuple" title="openmm.unit.baseunit.BaseUnit.get_dimension_tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dimension_tuple</span></code></a>()</p></td>
+<td><p>Returns a sorted tuple of (BaseDimension, exponent) pairs, that can be used as a dictionary key.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.baseunit.BaseUnit.iter_base_dimensions" title="openmm.unit.baseunit.BaseUnit.iter_base_dimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_base_dimensions</span></code></a>()</p></td>
+<td><p>Returns a dictionary of BaseDimension:exponent pairs, describing the dimension of this unit.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_base_units</span></code>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.__lt__">
+<span class="sig-name descname"><span class="pre">__lt__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.__lt__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Comparison function that sorts BaseUnits by BaseDimension</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.iter_base_dimensions">
+<span class="sig-name descname"><span class="pre">iter_base_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.iter_base_dimensions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns a dictionary of BaseDimension:exponent pairs, describing the dimension of this unit.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.get_dimension_tuple">
+<span class="sig-name descname"><span class="pre">get_dimension_tuple</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.get_dimension_tuple" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns a sorted tuple of (BaseDimension, exponent) pairs, that can be used as a dictionary key.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.__str__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns a string with the name of this BaseUnit</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.define_conversion_factor_to">
+<span class="sig-name descname"><span class="pre">define_conversion_factor_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.define_conversion_factor_to" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Defines a conversion factor between two BaseUnits.</p>
+<p>self * factor = other</p>
+<dl class="simple">
+<dt>Parameters:</dt><dd><ul class="simple">
+<li><p>self: (BaseUnit) âFromâ unit in conversion.</p></li>
+<li><p>other: (BaseUnit) âToâ unit in conversion.</p></li>
+<li><p>factor: (float) Conversion factor.</p></li>
+</ul>
+</dd>
+</dl>
+<p>After calling this method, both self and other will have stored
+conversion factors for one another, plus all other BaseUnits which
+self and other have previously defined.</p>
+<p>Both self and other must have the same dimension, otherwise a TypeError
+will be raised.</p>
+<p>Returns None.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.baseunit.BaseUnit.conversion_factor_to">
+<span class="sig-name descname"><span class="pre">conversion_factor_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.baseunit.BaseUnit.conversion_factor_to" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns a conversion factor from this BaseUnit to another BaseUnit.</p>
+<p>It does not matter which existing BaseUnit you define the conversion factor to.
+Conversions for all other known BaseUnits will be computed at the same time.</p>
+<p>Raises TypeError if dimension does not match.
+Raises LookupError if no conversion has been defined. (see define_conversion_factor_to).</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

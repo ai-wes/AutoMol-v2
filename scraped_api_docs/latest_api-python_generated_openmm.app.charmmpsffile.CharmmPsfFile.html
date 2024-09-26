@@ -1,0 +1,250 @@
+<div class="body" role="main">
+<section id="charmmpsffile">
+<h1>CharmmPsfFile<a class="headerlink" href="#charmmpsffile" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.charmmpsffile.</span></span><span class="sig-name descname"><span class="pre">CharmmPsfFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psf_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitCellDimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>A chemical structure instantiated from CHARMM files.</p>
+<p>This structure has numerous attributes that are lists of the elements of
+this structure, including atoms, bonds, torsions, etc. The attributes are</p>
+<ul class="simple">
+<li><p>residue_list</p></li>
+<li><p>atom_list</p></li>
+<li><p>bond_list</p></li>
+<li><p>angle_list</p></li>
+<li><p>dihedral_list</p></li>
+<li><p>dihedral_parameter_list</p></li>
+<li><p>improper_list</p></li>
+<li><p>cmap_list</p></li>
+<li><p>donor_list    # hbonds donors?</p></li>
+<li><p>acceptor_list # hbond acceptors?</p></li>
+<li><p>group_list    # list of nonbonded interaction groups</p></li>
+</ul>
+<p>Four additional lists for Drude psf:
+- drudeconsts_list
+- drudepair_list
+- lonepair_list
+- aniso_list</p>
+<p>Additional attribute is available if a CharmmParameterSet is loaded into
+this structure.</p>
+<ul class="simple">
+<li><p>urey_bradley_list</p></li>
+</ul>
+<p>The lengths of each of these lists gives the pointers (e.g., natom, nres,
+etc.)</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cs</span> <span class="o">=</span> <span class="n">CharmmPsfFile</span><span class="p">(</span><span class="s2">"testfiles/test.psf"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">atom_list</span><span class="p">)</span>
+<span class="go">33</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">cs</span><span class="o">.</span><span class="n">bond_list</span><span class="p">)</span>
+<span class="go">32</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">psf_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodicBoxVectors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitCellDimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Opens and parses a PSF file, then instantiates a CharmmPsfFile
+instance from the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>psf_name</strong> (<em>str</em>) â Name of the PSF file (it must exist)</p></li>
+<li><p><strong>periodicBoxVectors</strong> (<em>tuple of Vec3</em>) â the vectors defining the periodic box</p></li>
+<li><p><strong>unitCellDimensions</strong> (<a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><em>Vec3</em></a>) â the dimensions of the crystallographic unit cell.  For
+non-rectangular unit cells, specify periodicBoxVectors instead.</p></li>
+</ul>
+</dd>
+</dl>
+<p>:raises IOError : If file âpsf_nameâ does not exist:
+:raises CharmmPSFError: If any parsing errors are encountered:</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.__init__" title="openmm.app.charmmpsffile.CharmmPsfFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(psf_name[,Â periodicBoxVectors,Â â¦])</p></td>
+<td><p>Opens and parses a PSF file, then instantiates a CharmmPsfFile instance from the data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.createSystem" title="openmm.app.charmmpsffile.CharmmPsfFile.createSystem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">createSystem</span></code></a>(params[,Â nonbondedMethod,Â â¦])</p></td>
+<td><p>Construct an OpenMM System representing the topology described by the prmtop file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.deleteCmap" title="openmm.app.charmmpsffile.CharmmPsfFile.deleteCmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deleteCmap</span></code></a>()</p></td>
+<td><p>Deletes the CMAP terms from the CHARMM PSF</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.loadParameters" title="openmm.app.charmmpsffile.CharmmPsfFile.loadParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loadParameters</span></code></a>(parmset)</p></td>
+<td><p>Loads parameters from a parameter set that was loaded via CHARMM RTF, PAR, and STR files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.setBox" title="openmm.app.charmmpsffile.CharmmPsfFile.setBox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setBox</span></code></a>(a,Â b,Â c[,Â alpha,Â beta,Â gamma])</p></td>
+<td><p>Sets the periodic box boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ANGLE_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BOND_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">CMAP_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DIHEDRAL_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">DRUDE_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">GB_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMPROPER_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NONBONDED_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">UREY_BRADLEY_FORCE_GROUP</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.boxLengths" title="openmm.app.charmmpsffile.CharmmPsfFile.boxLengths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boxLengths</span></code></a></p></td>
+<td><p>Return tuple of 3 units</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.boxVectors" title="openmm.app.charmmpsffile.CharmmPsfFile.boxVectors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">boxVectors</span></code></a></p></td>
+<td><p>Return the box vectors</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.system" title="openmm.app.charmmpsffile.CharmmPsfFile.system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">system</span></code></a></p></td>
+<td><p>Return the cached system class â it needs to be initialized via âcreateSystemâ first!</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.charmmpsffile.CharmmPsfFile.topology" title="openmm.app.charmmpsffile.CharmmPsfFile.topology"><code class="xref py py-obj docutils literal notranslate"><span class="pre">topology</span></code></a></p></td>
+<td><p>Create an OpenMM Topology object from the stored bonded network</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.loadParameters">
+<span class="sig-name descname"><span class="pre">loadParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parmset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.loadParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Loads parameters from a parameter set that was loaded via CHARMM RTF,
+PAR, and STR files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parmset</strong> (<a class="reference internal" href="openmm.app.charmmparameterset.CharmmParameterSet.html#openmm.app.charmmparameterset.CharmmParameterSet" title="openmm.app.charmmparameterset.CharmmParameterSet"><em>CharmmParameterSet</em></a>) â List of all parameters</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>If any parameters that are necessary cannot be found, a
+MissingParameter exception is raised.</p></li>
+<li><p>If any dihedral or improper parameters cannot be found, I will try
+inserting wildcards (at either end for dihedrals and as the two
+central atoms in impropers) and see if that matches.  Wild-cards
+will apply ONLY if specific parameters cannot be found.</p></li>
+<li><p>This method will expand the dihedral_parameter_list attribute by
+adding a separate Dihedral object for each term for types that
+have a multi-term expansion</p></li>
+</ul>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.setBox">
+<span class="sig-name descname"><span class="pre">setBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=90.0,</span> <span class="pre">unit=degree)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=90.0,</span> <span class="pre">unit=degree)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=90.0,</span> <span class="pre">unit=degree)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.setBox" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Sets the periodic box boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>length</em>) â Lengths of the periodic cell</p></li>
+<li><p><strong>b</strong> (<em>length</em>) â Lengths of the periodic cell</p></li>
+<li><p><strong>c</strong> (<em>length</em>) â Lengths of the periodic cell</p></li>
+<li><p><strong>alpha</strong> (<em>floats</em><em>, </em><em>optional</em>) â Angles between the periodic cell vectors.</p></li>
+<li><p><strong>beta</strong> (<em>floats</em><em>, </em><em>optional</em>) â Angles between the periodic cell vectors.</p></li>
+<li><p><strong>gamma</strong> (<em>floats</em><em>, </em><em>optional</em>) â Angles between the periodic cell vectors.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.topology">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">topology</span></span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.topology" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create an OpenMM Topology object from the stored bonded network</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.createSystem">
+<span class="sig-name descname"><span class="pre">createSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonbondedMethod</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NoCutoff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonbondedCutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=1.0,</span> <span class="pre">unit=nanometer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">switchDistance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=0.0,</span> <span class="pre">unit=nanometer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigidWater</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitSolvent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitSolventKappa</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicitSolventSaltConc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=0.0,</span> <span class="pre">unit=mole</span> <span class="pre">/</span> <span class="pre">liter)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=298.15,</span> <span class="pre">unit=kelvin)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soluteDielectric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solventDielectric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">78.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">removeCMMotion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydrogenMass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ewaldErrorTolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flexibleConstraints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gbsaModel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drudeMass</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Quantity(value=0.4,</span> <span class="pre">unit=dalton)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.createSystem" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Construct an OpenMM System representing the topology described by the
+prmtop file. You MUST have loaded a parameter set into this PSF before
+calling createSystem. If not, AttributeError will be raised. ValueError
+is raised for illegal input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>params</strong> (<a class="reference internal" href="openmm.app.charmmparameterset.CharmmParameterSet.html#openmm.app.charmmparameterset.CharmmParameterSet" title="openmm.app.charmmparameterset.CharmmParameterSet"><em>CharmmParameterSet</em></a>) â The parameter set to use to parametrize this molecule</p></li>
+<li><p><strong>nonbondedMethod</strong> (<em>object=NoCutoff</em>) â The method to use for nonbonded interactions. Allowed values are
+NoCutoff, CutoffNonPeriodic, CutoffPeriodic, Ewald, PME, or LJPME.</p></li>
+<li><p><strong>nonbondedCutoff</strong> (<em>distance=1*nanometer</em>) â The cutoff distance to use for nonbonded interactions.</p></li>
+<li><p><strong>switchDistance</strong> (<em>distance=0*nanometer</em>) â The distance at which the switching function is active for nonbonded
+interactions. If the switchDistance evaluates to boolean False (if
+it is 0), no switching function will be used. Illegal values will
+raise a ValueError</p></li>
+<li><p><strong>constraints</strong> (<em>object=None</em>) â Specifies which bonds or angles should be implemented with
+constraints. Allowed values are None, HBonds, AllBonds, or HAngles.</p></li>
+<li><p><strong>rigidWater</strong> (<em>boolean=True</em>) â If true, water molecules will be fully rigid regardless of the value
+passed for the constraints argument</p></li>
+<li><p><strong>implicitSolvent</strong> (<em>object=None</em>) â If not None, the implicit solvent model to use. Allowed values are
+HCT, OBC1, OBC2, or GBn</p></li>
+<li><p><strong>implicitSolventKappa</strong> (<em>float=None</em>) â Debye screening parameter to model salt concentrations in GB
+solvent.</p></li>
+<li><p><strong>implicitSolventSaltConc</strong> (<em>float=0.0*u.moles/u.liter</em>) â Salt concentration for GB simulations. Converted to Debye length
+<code class="docutils literal notranslate"><span class="pre">kappa</span></code></p></li>
+<li><p><strong>temperature</strong> (<em>float=298.15*u.kelvin</em>) â Temperature used in the salt concentration-to-kappa conversion for
+GB salt concentration term</p></li>
+<li><p><strong>soluteDielectric</strong> (<em>float=1.0</em>) â The solute dielectric constant to use in the implicit solvent model.</p></li>
+<li><p><strong>solventDielectric</strong> (<em>float=78.5</em>) â The solvent dielectric constant to use in the implicit solvent
+model.</p></li>
+<li><p><strong>removeCMMotion</strong> (<em>boolean=True</em>) â If true, a CMMotionRemover will be added to the System.</p></li>
+<li><p><strong>hydrogenMass</strong> (<em>mass=None</em>) â The mass to use for hydrogen atoms bound to heavy atoms. Any mass
+added to a hydrogen is subtracted from the heavy atom to keep their
+total mass the same.  If rigidWater is used to make water molecules
+rigid, then water hydrogens are not altered.</p></li>
+<li><p><strong>ewaldErrorTolerance</strong> (<em>float=0.0005</em>) â The error tolerance to use if the nonbonded method is Ewald, PME, or LJPME.</p></li>
+<li><p><strong>flexibleConstraints</strong> (<em>bool=True</em>) â If True, parameters for constrained degrees of freedom will be added to the System</p></li>
+<li><p><strong>verbose</strong> (<em>bool=False</em>) â Optionally prints out a running progress report</p></li>
+<li><p><strong>gbsaModel</strong> (<em>str=None</em>) â Can be ACE (to use the ACE solvation model) or None. Other values
+raise a ValueError</p></li>
+<li><p><strong>drudeMass</strong> (<em>mass=0.4*amu</em>) â The mass to use for Drude particles.  Any mass added to a Drude particle is
+subtracted from its parent atom to keep their total mass the same.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.system">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">system</span></span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.system" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return the cached system class â it needs to be initialized via
+âcreateSystemâ first!</p>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.boxLengths">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">boxLengths</span></span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.boxLengths" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return tuple of 3 units</p>
+</dd></dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.boxVectors">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">boxVectors</span></span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.boxVectors" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return the box vectors</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.charmmpsffile.CharmmPsfFile.deleteCmap">
+<span class="sig-name descname"><span class="pre">deleteCmap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.charmmpsffile.CharmmPsfFile.deleteCmap" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Deletes the CMAP terms from the CHARMM PSF</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

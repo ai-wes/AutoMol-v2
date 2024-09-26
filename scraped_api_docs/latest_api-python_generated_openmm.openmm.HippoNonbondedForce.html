@@ -1,0 +1,579 @@
+<div class="body" role="main">
+<section id="hippononbondedforce">
+<h1>HippoNonbondedForce<a class="headerlink" href="#hippononbondedforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">HippoNonbondedForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class implements all nonbonded interactions in the HIPPO force field: electrostatics, induction, charge transfer, dispersion, and repulsion. Although some of these are conceptually distinct, they share parameters in common and are most efficiently computed together. For example, the same multipole definitions are used for both electrostatics and Pauli repulsion. Therefore, all of them are computed by a single Force object.</p>
+<p>To use it, create a HippoNonbondedForce object, then call addParticle() once for each particle. After an entry has been added, you can modify its force field parameters by calling setParticleParameters(). This will have no effect on Contexts that already exist unless you call updateParametersInContext().</p>
+<p>You also can specify âexceptionsâ, particular pairs of particles whose interactions should be reduced or completely omitted. Call addException() to define exceptions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.HippoNonbondedForce" title="openmm.openmm.HippoNonbondedForce"><span class="pre">HippoNonbondedForce</span></a><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.HippoNonbondedForce" title="openmm.openmm.HippoNonbondedForce"><span class="pre">HippoNonbondedForce</span></a></dt>
+<dd><p>Create a HippoNonbondedForce.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.__init__" title="openmm.openmm.HippoNonbondedForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â HippoNonbondedForce)</p></td>
+<td><p>Create a HippoNonbondedForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.addException" title="openmm.openmm.HippoNonbondedForce.addException"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addException</span></code></a>(self,Â particle1,Â particle2,Â â¦)</p></td>
+<td><p>Add an interaction to the list of exceptions that should be calculated differently from other interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.addParticle" title="openmm.openmm.HippoNonbondedForce.addParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticle</span></code></a>(self,Â charge,Â dipole,Â â¦)</p></td>
+<td><p>Add the nonbonded force parameters for a particle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getCutoffDistance" title="openmm.openmm.HippoNonbondedForce.getCutoffDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getCutoffDistance</span></code></a>(self)</p></td>
+<td><p>Get the cutoff distance (in nm) being used for nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getDPMEParameters" title="openmm.openmm.HippoNonbondedForce.getDPMEParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDPMEParameters</span></code></a>(self)</p></td>
+<td><p>Get the parameters to use for dispersion PME calculations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getDPMEParametersInContext" title="openmm.openmm.HippoNonbondedForce.getDPMEParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDPMEParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Get the parameters being used for dispersion PME in a particular Context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getEwaldErrorTolerance" title="openmm.openmm.HippoNonbondedForce.getEwaldErrorTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEwaldErrorTolerance</span></code></a>(self)</p></td>
+<td><p>Get the error tolerance for Ewald summation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getExceptionParameters" title="openmm.openmm.HippoNonbondedForce.getExceptionParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getExceptionParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the scale factors for an interaction that should be calculated differently from others.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getExtrapolationCoefficients" title="openmm.openmm.HippoNonbondedForce.getExtrapolationCoefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getExtrapolationCoefficients</span></code></a>(self)</p></td>
+<td><p>Get the coefficients for the mu_0, mu_1, mu_2, â¦, mu_n terms in the extrapolation algorithm for induced dipoles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getForceGroup" title="openmm.openmm.HippoNonbondedForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getInducedDipoles" title="openmm.openmm.HippoNonbondedForce.getInducedDipoles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getInducedDipoles</span></code></a>(self,Â context)</p></td>
+<td><p>Get the induced dipole moments of all particles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getLabFramePermanentDipoles" title="openmm.openmm.HippoNonbondedForce.getLabFramePermanentDipoles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getLabFramePermanentDipoles</span></code></a>(self,Â context)</p></td>
+<td><p>Get the fixed dipole moments of all particles in the global reference frame.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getName" title="openmm.openmm.HippoNonbondedForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getNonbondedMethod" title="openmm.openmm.HippoNonbondedForce.getNonbondedMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNonbondedMethod</span></code></a>(self)</p></td>
+<td><p>Get the method used for handling long-range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getNumExceptions" title="openmm.openmm.HippoNonbondedForce.getNumExceptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumExceptions</span></code></a>(self)</p></td>
+<td><p>Get the number of exceptions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getNumParticles" title="openmm.openmm.HippoNonbondedForce.getNumParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticles</span></code></a>(self)</p></td>
+<td><p>Get the number of particles in the potential function.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getPMEParameters" title="openmm.openmm.HippoNonbondedForce.getPMEParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPMEParameters</span></code></a>(self)</p></td>
+<td><p>Get the parameters to use for PME calculations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getPMEParametersInContext" title="openmm.openmm.HippoNonbondedForce.getPMEParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPMEParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Get the parameters being used for PME in a particular Context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getParticleParameters" title="openmm.openmm.HippoNonbondedForce.getParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the nonbonded force parameters for a particle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.getSwitchingDistance" title="openmm.openmm.HippoNonbondedForce.getSwitchingDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSwitchingDistance</span></code></a>(self)</p></td>
+<td><p>Get the distance at which the switching function begins to reduce the repulsion and charge transfer interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setCutoffDistance" title="openmm.openmm.HippoNonbondedForce.setCutoffDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setCutoffDistance</span></code></a>(self,Â distance)</p></td>
+<td><p>Set the cutoff distance (in nm) being used for nonbonded interactions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setDPMEParameters" title="openmm.openmm.HippoNonbondedForce.setDPMEParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDPMEParameters</span></code></a>(self,Â alpha,Â nx,Â ny,Â nz)</p></td>
+<td><p>Set the parameters to use for dispersion PME calculations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setEwaldErrorTolerance" title="openmm.openmm.HippoNonbondedForce.setEwaldErrorTolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setEwaldErrorTolerance</span></code></a>(self,Â tol)</p></td>
+<td><p>Get the error tolerance for Ewald summation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setExceptionParameters" title="openmm.openmm.HippoNonbondedForce.setExceptionParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setExceptionParameters</span></code></a>(self,Â index,Â â¦)</p></td>
+<td><p>Set the scale factors for an interaction that should be calculated differently from others.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setExtrapolationCoefficients" title="openmm.openmm.HippoNonbondedForce.setExtrapolationCoefficients"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setExtrapolationCoefficients</span></code></a>(self,Â coefficients)</p></td>
+<td><p>Set the coefficients for the mu_0, mu_1, mu_2, â¦, mu_n terms in the extrapolation algorithm for induced dipoles.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setForceGroup" title="openmm.openmm.HippoNonbondedForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setName" title="openmm.openmm.HippoNonbondedForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setNonbondedMethod" title="openmm.openmm.HippoNonbondedForce.setNonbondedMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setNonbondedMethod</span></code></a>(self,Â method)</p></td>
+<td><p>Set the method used for handling long-range nonbonded interactions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setPMEParameters" title="openmm.openmm.HippoNonbondedForce.setPMEParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPMEParameters</span></code></a>(self,Â alpha,Â nx,Â ny,Â nz)</p></td>
+<td><p>Set the parameters to use for PME calculations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setParticleParameters" title="openmm.openmm.HippoNonbondedForce.setParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleParameters</span></code></a>(self,Â index,Â charge,Â â¦)</p></td>
+<td><p>Set the nonbonded force parameters for a particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.setSwitchingDistance" title="openmm.openmm.HippoNonbondedForce.setSwitchingDistance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setSwitchingDistance</span></code></a>(self,Â distance)</p></td>
+<td><p>Set the distance at which the switching function begins to reduce the repulsion and charge transfer interactions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.updateParametersInContext" title="openmm.openmm.HippoNonbondedForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the particle and exception parameters in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.usesPeriodicBoundaryConditions" title="openmm.openmm.HippoNonbondedForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Bisector</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoAxisType</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoCutoff</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">PME</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ThreeFold</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZBisect</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZOnly</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ZThenX</span></code></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.HippoNonbondedForce.thisown" title="openmm.openmm.HippoNonbondedForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getNumParticles">
+<span class="sig-name descname"><span class="pre">getNumParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getNumParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particles in the potential function.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getNumExceptions">
+<span class="sig-name descname"><span class="pre">getNumExceptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getNumExceptions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of exceptions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getNonbondedMethod">
+<span class="sig-name descname"><span class="pre">getNonbondedMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">OpenMM::HippoNonbondedForce::NonbondedMethod</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getNonbondedMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the method used for handling long-range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setNonbondedMethod">
+<span class="sig-name descname"><span class="pre">setNonbondedMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setNonbondedMethod" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the method used for handling long-range nonbonded interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getCutoffDistance">
+<span class="sig-name descname"><span class="pre">getCutoffDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getCutoffDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the cutoff distance (in nm) being used for nonbonded interactions. If the NonbondedMethod in use is NoCutoff, this value will have no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the cutoff distance, measured in nm</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setCutoffDistance">
+<span class="sig-name descname"><span class="pre">setCutoffDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setCutoffDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the cutoff distance (in nm) being used for nonbonded interactions. If the NonbondedMethod in use is NoCutoff, this value will have no effect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>distance</strong> (<em>double</em>) â the cutoff distance, measured in nm</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getSwitchingDistance">
+<span class="sig-name descname"><span class="pre">getSwitchingDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getSwitchingDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the distance at which the switching function begins to reduce the repulsion and charge transfer interactions. This must be less than the cutoff distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setSwitchingDistance">
+<span class="sig-name descname"><span class="pre">setSwitchingDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setSwitchingDistance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the distance at which the switching function begins to reduce the repulsion and charge transfer interactions. This must be less than the cutoff distance.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getExtrapolationCoefficients">
+<span class="sig-name descname"><span class="pre">getExtrapolationCoefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">vectord</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getExtrapolationCoefficients" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the coefficients for the mu_0, mu_1, mu_2, â¦, mu_n terms in the extrapolation algorithm for induced dipoles.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setExtrapolationCoefficients">
+<span class="sig-name descname"><span class="pre">setExtrapolationCoefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coefficients</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setExtrapolationCoefficients" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the coefficients for the mu_0, mu_1, mu_2, â¦, mu_n terms in the extrapolation algorithm for induced dipoles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coefficients</strong> (<em>vector&lt; double &gt;</em>) â a vector whose mth entry specifies the coefficient for mu_m. The length of this vector determines how many iterations are performed.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getPMEParameters">
+<span class="sig-name descname"><span class="pre">getPMEParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getPMEParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters to use for PME calculations. If alpha is 0 (the default), these parameters are ignored and instead their values are chosen based on the Ewald error tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>alpha</strong> (<em>double</em>) â the separation parameter</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) â the number of grid points along the X axis</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) â the number of grid points along the Y axis</p></li>
+<li><p><strong>nz</strong> (<em>int</em>) â the number of grid points along the Z axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getDPMEParameters">
+<span class="sig-name descname"><span class="pre">getDPMEParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getDPMEParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters to use for dispersion PME calculations. If alpha is 0 (the default), these parameters are ignored and instead their values are chosen based on the Ewald error tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>alpha</strong> (<em>double</em>) â the separation parameter</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) â the number of dispersion grid points along the X axis</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) â the number of dispersion grid points along the Y axis</p></li>
+<li><p><strong>nz</strong> (<em>int</em>) â the number of dispersion grid points along the Z axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setPMEParameters">
+<span class="sig-name descname"><span class="pre">setPMEParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setPMEParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the parameters to use for PME calculations. If alpha is 0 (the default), these parameters are ignored and instead their values are chosen based on the Ewald error tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>double</em>) â the separation parameter</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) â the number of grid points along the X axis</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) â the number of grid points along the Y axis</p></li>
+<li><p><strong>nz</strong> (<em>int</em>) â the number of grid points along the Z axis</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setDPMEParameters">
+<span class="sig-name descname"><span class="pre">setDPMEParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ny</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nz</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setDPMEParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the parameters to use for dispersion PME calculations. If alpha is 0 (the default), these parameters are ignored and instead their values are chosen based on the Ewald error tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>double</em>) â the separation parameter</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) â the number of grid points along the X axis</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) â the number of grid points along the Y axis</p></li>
+<li><p><strong>nz</strong> (<em>int</em>) â the number of grid points along the Z axis</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getPMEParametersInContext">
+<span class="sig-name descname"><span class="pre">getPMEParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getPMEParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters being used for PME in a particular Context. Because some platforms have restrictions on the allowed grid sizes, the values that are actually used may be slightly different from those specified with setPmeGridDimensions(), or the standard values calculated based on the Ewald error tolerance. See the manual for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<a class="reference internal" href="openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><em>Context</em></a>) â the Context for which to get the parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>alpha</strong> (<em>double</em>) â the separation parameter</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) â the number of grid points along the X axis</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) â the number of grid points along the Y axis</p></li>
+<li><p><strong>nz</strong> (<em>int</em>) â the number of grid points along the Z axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getDPMEParametersInContext">
+<span class="sig-name descname"><span class="pre">getDPMEParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getDPMEParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters being used for dispersion PME in a particular Context. Because some platforms have restrictions on the allowed grid sizes, the values that are actually used may be slightly different from those specified with setPMEParameters(), or the standard values calculated based on the Ewald error tolerance. See the manual for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<a class="reference internal" href="openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><em>Context</em></a>) â the Context for which to get the parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>alpha</strong> (<em>double</em>) â the separation parameter</p></li>
+<li><p><strong>nx</strong> (<em>int</em>) â the number of grid points along the X axis</p></li>
+<li><p><strong>ny</strong> (<em>int</em>) â the number of grid points along the Y axis</p></li>
+<li><p><strong>nz</strong> (<em>int</em>) â the number of grid points along the Z axis</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.addParticle">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dipole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadrupole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreCharge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pauliK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pauliQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pauliAlpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarizability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleAtomZ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleAtomX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleAtomY</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.addParticle" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add the nonbonded force parameters for a particle. This should be called once for each particle in the System. When it is called for the iâth time, it specifies the parameters for the iâth particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>charge</strong> (<em>double</em>) â the particleâs charge</p></li>
+<li><p><strong>dipole</strong> (<em>vector&lt; double &gt;</em>) â the particleâs molecular dipole (vector of size 3)</p></li>
+<li><p><strong>quadrupole</strong> (<em>vector&lt; double &gt;</em>) â the particleâs molecular quadrupole (vector of size 9)</p></li>
+<li><p><strong>coreCharge</strong> (<em>double</em>) â the charge of the atomic core</p></li>
+<li><p><strong>alpha</strong> (<em>double</em>) â controls the width of the particleâs electron density</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â sets the magnitude of charge transfer</p></li>
+<li><p><strong>damping</strong> (<em>double</em>) â sets the length scale for charge transfer</p></li>
+<li><p><strong>c6</strong> (<em>double</em>) â the coefficient of the dispersion interaction</p></li>
+<li><p><strong>pauliK</strong> (<em>double</em>) â the coefficient of the Pauli repulsion interaction</p></li>
+<li><p><strong>pauliQ</strong> (<em>double</em>) â the charge used in computing the Pauli repulsion interaction</p></li>
+<li><p><strong>pauliAlpha</strong> (<em>double</em>) â the width of the particleâs electron density for computing the Pauli repulsion interaction</p></li>
+<li><p><strong>polarizability</strong> (<em>double</em>) â atomic polarizability</p></li>
+<li><p><strong>axisType</strong> (<em>int</em>) â the particleâs axis type</p></li>
+<li><p><strong>multipoleAtomZ</strong> (<em>int</em>) â index of first atom used in defining the local coordinate system for multipoles</p></li>
+<li><p><strong>multipoleAtomX</strong> (<em>int</em>) â index of second atom used in defining the local coordinate system for multipoles</p></li>
+<li><p><strong>multipoleAtomY</strong> (<em>int</em>) â index of third atom used in defining the local coordinate system for multipoles</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the particle that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getParticleParameters">
+<span class="sig-name descname"><span class="pre">getParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the nonbonded force parameters for a particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the particle for which to get parameters</p></li>
+<li><p><strong>charge</strong> (<em>double</em>) â the particleâs charge</p></li>
+<li><p><strong>dipole</strong> (<em>vector&lt; double &gt;</em>) â the particleâs molecular dipole (vector of size 3)</p></li>
+<li><p><strong>quadrupole</strong> (<em>vector&lt; double &gt;</em>) â the particleâs molecular quadrupole (vector of size 9)</p></li>
+<li><p><strong>coreCharge</strong> (<em>double</em>) â the charge of the atomic core</p></li>
+<li><p><strong>alpha</strong> (<em>double</em>) â controls the width of the particleâs electron density</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â sets the magnitude of charge transfer</p></li>
+<li><p><strong>damping</strong> (<em>double</em>) â sets the length scale for charge transfer</p></li>
+<li><p><strong>c6</strong> (<em>double</em>) â the coefficient of the dispersion interaction</p></li>
+<li><p><strong>pauliK</strong> (<em>double</em>) â the coefficient of the Pauli repulsion interaction</p></li>
+<li><p><strong>pauliQ</strong> (<em>double</em>) â the charge used in computing the Pauli repulsion interaction</p></li>
+<li><p><strong>pauliAlpha</strong> (<em>double</em>) â the width of the particleâs electron density for computing the Pauli repulsion interaction</p></li>
+<li><p><strong>polarizability</strong> (<em>double</em>) â atomic polarizability</p></li>
+<li><p><strong>axisType</strong> (<em>int</em>) â the particleâs axis type</p></li>
+<li><p><strong>multipoleAtomZ</strong> (<em>int</em>) â index of first atom used in defining the local coordinate system for multipoles</p></li>
+<li><p><strong>multipoleAtomX</strong> (<em>int</em>) â index of second atom used in defining the local coordinate system for multipoles</p></li>
+<li><p><strong>multipoleAtomY</strong> (<em>int</em>) â index of third atom used in defining the local coordinate system for multipoles</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setParticleParameters">
+<span class="sig-name descname"><span class="pre">setParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dipole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadrupole</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreCharge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pauliK</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pauliQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pauliAlpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarizability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleAtomZ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleAtomX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleAtomY</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the nonbonded force parameters for a particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the particle for which to set parameters</p></li>
+<li><p><strong>charge</strong> (<em>double</em>) â the particleâs charge</p></li>
+<li><p><strong>dipole</strong> (<em>vector&lt; double &gt;</em>) â the particleâs molecular dipole (vector of size 3)</p></li>
+<li><p><strong>quadrupole</strong> (<em>vector&lt; double &gt;</em>) â the particleâs molecular quadrupole (vector of size 9)</p></li>
+<li><p><strong>coreCharge</strong> (<em>double</em>) â the charge of the atomic core</p></li>
+<li><p><strong>alpha</strong> (<em>double</em>) â controls the width of the particleâs electron density</p></li>
+<li><p><strong>epsilon</strong> (<em>double</em>) â sets the magnitude of charge transfer</p></li>
+<li><p><strong>damping</strong> (<em>double</em>) â sets the length scale for charge transfer</p></li>
+<li><p><strong>c6</strong> (<em>double</em>) â the coefficient of the dispersion interaction</p></li>
+<li><p><strong>pauliK</strong> (<em>double</em>) â the coefficient of the Pauli repulsion interaction</p></li>
+<li><p><strong>pauliQ</strong> (<em>double</em>) â the charge used in computing the Pauli repulsion interaction</p></li>
+<li><p><strong>pauliAlpha</strong> (<em>double</em>) â the width of the particleâs electron density for computing the Pauli repulsion interaction</p></li>
+<li><p><strong>polarizability</strong> (<em>double</em>) â atomic polarizability</p></li>
+<li><p><strong>axisType</strong> (<em>int</em>) â the particleâs axis type</p></li>
+<li><p><strong>multipoleAtomZ</strong> (<em>int</em>) â index of first atom used in defining the local coordinate system for multipoles</p></li>
+<li><p><strong>multipoleAtomX</strong> (<em>int</em>) â index of second atom used in defining the local coordinate system for multipoles</p></li>
+<li><p><strong>multipoleAtomY</strong> (<em>int</em>) â index of third atom used in defining the local coordinate system for multipoles</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.addException">
+<span class="sig-name descname"><span class="pre">addException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleMultipoleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dipoleMultipoleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dipoleDipoleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dispersionScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repulsionScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chargeTransferScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.addException" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add an interaction to the list of exceptions that should be calculated differently from other interactions. If all scale factors are set to 0, this will cause the interaction to be completely omitted from force and energy calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle1</strong> (<em>int</em>) â the index of the first particle involved in the interaction</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index of the second particle involved in the interaction</p></li>
+<li><p><strong>multipoleMultipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between fixed multipoles</p></li>
+<li><p><strong>dipoleMultipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between an induced dipole and a fixed multipole</p></li>
+<li><p><strong>dipoleDipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between induced dipoles</p></li>
+<li><p><strong>dispersionScale</strong> (<em>double</em>) â the factor by which to scale the dispersion interaction</p></li>
+<li><p><strong>repulsionScale</strong> (<em>double</em>) â the factor by which to scale the Pauli repulsion</p></li>
+<li><p><strong>chargeTransferScale</strong> (<em>double</em>) â the factor by which to scale the charge transfer interaction</p></li>
+<li><p><strong>replace</strong> (<em>bool</em>) â determines the behavior if there is already an exception for the same two particles. If true, the existing one is replaced. If false, an exception is thrown.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the exception that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getExceptionParameters">
+<span class="sig-name descname"><span class="pre">getExceptionParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getExceptionParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the scale factors for an interaction that should be calculated differently from others.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the interaction for which to get parameters</p></li>
+<li><p><strong>particle1</strong> (<em>int</em>) â the index of the first particle involved in the interaction</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index of the second particle involved in the interaction</p></li>
+<li><p><strong>multipoleMultipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between fixed multipoles</p></li>
+<li><p><strong>dipoleMultipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between an induced dipole and a fixed multipole</p></li>
+<li><p><strong>dipoleDipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between induced dipoles</p></li>
+<li><p><strong>dispersionScale</strong> (<em>double</em>) â the factor by which to scale the dispersion interaction</p></li>
+<li><p><strong>repulsionScale</strong> (<em>double</em>) â the factor by which to scale the Pauli repulsion</p></li>
+<li><p><strong>chargeTransferScale</strong> (<em>double</em>) â the factor by which to scale the charge transfer interaction</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setExceptionParameters">
+<span class="sig-name descname"><span class="pre">setExceptionParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipoleMultipoleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dipoleMultipoleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dipoleDipoleScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dispersionScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repulsionScale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chargeTransferScale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setExceptionParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the scale factors for an interaction that should be calculated differently from others. If all scale factors are set to 0, this will cause the interaction to be completely omitted from force and energy calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the interaction for which to set parameters</p></li>
+<li><p><strong>particle1</strong> (<em>int</em>) â the index of the first particle involved in the interaction</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index of the second particle involved in the interaction</p></li>
+<li><p><strong>multipoleMultipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between fixed multipoles</p></li>
+<li><p><strong>dipoleMultipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between an induced dipole and a fixed multipole</p></li>
+<li><p><strong>dipoleDipoleScale</strong> (<em>double</em>) â the factor by which to scale the Coulomb interaction between induced dipoles</p></li>
+<li><p><strong>dispersionScale</strong> (<em>double</em>) â the factor by which to scale the dispersion interaction</p></li>
+<li><p><strong>repulsionScale</strong> (<em>double</em>) â the factor by which to scale the Pauli repulsion</p></li>
+<li><p><strong>chargeTransferScale</strong> (<em>double</em>) â the factor by which to scale the charge transfer interaction</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getEwaldErrorTolerance">
+<span class="sig-name descname"><span class="pre">getEwaldErrorTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getEwaldErrorTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the error tolerance for Ewald summation. This corresponds to the fractional error in the forces which is acceptable. This value is used to select the grid dimensions and separation (alpha) parameter so that the average error level will be less than the tolerance. There is not a rigorous guarantee that all forces on all atoms will be less than the tolerance, however.</p>
+<p>This can be overridden by explicitly setting an alpha parameter and grid dimensions to use.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setEwaldErrorTolerance">
+<span class="sig-name descname"><span class="pre">setEwaldErrorTolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setEwaldErrorTolerance" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the error tolerance for Ewald summation. This corresponds to the fractional error in the forces which is acceptable. This value is used to select the grid dimensions and separation (alpha) parameter so that the average error level will be less than the tolerance. There is not a rigorous guarantee that all forces on all atoms will be less than the tolerance, however.</p>
+<p>This can be overridden by explicitly setting an alpha parameter and grid dimensions to use.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getLabFramePermanentDipoles">
+<span class="sig-name descname"><span class="pre">getLabFramePermanentDipoles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getLabFramePermanentDipoles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the fixed dipole moments of all particles in the global reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<a class="reference internal" href="openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><em>Context</em></a>) â the Context for which to get the fixed dipoles</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dipoles</strong> â the fixed dipole moment of particle i is stored into the iâth element</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector&lt; Vec3 &gt;</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getInducedDipoles">
+<span class="sig-name descname"><span class="pre">getInducedDipoles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getInducedDipoles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the induced dipole moments of all particles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<a class="reference internal" href="openmm.openmm.Context.html#openmm.openmm.Context" title="openmm.openmm.Context"><em>Context</em></a>) â the Context for which to get the induced dipoles</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dipoles</strong> â the induced dipole moment of particle i is stored into the iâth element</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>vector&lt; Vec3 &gt;</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the particle and exception parameters in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setParticleParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>This method has several limitations. The only information it updates is the parameters of particles and exceptions. All other aspects of the Force (the nonbonded method, the cutoff distance, etc.) are unaffected and can only be changed by reinitializing the Context. Furthermore, only the scale factors for an exception can be changed; the pair of particles involved in the exception cannot change. Finally, this method cannot be used to add new particles or exceptions, only to change the parameters of existing ones.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if nonbondedMethod uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.HippoNonbondedForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.HippoNonbondedForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

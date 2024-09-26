@@ -1,0 +1,352 @@
+<div class="body" role="main">
+<section id="quantity">
+<h1>Quantity<a class="headerlink" href="#quantity" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.unit.quantity.</span></span><span class="sig-name descname"><span class="pre">Quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Physical quantity, such as 1.3 meters per second.</p>
+<p>Quantities contain both a value, such as 1.3; and a unit,
+such as âmeters per secondâ.</p>
+<p>Supported value types include:</p>
+<ol class="arabic simple">
+<li><p>numbers (float, int, long)</p></li>
+<li><p>lists of numbers, e.g. [1,2,3]</p></li>
+<li><p>tuples of numbers, e.g. (1,2,3)</p>
+<ul class="simple">
+<li><p>Note: unit conversions will cause tuples to be converted to lists</p></li>
+</ul>
+</li>
+<li><p>lists of tuples of numbers, lists of lists of â¦ etc. of numbers</p></li>
+<li><p>numpy.arrays</p></li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Create a new Quantity from a value and a unit.</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><ul class="simple">
+<li><p>value: (any type, usually a number) Measure of this quantity</p></li>
+<li><p>unit: (Unit) the physical unit, e.g. openmm.unit.meters.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.__init__" title="openmm.unit.quantity.Quantity.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>([value,Â unit])</p></td>
+<td><p>Create a new Quantity from a value and a unit.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">append</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">count</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">extend</span></code>(rhs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">format</span></code>(format_spec)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.in_unit_system" title="openmm.unit.quantity.Quantity.in_unit_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_unit_system</span></code></a>(system)</p></td>
+<td><p>Returns a new Quantity equal to this one, expressed in a particular unit system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.in_units_of" title="openmm.unit.quantity.Quantity.in_units_of"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_units_of</span></code></a>(other_unit)</p></td>
+<td><p>Returns an equal Quantity expressed in different units.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">index</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert</span></code>(index,Â item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.max" title="openmm.unit.quantity.Quantity.max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Computes the maximum value of the sequence, with the result having the same unit as the current sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.mean" title="openmm.unit.quantity.Quantity.mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Computes the mean of a sequence, with the result having the same unit as the current sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.min" title="openmm.unit.quantity.Quantity.min"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Computes the minimum value of the sequence, with the result having the same unit as the current sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pop</span></code>(*args)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.reduce_unit" title="openmm.unit.quantity.Quantity.reduce_unit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reduce_unit</span></code></a>([guide_unit])</p></td>
+<td><p>Combine similar component units and scale, to form an equal Quantity in simpler units.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove</span></code>(item)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.reshape" title="openmm.unit.quantity.Quantity.reshape"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reshape</span></code></a>(shape[,Â order])</p></td>
+<td><p>Same as numpy.ndarray.reshape, except the result is a Quantity with the same units as the current object rather than a plain numpy.ndarray</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.sqrt" title="openmm.unit.quantity.Quantity.sqrt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sqrt</span></code></a>()</p></td>
+<td><p>Returns square root of a Quantity.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.std" title="openmm.unit.quantity.Quantity.std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">std</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Computes the square root of the variance of a sequence, with the result having the same unit as the current sequence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.sum" title="openmm.unit.quantity.Quantity.sum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum</span></code></a>(*args,Â **kwargs)</p></td>
+<td><p>Computes the sum of a sequence, with the result having the same unit as the current sequence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.value_in_unit" title="openmm.unit.quantity.Quantity.value_in_unit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_in_unit</span></code></a>(unit)</p></td>
+<td><p>Returns underlying value, in the specified units.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.unit.quantity.Quantity.value_in_unit_system" title="openmm.unit.quantity.Quantity.value_in_unit_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_in_unit_system</span></code></a>(system)</p></td>
+<td><p>Returns the underlying value type, after conversion to a particular unit system.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__copy__">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__copy__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Shallow copy produces a new Quantity with the shallow copy of value and the same unit.
+Because we want copy operations to work just the same way they would on the underlying value.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__deepcopy__">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__deepcopy__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Deep copy produces a new Quantity with a deep copy of the value, and the same unit.
+Because we want copy operations to work just the same way they would on the underlying value.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__getattr__">
+<span class="sig-name descname"><span class="pre">__getattr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__getattr__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Delegate unrecognized attribute calls to the underlying value type.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__str__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Printable string version of this Quantity.</p>
+<p>Returns a string consisting of quantity number followed by unit abbreviation.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__repr__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__add__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add two Quantities.</p>
+<p>Only Quantities with the same dimensions (e.g. length)
+can be added.  Raises TypeError otherwise.</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><ul class="simple">
+<li><p>self: left hand member of sum</p></li>
+<li><p>other: right hand member of sum</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a new Quantity that is the sum of the two arguments.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__sub__">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__sub__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Subtract two Quantities.</p>
+<p>Only Quantities with the same dimensions (e.g. length)
+can be subtracted.  Raises TypeError otherwise.</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><ul class="simple">
+<li><p>self: left hand member (a) of a - b.</p></li>
+<li><p>other: right hand member (b) of a - b.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns a new Quantity that is the difference of the two arguments.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__eq__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__ne__" title="Permalink to this definition">Â¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.reduce_unit">
+<span class="sig-name descname"><span class="pre">reduce_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">guide_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.reduce_unit" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Combine similar component units and scale, to form an
+equal Quantity in simpler units.</p>
+<p>Returns underlying value type if unit is dimensionless.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__mul__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Multiply a quantity by another object</p>
+<p>Returns a new Quantity that is the product of the self * other,
+unless the resulting unit is dimensionless, in which case the
+underlying value type is returned, instead of a Quantity.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__rmul__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Multiply a scalar by a Quantity</p>
+<p>Returns a new Quantity with the same units as self, but with the value
+multiplied by other.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__truediv__">
+<span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__truediv__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Divide a Quantity by another object</p>
+<p>Returns a new Quantity, unless the resulting unit type is dimensionless,
+in which case the underlying value type is returned.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__div__">
+<span class="sig-name descname"><span class="pre">__div__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__div__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Divide a Quantity by another object</p>
+<p>Returns a new Quantity, unless the resulting unit type is dimensionless,
+in which case the underlying value type is returned.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__rtruediv__">
+<span class="sig-name descname"><span class="pre">__rtruediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__rtruediv__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Divide a scalar by a quantity.</p>
+<p>Returns a new Quantity.  The resulting units are the inverse of the self argument units.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__rdiv__">
+<span class="sig-name descname"><span class="pre">__rdiv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__rdiv__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Divide a scalar by a quantity.</p>
+<p>Returns a new Quantity.  The resulting units are the inverse of the self argument units.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__pow__">
+<span class="sig-name descname"><span class="pre">__pow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exponent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__pow__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Raise a Quantity to a power.</p>
+<p>Generally both the value and the unit of the Quantity are affected by this operation.</p>
+<p>Returns a new Quantity equal to self**exponent.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.sqrt">
+<span class="sig-name descname"><span class="pre">sqrt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.sqrt" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns square root of a Quantity.</p>
+<p>Raises ArithmeticError if component exponents are not even.
+This behavior can be changed if you present a reasonable real life case to me.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.sum">
+<span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.sum" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Computes the sum of a sequence, with the result having the same unit as
+the current sequence.</p>
+<p>If the value is not iterable, it raises a TypeError (same behavior as if
+you tried to iterate over, for instance, an integer).</p>
+<p>This function can take as arguments any arguments recognized by
+<cite>numpy.sum</cite>. If arguments are passed to a non-numpy array, a TypeError
+is raised</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.mean">
+<span class="sig-name descname"><span class="pre">mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.mean" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Computes the mean of a sequence, with the result having the same unit as
+the current sequence.</p>
+<p>If the value is not iterable, it raises a TypeError</p>
+<p>This function can take as arguments any arguments recognized by
+<cite>numpy.mean</cite>. If arguments are passed to a non-numpy array, a TypeError
+is raised</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.std">
+<span class="sig-name descname"><span class="pre">std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.std" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Computes the square root of the variance of a sequence, with the result
+having the same unit as the current sequence.</p>
+<p>If the value is not iterable, it raises a TypeError</p>
+<p>This function can take as arguments any arguments recognized by
+<cite>numpy.std</cite>. If arguments are passed to a non-numpy array, a TypeError
+is raised</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.max" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Computes the maximum value of the sequence, with the result having the
+same unit as the current sequence.</p>
+<p>If the value is not iterable, it raises a TypeError</p>
+<p>This function can take as arguments any arguments recognized by
+<cite>numpy.max</cite>. If arguments are passed to a non-numpy array, a TypeError
+is raised</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.min" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Computes the minimum value of the sequence, with the result having the
+same unit as the current sequence.</p>
+<p>If the value is not iterable, it raises a TypeError</p>
+<p>This function can take as arguments any arguments recognized by
+<cite>numpy.min</cite>. If arguments are passed to a non-numpy array, a TypeError
+is raised</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.reshape">
+<span class="sig-name descname"><span class="pre">reshape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.reshape" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Same as numpy.ndarray.reshape, except the result is a Quantity with the
+same units as the current object rather than a plain numpy.ndarray</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__abs__">
+<span class="sig-name descname"><span class="pre">__abs__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__abs__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return absolute value of a Quantity.</p>
+<p>The unit is unchanged.  A negative value of self will result in a positive value
+in the result.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__pos__">
+<span class="sig-name descname"><span class="pre">__pos__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__pos__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns a reference to self.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__neg__">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__neg__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Negate a Quantity.</p>
+<p>Returns a new Quantity with a different sign on the value.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__nonzero__">
+<span class="sig-name descname"><span class="pre">__nonzero__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__nonzero__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns True if value underlying Quantity is zero, False otherwise.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.value_in_unit">
+<span class="sig-name descname"><span class="pre">value_in_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.value_in_unit" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns underlying value, in the specified units.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.value_in_unit_system">
+<span class="sig-name descname"><span class="pre">value_in_unit_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.value_in_unit_system" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns the underlying value type, after conversion to a particular unit system.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.in_unit_system">
+<span class="sig-name descname"><span class="pre">in_unit_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">system</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.in_unit_system" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns a new Quantity equal to this one, expressed in a particular unit system.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.in_units_of">
+<span class="sig-name descname"><span class="pre">in_units_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other_unit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.in_units_of" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns an equal Quantity expressed in different units.</p>
+<p>If the units are the same as those in self, a reference to self is returned.
+Raises a TypeError if the new unit is not compatible with the original unit.</p>
+<dl class="simple">
+<dt>The post_multiply argument is used in case the multiplication operation is not commutative.</dt><dd><p>i.e. result = factor * value when post_multiply is False
+and  result = value * factor when post_multiply is True</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__len__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Return size of internal value type.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.unit.quantity.Quantity.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.unit.quantity.Quantity.__getitem__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Keep the same units on contained elements.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

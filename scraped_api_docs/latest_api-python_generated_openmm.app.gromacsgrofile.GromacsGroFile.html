@@ -1,0 +1,87 @@
+<div class="body" role="main">
+<section id="gromacsgrofile">
+<h1>GromacsGroFile<a class="headerlink" href="#gromacsgrofile" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.app.gromacsgrofile.GromacsGroFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.app.gromacsgrofile.</span></span><span class="sig-name descname"><span class="pre">GromacsGroFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacsgrofile.GromacsGroFile" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>GromacsGroFile parses a Gromacs .gro file and constructs a set of atom positions from it.</p>
+<p>A .gro file also contains some topological information, such as elements and residue names,
+but not enough to construct a full Topology object.  This information is recorded and stored
+in the objectâs public fields.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacsgrofile.GromacsGroFile.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacsgrofile.GromacsGroFile.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Load a .gro file.</p>
+<p>The atom positions can be retrieved by calling getPositions().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>string</em>) â the name of the file to load</p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.gromacsgrofile.GromacsGroFile.__init__" title="openmm.app.gromacsgrofile.GromacsGroFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(file)</p></td>
+<td><p>Load a .gro file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.gromacsgrofile.GromacsGroFile.getNumFrames" title="openmm.app.gromacsgrofile.GromacsGroFile.getNumFrames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumFrames</span></code></a>()</p></td>
+<td><p>Get the number of frames stored in the file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.gromacsgrofile.GromacsGroFile.getPeriodicBoxVectors" title="openmm.app.gromacsgrofile.GromacsGroFile.getPeriodicBoxVectors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPeriodicBoxVectors</span></code></a>([frame])</p></td>
+<td><p>Get the vectors defining the periodic box.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.app.gromacsgrofile.GromacsGroFile.getPositions" title="openmm.app.gromacsgrofile.GromacsGroFile.getPositions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPositions</span></code></a>([asNumpy,Â frame])</p></td>
+<td><p>Get the atomic positions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.app.gromacsgrofile.GromacsGroFile.getUnitCellDimensions" title="openmm.app.gromacsgrofile.GromacsGroFile.getUnitCellDimensions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getUnitCellDimensions</span></code></a>([frame])</p></td>
+<td><p>Get the dimensions of the crystallographic unit cell.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacsgrofile.GromacsGroFile.getNumFrames">
+<span class="sig-name descname"><span class="pre">getNumFrames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacsgrofile.GromacsGroFile.getNumFrames" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of frames stored in the file.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacsgrofile.GromacsGroFile.getPositions">
+<span class="sig-name descname"><span class="pre">getPositions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asNumpy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacsgrofile.GromacsGroFile.getPositions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the atomic positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>asNumpy</strong> (<em>boolean=False</em>) â if true, the values are returned as a numpy array instead of a list
+of Vec3s</p></li>
+<li><p><strong>frame</strong> (<em>int=0</em>) â the index of the frame for which to get positions</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacsgrofile.GromacsGroFile.getPeriodicBoxVectors">
+<span class="sig-name descname"><span class="pre">getPeriodicBoxVectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacsgrofile.GromacsGroFile.getPeriodicBoxVectors" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the vectors defining the periodic box.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>int=0</em>) â the index of the frame for which to get the box vectors</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.app.gromacsgrofile.GromacsGroFile.getUnitCellDimensions">
+<span class="sig-name descname"><span class="pre">getUnitCellDimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.app.gromacsgrofile.GromacsGroFile.getUnitCellDimensions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the dimensions of the crystallographic unit cell.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>frame</strong> (<em>int=0</em>) â the index of the frame for which to get the unit cell dimensions</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

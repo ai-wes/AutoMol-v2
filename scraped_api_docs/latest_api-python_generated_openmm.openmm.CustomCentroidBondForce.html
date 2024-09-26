@@ -1,0 +1,603 @@
+<div class="body" role="main">
+<section id="customcentroidbondforce">
+<h1>CustomCentroidBondForce<a class="headerlink" href="#customcentroidbondforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">CustomCentroidBondForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class is similar to CustomCompoundBondForce, but instead of applying forces between individual particles, it applies them between the centers of groups of particles. This is useful for a variety of purposes, such as restraints to keep two molecules from moving too far apart.</p>
+<p>When using this class, you define groups of particles, and the center of each group is calculated as a weighted average of the particle positions. By default, the particle masses are used as weights, so the center position is the center of mass. You can optionally specify different weights to use. You then add bonds just as with CustomCompoundBondForce, but instead of specifying the particles that make up a bond, you specify the groups.</p>
+<p>When creating a CustomCentroidBondForce, you specify the number of groups involved in a bond, and an expression for the energy of each bond. It may depend on the center positions of individual groups, the distances between the centers of pairs of groups, the angles formed by sets of three groups, and the dihedral angles formed by sets of four groups.</p>
+<p>We refer to the groups in a bond as g1, g2, g3, etc. For each bond, CustomCentroidBondForce evaluates a user supplied algebraic expression to determine the interaction energy. The expression may depend on the following variables and functions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>x1, y1, z1, x2, y2, z2, etc.: The x, y, and z coordinates of the centers of the groups. For example, x1 is the x coordinate of the center of group g1, and y3 is the y coordinate of the center of group g3.</p></li>
+<li><p>distance(g1, g2): the distance between the centers of groups g1 and g2 (where âg1â and âg2â may be replaced by the names of whichever groups you want to calculate the distance between).</p></li>
+<li><p>angle(g1, g2, g3): the angle formed by the centers of the three specified groups.</p></li>
+<li><p>dihedral(g1, g2, g3, g4): the dihedral angle formed by the centers of the four specified groups.</p></li>
+</ul>
+</div></blockquote>
+<p>The expression also may involve tabulated functions, and may depend on arbitrary global and per-bond parameters.</p>
+<p>To use this class, create a CustomCentroidBondForce object, passing an algebraic expression to the constructor that defines the interaction energy of each bond. Then call addPerBondParameter() to define per-bond parameters and addGlobalParameter() to define global parameters. The values of per-bond parameters are specified as part of the system definition, while values of global parameters may be modified during a simulation by calling Context::setParameter().</p>
+<p>Next call addGroup() to define the particle groups. Each group is specified by the particles it contains, and the weights to use when computing the center position.</p>
+<p>Then call addBond() to define bonds and specify their parameter values. After a bond has been added, you can modify its parameters by calling setBondParameters(). This will have no effect on Contexts that already exist unless you call updateParametersInContext().</p>
+<p>As an example, the following code creates a CustomCentroidBondForce that implements a harmonic force between the centers of mass of two groups of particles.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CustomCentroidBondForce</span><span class="o">*</span><span class="w"> </span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CustomCentroidBondForce</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s">"0.5*k*distance(g1,g2)^2"</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addPerBondParameter</span><span class="p">(</span><span class="s">"k"</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addGroup</span><span class="p">(</span><span class="n">particles1</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addGroup</span><span class="p">(</span><span class="n">particles2</span><span class="p">);</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">bondGroups</span><span class="p">;</span>
+<span class="n">bondGroups</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="n">bondGroups</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">bondParameters</span><span class="p">;</span>
+<span class="n">bondParameters</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="n">force</span><span class="o">-&gt;</span><span class="n">addBond</span><span class="p">(</span><span class="n">bondGroups</span><span class="p">,</span><span class="w"> </span><span class="n">bondParameters</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>This class also has the ability to compute derivatives of the potential energy with respect to global parameters. Call addEnergyParameterDerivative() to request that the derivative with respect to a particular parameter be computed. You can then query its value in a Context by calling getState() on it.</p>
+<p>Expressions may involve the operators + (add), - (subtract), * (multiply), / (divide), and ^ (power), and the following functions: sqrt, exp, log, sin, cos, sec, csc, tan, cot, asin, acos, atan, atan2, sinh, cosh, tanh, erf, erfc, min, max, abs, floor, ceil, step, delta, select. All trigonometric functions are defined in radians, and log is the natural logarithm. step(x) = 0 if x is less than 0, 1 otherwise. delta(x) = 1 if x is 0, 0 otherwise. select(x,y,z) = z if x = 0, y otherwise.</p>
+<p>This class also supports the functions pointdistance(x1, y1, z1, x2, y2, z2), pointangle(x1, y1, z1, x2, y2, z2, x3, y3, z3), and pointdihedral(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4). These functions are similar to distance(), angle(), and dihedral(), but the arguments are the coordinates of points to perform the calculation based on rather than the names of groups. This enables more flexible geometric calculations. For example, the following computes the distance from group g1 to the midpoint between groups g2 and g3.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">CustomCentroidBondForce</span><span class="o">*</span><span class="w"> </span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">CustomCentroidBondForce</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s">"pointdistance(x1, y1, z1, (x2+x3)/2, (y2+y3)/2, (z2+z3)/2)"</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In addition, you can call addTabulatedFunction() to define a new function based on tabulated values. You specify the function by creating a TabulatedFunction object. That function can then appear in the expression.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numGroups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce" title="openmm.openmm.CustomCentroidBondForce"><span class="pre">CustomCentroidBondForce</span></a><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce" title="openmm.openmm.CustomCentroidBondForce"><span class="pre">CustomCentroidBondForce</span></a></dt>
+<dd><p>Create a CustomCentroidBondForce.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numGroups</strong> (<em>int</em>) â the number of groups used to define each bond</p></li>
+<li><p><strong>energy</strong> (<em>string</em>) â an algebraic expression giving the interaction energy of each bond as a function of particle positions, inter-particle distances, angles, and dihedrals, and any global and per-bond parameters</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.__init__" title="openmm.openmm.CustomCentroidBondForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â CustomCentroidBondForce)</p></td>
+<td><p>Create a CustomCentroidBondForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.addBond" title="openmm.openmm.CustomCentroidBondForce.addBond"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addBond</span></code></a>(self,Â groups[,Â parameters])</p></td>
+<td><p>Add a bond to the force</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.addEnergyParameterDerivative" title="openmm.openmm.CustomCentroidBondForce.addEnergyParameterDerivative"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addEnergyParameterDerivative</span></code></a>(self,Â name)</p></td>
+<td><p>Request that this Force compute the derivative of its energy with respect to a global parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.addGlobalParameter" title="openmm.openmm.CustomCentroidBondForce.addGlobalParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addGlobalParameter</span></code></a>(self,Â name,Â defaultValue)</p></td>
+<td><p>Add a new global parameter that the interaction may depend on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.addGroup" title="openmm.openmm.CustomCentroidBondForce.addGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addGroup</span></code></a>(self,Â particles[,Â weights])</p></td>
+<td><p>Add a particle group.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.addPerBondParameter" title="openmm.openmm.CustomCentroidBondForce.addPerBondParameter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addPerBondParameter</span></code></a>(self,Â name)</p></td>
+<td><p>Add a new per-bond parameter that the interaction may depend on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.addTabulatedFunction" title="openmm.openmm.CustomCentroidBondForce.addTabulatedFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addTabulatedFunction</span></code></a>(self,Â name,Â function)</p></td>
+<td><p>Add a tabulated function that may appear in the energy expression.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getBondParameters" title="openmm.openmm.CustomCentroidBondForce.getBondParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getBondParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the properties of a bond.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getEnergyFunction" title="openmm.openmm.CustomCentroidBondForce.getEnergyFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEnergyFunction</span></code></a>(self)</p></td>
+<td><p>Get the algebraic expression that gives the interaction energy of each bond</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getEnergyParameterDerivativeName" title="openmm.openmm.CustomCentroidBondForce.getEnergyParameterDerivativeName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getEnergyParameterDerivativeName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a global parameter with respect to which this Force should compute the derivative of the energy.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getForceGroup" title="openmm.openmm.CustomCentroidBondForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getGlobalParameterDefaultValue" title="openmm.openmm.CustomCentroidBondForce.getGlobalParameterDefaultValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalParameterDefaultValue</span></code></a>(self,Â index)</p></td>
+<td><p>Get the default value of a global parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getGlobalParameterName" title="openmm.openmm.CustomCentroidBondForce.getGlobalParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGlobalParameterName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a global parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getGroupParameters" title="openmm.openmm.CustomCentroidBondForce.getGroupParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getGroupParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the properties of a group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getName" title="openmm.openmm.CustomCentroidBondForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumBonds" title="openmm.openmm.CustomCentroidBondForce.getNumBonds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumBonds</span></code></a>(self)</p></td>
+<td><p>Get the number of bonds for which force field parameters have been defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumEnergyParameterDerivatives" title="openmm.openmm.CustomCentroidBondForce.getNumEnergyParameterDerivatives"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumEnergyParameterDerivatives</span></code></a>(self)</p></td>
+<td><p>Get the number of global parameters with respect to which the derivative of the energy should be computed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumFunctions" title="openmm.openmm.CustomCentroidBondForce.getNumFunctions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumFunctions</span></code></a>(self)</p></td>
+<td><p>Get the number of tabulated functions that have been defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumGlobalParameters" title="openmm.openmm.CustomCentroidBondForce.getNumGlobalParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumGlobalParameters</span></code></a>(self)</p></td>
+<td><p>Get the number of global parameters that the interaction depends on.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumGroups" title="openmm.openmm.CustomCentroidBondForce.getNumGroups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumGroups</span></code></a>(self)</p></td>
+<td><p>Get the number of particle groups that have been defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumGroupsPerBond" title="openmm.openmm.CustomCentroidBondForce.getNumGroupsPerBond"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumGroupsPerBond</span></code></a>(self)</p></td>
+<td><p>Get the number of groups used to define each bond.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumPerBondParameters" title="openmm.openmm.CustomCentroidBondForce.getNumPerBondParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumPerBondParameters</span></code></a>(self)</p></td>
+<td><p>Get the number of per-bond parameters that the interaction depends on.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getNumTabulatedFunctions" title="openmm.openmm.CustomCentroidBondForce.getNumTabulatedFunctions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumTabulatedFunctions</span></code></a>(self)</p></td>
+<td><p>Get the number of tabulated functions that have been defined.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getPerBondParameterName" title="openmm.openmm.CustomCentroidBondForce.getPerBondParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPerBondParameterName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a per-bond parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getTabulatedFunction" title="openmm.openmm.CustomCentroidBondForce.getTabulatedFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTabulatedFunction</span></code></a>(-&gt;Â TabulatedFunction)</p></td>
+<td><p>Get a reference to a tabulated function that may appear in the energy expression.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.getTabulatedFunctionName" title="openmm.openmm.CustomCentroidBondForce.getTabulatedFunctionName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getTabulatedFunctionName</span></code></a>(self,Â index)</p></td>
+<td><p>Get the name of a tabulated function that may appear in the energy expression.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setBondParameters" title="openmm.openmm.CustomCentroidBondForce.setBondParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setBondParameters</span></code></a>(self,Â index,Â groups[,Â â¦])</p></td>
+<td><p>Set the properties of a bond.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setEnergyFunction" title="openmm.openmm.CustomCentroidBondForce.setEnergyFunction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setEnergyFunction</span></code></a>(self,Â energy)</p></td>
+<td><p>Set the algebraic expression that gives the interaction energy of each bond</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setForceGroup" title="openmm.openmm.CustomCentroidBondForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setGlobalParameterDefaultValue" title="openmm.openmm.CustomCentroidBondForce.setGlobalParameterDefaultValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGlobalParameterDefaultValue</span></code></a>(self,Â index,Â â¦)</p></td>
+<td><p>Set the default value of a global parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setGlobalParameterName" title="openmm.openmm.CustomCentroidBondForce.setGlobalParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGlobalParameterName</span></code></a>(self,Â index,Â name)</p></td>
+<td><p>Set the name of a global parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setGroupParameters" title="openmm.openmm.CustomCentroidBondForce.setGroupParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setGroupParameters</span></code></a>(self,Â index,Â particles[,Â â¦])</p></td>
+<td><p>Set the properties of a group.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setName" title="openmm.openmm.CustomCentroidBondForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setPerBondParameterName" title="openmm.openmm.CustomCentroidBondForce.setPerBondParameterName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPerBondParameterName</span></code></a>(self,Â index,Â name)</p></td>
+<td><p>Set the name of a per-bond parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.setUsesPeriodicBoundaryConditions" title="openmm.openmm.CustomCentroidBondForce.setUsesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setUsesPeriodicBoundaryConditions</span></code></a>(self,Â periodic)</p></td>
+<td><p>Set whether this force should apply periodic boundary conditions when calculating displacements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.updateParametersInContext" title="openmm.openmm.CustomCentroidBondForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the per-bond parameters and tabulated functions in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.usesPeriodicBoundaryConditions" title="openmm.openmm.CustomCentroidBondForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.CustomCentroidBondForce.thisown" title="openmm.openmm.CustomCentroidBondForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumGroupsPerBond">
+<span class="sig-name descname"><span class="pre">getNumGroupsPerBond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumGroupsPerBond" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of groups used to define each bond.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumGroups">
+<span class="sig-name descname"><span class="pre">getNumGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumGroups" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particle groups that have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumBonds">
+<span class="sig-name descname"><span class="pre">getNumBonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumBonds" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of bonds for which force field parameters have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumPerBondParameters">
+<span class="sig-name descname"><span class="pre">getNumPerBondParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumPerBondParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of per-bond parameters that the interaction depends on.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumGlobalParameters">
+<span class="sig-name descname"><span class="pre">getNumGlobalParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumGlobalParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of global parameters that the interaction depends on.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumEnergyParameterDerivatives">
+<span class="sig-name descname"><span class="pre">getNumEnergyParameterDerivatives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumEnergyParameterDerivatives" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of global parameters with respect to which the derivative of the energy should be computed.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumTabulatedFunctions">
+<span class="sig-name descname"><span class="pre">getNumTabulatedFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumTabulatedFunctions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of tabulated functions that have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getNumFunctions">
+<span class="sig-name descname"><span class="pre">getNumFunctions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getNumFunctions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of tabulated functions that have been defined.</p>
+<div class="admonition-deprecated admonition">
+<p class="admonition-title">Deprecated</p>
+<blockquote>
+<div><p>This method exists only for backward compatibility. Use getNumTabulatedFunctions() instead.</p>
+</div></blockquote>
+</div>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getEnergyFunction">
+<span class="sig-name descname"><span class="pre">getEnergyFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getEnergyFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the algebraic expression that gives the interaction energy of each bond</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setEnergyFunction">
+<span class="sig-name descname"><span class="pre">setEnergyFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setEnergyFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the algebraic expression that gives the interaction energy of each bond</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.addPerBondParameter">
+<span class="sig-name descname"><span class="pre">addPerBondParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.addPerBondParameter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a new per-bond parameter that the interaction may depend on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the parameter that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getPerBondParameterName">
+<span class="sig-name descname"><span class="pre">getPerBondParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getPerBondParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a per-bond parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to get the name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setPerBondParameterName">
+<span class="sig-name descname"><span class="pre">setPerBondParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setPerBondParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of a per-bond parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to set the name</p></li>
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.addGlobalParameter">
+<span class="sig-name descname"><span class="pre">addGlobalParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.addGlobalParameter" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a new global parameter that the interaction may depend on. The default value provided to this method is the initial value of the parameter in newly created Contexts. You can change the value at any time by calling setParameter() on the Context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p></li>
+<li><p><strong>defaultValue</strong> (<em>double</em>) â the default value of the parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the parameter that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getGlobalParameterName">
+<span class="sig-name descname"><span class="pre">getGlobalParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getGlobalParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to get the name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setGlobalParameterName">
+<span class="sig-name descname"><span class="pre">setGlobalParameterName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setGlobalParameterName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to set the name</p></li>
+<li><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getGlobalParameterDefaultValue">
+<span class="sig-name descname"><span class="pre">getGlobalParameterDefaultValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getGlobalParameterDefaultValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default value of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to get the default value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter default value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setGlobalParameterDefaultValue">
+<span class="sig-name descname"><span class="pre">setGlobalParameterDefaultValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setGlobalParameterDefaultValue" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default value of a global parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the parameter for which to set the default value</p></li>
+<li><p><strong>defaultValue</strong> (<em>double</em>) â the default value of the parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.addEnergyParameterDerivative">
+<span class="sig-name descname"><span class="pre">addEnergyParameterDerivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.addEnergyParameterDerivative" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Request that this Force compute the derivative of its energy with respect to a global parameter. The parameter must have already been added with addGlobalParameter().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>string</em>) â the name of the parameter</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getEnergyParameterDerivativeName">
+<span class="sig-name descname"><span class="pre">getEnergyParameterDerivativeName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getEnergyParameterDerivativeName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a global parameter with respect to which this Force should compute the derivative of the energy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the parameter derivative, between 0 and getNumEnergyParameterDerivatives()</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the parameter name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.addGroup">
+<span class="sig-name descname"><span class="pre">addGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">particles</span></em>, <em class="sig-param"><span class="pre">weights=std::vector&lt;</span> <span class="pre">double</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.addGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a particle group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particles</strong> (<em>vector&lt; int &gt;</em>) â the indices of the particles to include in the group</p></li>
+<li><p><strong>weights</strong> (<em>vector&lt; double &gt;</em>) â the weight to use for each particle when computing the center position. If this is omitted, then particle masses will be used as weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the group that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getGroupParameters">
+<span class="sig-name descname"><span class="pre">getGroupParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getGroupParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the properties of a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the group to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>particles</strong> (<em>vector&lt; int &gt;</em>) â the indices of the particles in the group</p></li>
+<li><p><strong>weights</strong> (<em>vector&lt; double &gt;</em>) â the weight used for each particle when computing the center position. If no weights were specified, this vector will be empty indicating that particle masses should be used as weights.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setGroupParameters">
+<span class="sig-name descname"><span class="pre">setGroupParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">index</span></em>, <em class="sig-param"><span class="pre">particles</span></em>, <em class="sig-param"><span class="pre">weights=std::vector&lt;</span> <span class="pre">double</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setGroupParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the properties of a group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the group to set</p></li>
+<li><p><strong>particles</strong> (<em>vector&lt; int &gt;</em>) â the indices of the particles in the group</p></li>
+<li><p><strong>weights</strong> (<em>vector&lt; double &gt;</em>) â the weight to use for each particle when computing the center position. If this is omitted, then particle masses will be used as weights.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.addBond">
+<span class="sig-name descname"><span class="pre">addBond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">groups</span></em>, <em class="sig-param"><span class="pre">parameters=std::vector&lt;</span> <span class="pre">double</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.addBond" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a bond to the force</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>groups</strong> (<em>vector&lt; int &gt;</em>) â the indices of the groups the bond depends on</p></li>
+<li><p><strong>parameters</strong> (<em>vector&lt; double &gt;</em>) â the list of per-bond parameter values for the new bond</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the bond that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getBondParameters">
+<span class="sig-name descname"><span class="pre">getBondParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getBondParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the properties of a bond.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the bond to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>groups</strong> (<em>vector&lt; int &gt;</em>) â the indices of the groups in the bond</p></li>
+<li><p><strong>parameters</strong> (<em>vector&lt; double &gt;</em>) â the list of per-bond parameter values for the bond</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setBondParameters">
+<span class="sig-name descname"><span class="pre">setBondParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">index</span></em>, <em class="sig-param"><span class="pre">groups</span></em>, <em class="sig-param"><span class="pre">parameters=std::vector&lt;</span> <span class="pre">double</span> <span class="pre">&gt;()</span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setBondParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the properties of a bond.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the bond to set</p></li>
+<li><p><strong>groups</strong> (<em>vector&lt; int &gt;</em>) â the indices of the groups in the bond</p></li>
+<li><p><strong>parameters</strong> (<em>vector&lt; double &gt;</em>) â the list of per-bond parameter values for the bond</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.addTabulatedFunction">
+<span class="sig-name descname"><span class="pre">addTabulatedFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.addTabulatedFunction" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a tabulated function that may appear in the energy expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) â the name of the function as it appears in expressions</p></li>
+<li><p><strong>function</strong> (<em>TabulatedFunction *</em>) â a TabulatedFunction object defining the function. The TabulatedFunction should have been created on the heap with the ânewâ operator. The Force takes over ownership of it, and deletes it when the Force itself is deleted.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the function that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getTabulatedFunction">
+<span class="sig-name descname"><span class="pre">getTabulatedFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="openmm.openmm.TabulatedFunction.html#openmm.openmm.TabulatedFunction" title="openmm.openmm.TabulatedFunction"><span class="pre">TabulatedFunction</span></a><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getTabulatedFunction" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">getTabulatedFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="openmm.openmm.TabulatedFunction.html#openmm.openmm.TabulatedFunction" title="openmm.openmm.TabulatedFunction"><span class="pre">TabulatedFunction</span></a></dt>
+<dd><p>Get a reference to a tabulated function that may appear in the energy expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the function to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the TabulatedFunction object defining the function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="openmm.openmm.TabulatedFunction.html#openmm.openmm.TabulatedFunction" title="openmm.openmm.TabulatedFunction">TabulatedFunction</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getTabulatedFunctionName">
+<span class="sig-name descname"><span class="pre">getTabulatedFunctionName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getTabulatedFunctionName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of a tabulated function that may appear in the energy expression.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the function to get</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the name of the function as it appears in expressions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the per-bond parameters and tabulated functions in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setBondParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>This method has several limitations. The only information it updates is the values of per-bond parameters and tabulated functions. All other aspects of the Force (such as the energy function) are unaffected and can only be changed by reinitializing the Context. Neither the definitions of groups nor the set of groups involved in a bond can be changed, nor can new bonds be added. Also, while the tabulated values of a function can change, everything else about it (its dimensions, the data range) must not be changed.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setUsesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">setUsesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">periodic</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setUsesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set whether this force should apply periodic boundary conditions when calculating displacements. Usually this is not appropriate for bonded forces, but there are situations when it can be useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.CustomCentroidBondForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.CustomCentroidBondForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

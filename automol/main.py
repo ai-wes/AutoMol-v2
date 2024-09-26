@@ -8,9 +8,10 @@ from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
 from phase3.phase3_run import run_Phase_3
 from phase4.phase4_run import run_Phase_4
+from phase5.phase5_run import run_Phase_5
 from utils.save_utils import save_json, create_organized_directory_structure
 import argparse
-
+from server.app import emit_progress
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -42,40 +43,51 @@ def parse_arguments():
     return parser.parse_args()
 
 def main():
-    # Load configuration
-    args = parse_arguments()
+    # Load configuration from config.json
     try:
         with open('config.json', 'r') as config_file:
             config = json.load(config_file)
         logger.info("Configuration loaded successfully.")
+        emit_progress("Configuration loaded successfully.")
     except FileNotFoundError:
         logger.error("config.json file not found.")
+        emit_progress("config.json file not found.")
         sys.exit(1)
     except json.JSONDecodeError:
         logger.error("Invalid JSON in config.json.")
+        emit_progress("Invalid JSON in config.json.")
         sys.exit(1)
+
+    # Use the loaded configuration
+    args = argparse.Namespace(**config)
+
+
 
     # Merge config with arguments
     config = merge_config_with_args(config, args)
     logger.info("Configuration merged with command-line arguments.")
-
+    emit_progress("Configuration merged with command-line arguments.")
     config_overrides = {k: v for k, v in vars(args).items() if v is not None}
     config.update(config_overrides)
     logger.info(f"Configuration overridden with command-line arguments: {config_overrides}")
 
     # Create organized directory structure
     base_output_dir = config.get('base_output_dir', 'results')
+    emit_progress("Creating organized directory structure...")
     try:
         run_dir, phase_dirs = create_organized_directory_structure(base_output_dir)
         if not run_dir or not phase_dirs:
             raise ValueError("Failed to create directory structure")
         logger.info(f"Organized directory structure created at {run_dir}.")
+        emit_progress(f"Organized directory structure created at {run_dir}.")
     except Exception as e:
         logger.error(f"Failed to create directory structure: {str(e)}")
+        emit_progress(f"Failed to create directory structure: {str(e)}")
         sys.exit(1)
 
     # Update config with run_dir
     config['run_dir'] = run_dir
+    emit_progress("Updated config with run_dir.")
 
     # Phase 1: Generate Hypothesis
     if not config.get('skip_description_gen', False):
@@ -83,15 +95,19 @@ def main():
         phase1_results = run_Phase_1(config)
         save_json(phase1_results, Path(run_dir) / "phase1_results.json")
         logger.info("Phase 1 results saved successfully.")
-    else:
+        emit_progress("Phase 1 results saved successfully.")
+    else:   
         logger.info("Skipping Phase 1: Generate Hypothesis as per command-line flag.")
+        emit_progress("Skipping Phase 1: Generate Hypothesis as per command-line flag.")
         # Optionally, set default values or handle accordingly
         phase1_results = {
             'technical_description': config.get('input_text', ''),
             'initial_hypothesis': config.get('input_text', '')
         }
     print("phase1_results", phase1_results)
-
+    emit_progress("phase1_results", phase1_results)
+    
+    
     # Phase 2a: Generate and Optimize Proteins
     logger.info("Starting Phase 2a: Generate and Optimize Proteins")
     phase2a_config = config['phase2a']
@@ -103,7 +119,7 @@ def main():
         'optimization_steps': config.get('optimization_steps', 15),
         'score_threshold': config.get('score_threshold', 0.55)
     })
-
+    emit_progress("phase2a_config", phase2a_config)
     # Filter out unexpected keys
     expected_keys = ['technical_descriptions', 'predicted_structures_dir', 'results_dir', 'num_sequences', 'optimization_steps', 'score_threshold']
     filtered_phase2a_config = {k: v for k, v in phase2a_config.items() if k in expected_keys}
@@ -112,7 +128,7 @@ def main():
     phase2a_results, all_generated_sequences = run_Phase_2a(**filtered_phase2a_config)
     save_json(phase2a_results, Path(run_dir) / "phase2a_results.json")
     logger.info("Phase 2a results saved successfully.")
-
+    emit_progress("Phase 2a results saved successfully.")
     # Extract protein sequences from phase2a_results
     protein_sequences = [result['sequence'] for result in phase2a_results]
 
@@ -128,6 +144,7 @@ def main():
         'score_threshold': config.get('score_threshold', 0.55),
         'protein_sequences': protein_sequences
     })
+    emit_progress("phase2b_config", phase2b_config)
 
     # Filter out unexpected keys
     expected_keys_phase2b = ['predicted_structures_dir', 'results_dir', 'num_sequences', 'optimization_steps', 'score_threshold', 'protein_sequences']
@@ -136,17 +153,18 @@ def main():
     phase2b_results = run_Phase_2b(**filtered_phase2b_config)
     save_json(phase2b_results, Path(run_dir) / "phase2b_results.json")
     logger.info("Phase 2b results saved successfully.")
-
+    emit_progress("Phase 2b results saved successfully.")
 
     # Phase 3: Simulation
     logger.info("Starting Phase 3: Simulation")
     phase3_config = config['phase3']
     phase3_config.update({
         'protein_results': phase2a_results,
+        'ligand_results': phase2b_results,  # Add ligand results from Phase 2b
         'output_dir': os.path.join(run_dir, "phase3"),
         'device': config.get('device', 'cpu')
     })
-
+    emit_progress("phase3_config", phase3_config)
     # Optionally, filter out unexpected keys for Phase 3
     expected_keys_phase3 = ['protein_results', 'output_dir', 'device']
     filtered_phase3_config = {k: v for k, v in phase3_config.items() if k in expected_keys_phase3}
@@ -155,7 +173,7 @@ def main():
     phase3_results = run_Phase_3(**filtered_phase3_config)
     save_json(phase3_results, Path(run_dir) / "phase3" / "phase3_results.json")
     logger.info("Phase 3 results saved successfully.")
-
+    emit_progress("Phase 3 results saved successfully.")
 
     # Phase 4: Final Analysis and Reporting
     # Phase 4: Final Analysis and Reporting
@@ -165,12 +183,12 @@ def main():
         'simulation_results': phase3_results,
         'output_dir': os.path.join(run_dir, "phase4")
     })
-
+    emit_progress("phase4_config", phase4_config)
     # Pass both phase3_results and config to run_Phase_4
     phase4_results = run_Phase_4(phase3_results, phase4_config)
     save_json(phase4_results, Path(run_dir) / "phase4_results.json")
     logger.info("Phase 4 results saved successfully.")
-
+    emit_progress("Phase 4 results saved successfully.")    
 
     # Save All Results Consolidated
     all_results = {
@@ -182,6 +200,18 @@ def main():
     }
     save_json(all_results, Path(run_dir) / "final_results.json")
     logger.info("All phase results saved successfully.")
+    emit_progress("All phase results saved successfully.")
 
+    # Phase 5: Final Report and Decision Making Process
+    logger.info("Starting Phase 5: Decision Making Process")
+    phase5_config = config['phase5']
+    phase5_config.update({
+        'base_output_dir': base_output_dir
+    })
+    phase5_results = run_Phase_5(phase5_config)
+    save_json(phase5_results, Path(run_dir) / "phase5_results.json")
+    logger.info("Phase 5 results saved successfully.")
+    emit_progress("Phase 5 results saved successfully.")
+    
 if __name__ == "__main__":
     main()

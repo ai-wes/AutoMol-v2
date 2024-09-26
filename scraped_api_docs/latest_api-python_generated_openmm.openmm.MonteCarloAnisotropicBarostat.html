@@ -1,0 +1,252 @@
+<div class="body" role="main">
+<section id="montecarloanisotropicbarostat">
+<h1>MonteCarloAnisotropicBarostat<a class="headerlink" href="#montecarloanisotropicbarostat" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">MonteCarloAnisotropicBarostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class uses a Monte Carlo algorithm to adjust the size of the periodic box, simulating the effect of constant pressure.</p>
+<p>This class is similar to MonteCarloBarostat, but each Monte Carlo move is applied to only one axis of the periodic box (unlike MonteCarloBarostat, which scales the entire box isotropically). This means that the box may change shape as well as size over the course of the simulation. It also allows you to specify a different pressure for each axis of the box, or to keep the box size fixed along certain axes while still allowing it to change along others.</p>
+<p>This class assumes the simulation is also being run at constant temperature, and requires you to specify the system temperature (since it affects the acceptance probability for Monte Carlo moves). It does not actually perform temperature regulation, however. You must use another mechanism along with it to maintain the temperature, such as LangevinIntegrator or AndersenThermostat.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultPressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultTemperature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleX</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleY</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaleZ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat" title="openmm.openmm.MonteCarloAnisotropicBarostat"><span class="pre">MonteCarloAnisotropicBarostat</span></a><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat" title="openmm.openmm.MonteCarloAnisotropicBarostat"><span class="pre">MonteCarloAnisotropicBarostat</span></a></dt>
+<dd><p>Create a MonteCarloAnisotropicBarostat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>defaultPressure</strong> (<a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><em>Vec3</em></a>) â The default pressure acting on each axis (in bar)</p></li>
+<li><p><strong>defaultTemperature</strong> (<em>double</em>) â the default temperature at which the system is being maintained (in Kelvin)</p></li>
+<li><p><strong>scaleX</strong> (<em>bool</em>) â whether to allow the X dimension of the periodic box to change size</p></li>
+<li><p><strong>scaleY</strong> (<em>bool</em>) â whether to allow the Y dimension of the periodic box to change size</p></li>
+<li><p><strong>scaleZ</strong> (<em>bool</em>) â whether to allow the Z dimension of the periodic box to change size</p></li>
+<li><p><strong>frequency</strong> (<em>int</em>) â the frequency at which Monte Carlo pressure changes should be attempted (in time steps)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.PressureX" title="openmm.openmm.MonteCarloAnisotropicBarostat.PressureX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PressureX</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current pressure acting on the X-axis (in bar).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.PressureY" title="openmm.openmm.MonteCarloAnisotropicBarostat.PressureY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PressureY</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current pressure acting on the Y-axis (in bar).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.PressureZ" title="openmm.openmm.MonteCarloAnisotropicBarostat.PressureZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PressureZ</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current pressure acting on the Z-axis (in bar).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.Temperature" title="openmm.openmm.MonteCarloAnisotropicBarostat.Temperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Temperature</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current temperature at which the system is being maintained (in Kelvin)</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.__init__" title="openmm.openmm.MonteCarloAnisotropicBarostat.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â MonteCarloAnisotropicBarostat)</p></td>
+<td><p>Create a MonteCarloAnisotropicBarostat.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultPressure" title="openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultPressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDefaultPressure</span></code></a>(self)</p></td>
+<td><p>Get the default pressure (in bar).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultTemperature" title="openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDefaultTemperature</span></code></a>(self)</p></td>
+<td><p>Get the default temperature at which the system is being maintained, measured in Kelvin.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getForceGroup" title="openmm.openmm.MonteCarloAnisotropicBarostat.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getFrequency" title="openmm.openmm.MonteCarloAnisotropicBarostat.getFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFrequency</span></code></a>(self)</p></td>
+<td><p>Get the frequency (in time steps) at which Monte Carlo pressure changes should be attempted.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getName" title="openmm.openmm.MonteCarloAnisotropicBarostat.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getRandomNumberSeed" title="openmm.openmm.MonteCarloAnisotropicBarostat.getRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRandomNumberSeed</span></code></a>(self)</p></td>
+<td><p>Get the random number seed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getScaleX" title="openmm.openmm.MonteCarloAnisotropicBarostat.getScaleX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getScaleX</span></code></a>(self)</p></td>
+<td><p>Get whether to allow the X dimension of the periodic box to change size.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getScaleY" title="openmm.openmm.MonteCarloAnisotropicBarostat.getScaleY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getScaleY</span></code></a>(self)</p></td>
+<td><p>Get whether to allow the Y dimension of the periodic box to change size.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getScaleZ" title="openmm.openmm.MonteCarloAnisotropicBarostat.getScaleZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getScaleZ</span></code></a>(self)</p></td>
+<td><p>Get whether to allow the Z dimension of the periodic box to change size.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultPressure" title="openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultPressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDefaultPressure</span></code></a>(self,Â pressure)</p></td>
+<td><p>Set the default pressure acting on the system.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultTemperature" title="openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultTemperature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDefaultTemperature</span></code></a>(self,Â temp)</p></td>
+<td><p>Set the default temperature at which the system is being maintained.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setForceGroup" title="openmm.openmm.MonteCarloAnisotropicBarostat.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setFrequency" title="openmm.openmm.MonteCarloAnisotropicBarostat.setFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setFrequency</span></code></a>(self,Â freq)</p></td>
+<td><p>Set the frequency (in time steps) at which Monte Carlo pressure changes should be attempted.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setName" title="openmm.openmm.MonteCarloAnisotropicBarostat.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setRandomNumberSeed" title="openmm.openmm.MonteCarloAnisotropicBarostat.setRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRandomNumberSeed</span></code></a>(self,Â seed)</p></td>
+<td><p>Set the random number seed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.usesPeriodicBoundaryConditions" title="openmm.openmm.MonteCarloAnisotropicBarostat.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.MonteCarloAnisotropicBarostat.thisown" title="openmm.openmm.MonteCarloAnisotropicBarostat.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.PressureX">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">PressureX</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.PressureX" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current pressure acting on the X-axis (in bar).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.PressureY">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">PressureY</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.PressureY" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current pressure acting on the Y-axis (in bar).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.PressureZ">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">PressureZ</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.PressureZ" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current pressure acting on the Z-axis (in bar).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.Temperature">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">Temperature</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.Temperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current temperature at which the system is being maintained (in Kelvin)</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultPressure">
+<span class="sig-name descname"><span class="pre">getDefaultPressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">Vec3</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultPressure" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default pressure (in bar).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the default pressure acting along each axis, measured in bar.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3">Vec3</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultPressure">
+<span class="sig-name descname"><span class="pre">setDefaultPressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultPressure" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default pressure acting on the system. This will affect any new Contexts you create, but not ones that already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pressure</strong> (<a class="reference internal" href="openmm.vec3.Vec3.html#openmm.vec3.Vec3" title="openmm.vec3.Vec3"><em>Vec3</em></a>) â the default pressure acting on the system, measured in bar.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getScaleX">
+<span class="sig-name descname"><span class="pre">getScaleX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getScaleX" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether to allow the X dimension of the periodic box to change size.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getScaleY">
+<span class="sig-name descname"><span class="pre">getScaleY</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getScaleY" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether to allow the Y dimension of the periodic box to change size.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getScaleZ">
+<span class="sig-name descname"><span class="pre">getScaleZ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getScaleZ" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get whether to allow the Z dimension of the periodic box to change size.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getFrequency">
+<span class="sig-name descname"><span class="pre">getFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the frequency (in time steps) at which Monte Carlo pressure changes should be attempted. If this is set to 0, the barostat is disabled.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.setFrequency">
+<span class="sig-name descname"><span class="pre">setFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the frequency (in time steps) at which Monte Carlo pressure changes should be attempted. If this is set to 0, the barostat is disabled.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultTemperature">
+<span class="sig-name descname"><span class="pre">getDefaultTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getDefaultTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default temperature at which the system is being maintained, measured in Kelvin.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultTemperature">
+<span class="sig-name descname"><span class="pre">setDefaultTemperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setDefaultTemperature" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default temperature at which the system is being maintained. This will affect any new Contexts you create, but not ones that already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>temp</strong> (<em>double</em>) â the system temperature, measured in Kelvin.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">getRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the random number seed. See setRandomNumberSeed() for details.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.setRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">setRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the random number seed. It is guaranteed that if two simulations are run with different random number seeds, the sequence of Monte Carlo steps will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a Context is created from this Force. This is done to ensure that each Context receives unique random seeds without you needing to set them explicitly.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.MonteCarloAnisotropicBarostat.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.MonteCarloAnisotropicBarostat.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

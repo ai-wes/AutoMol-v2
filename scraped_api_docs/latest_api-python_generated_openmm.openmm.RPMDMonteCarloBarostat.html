@@ -1,0 +1,177 @@
+<div class="body" role="main">
+<section id="rpmdmontecarlobarostat">
+<h1>RPMDMonteCarloBarostat<a class="headerlink" href="#rpmdmontecarlobarostat" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">RPMDMonteCarloBarostat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class is very similar to MonteCarloBarostat, but it is specifically designed for use with RPMDIntegrator. For each trial move, it scales all copies of the system by the same amount, then accepts or rejects the move based on the change to the total energy of the ring polymer (as returned by the integratorâs getTotalEnergy() method).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaultPressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat" title="openmm.openmm.RPMDMonteCarloBarostat"><span class="pre">RPMDMonteCarloBarostat</span></a><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat" title="openmm.openmm.RPMDMonteCarloBarostat"><span class="pre">RPMDMonteCarloBarostat</span></a></dt>
+<dd><p>Create a MonteCarloBarostat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>defaultPressure</strong> (<em>double</em>) â the default pressure acting on the system (in bar)</p></li>
+<li><p><strong>frequency</strong> (<em>int</em>) â the frequency at which Monte Carlo pressure changes should be attempted (in time steps)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.Pressure" title="openmm.openmm.RPMDMonteCarloBarostat.Pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pressure</span></code></a>()</p></td>
+<td><p>This is the name of the parameter which stores the current pressure acting on the system (in bar).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.__init__" title="openmm.openmm.RPMDMonteCarloBarostat.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â RPMDMonteCarloBarostat)</p></td>
+<td><p>Create a MonteCarloBarostat.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.getDefaultPressure" title="openmm.openmm.RPMDMonteCarloBarostat.getDefaultPressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getDefaultPressure</span></code></a>(self)</p></td>
+<td><p>Get the default pressure acting on the system (in bar).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.getForceGroup" title="openmm.openmm.RPMDMonteCarloBarostat.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.getFrequency" title="openmm.openmm.RPMDMonteCarloBarostat.getFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getFrequency</span></code></a>(self)</p></td>
+<td><p>Get the frequency (in time steps) at which Monte Carlo pressure changes should be attempted.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.getName" title="openmm.openmm.RPMDMonteCarloBarostat.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.getRandomNumberSeed" title="openmm.openmm.RPMDMonteCarloBarostat.getRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRandomNumberSeed</span></code></a>(self)</p></td>
+<td><p>Get the random number seed.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.setDefaultPressure" title="openmm.openmm.RPMDMonteCarloBarostat.setDefaultPressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setDefaultPressure</span></code></a>(self,Â pressure)</p></td>
+<td><p>Set the default pressure acting on the system.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.setForceGroup" title="openmm.openmm.RPMDMonteCarloBarostat.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.setFrequency" title="openmm.openmm.RPMDMonteCarloBarostat.setFrequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setFrequency</span></code></a>(self,Â freq)</p></td>
+<td><p>Set the frequency (in time steps) at which Monte Carlo pressure changes should be attempted.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.setName" title="openmm.openmm.RPMDMonteCarloBarostat.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.setRandomNumberSeed" title="openmm.openmm.RPMDMonteCarloBarostat.setRandomNumberSeed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setRandomNumberSeed</span></code></a>(self,Â seed)</p></td>
+<td><p>Set the random number seed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.usesPeriodicBoundaryConditions" title="openmm.openmm.RPMDMonteCarloBarostat.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.RPMDMonteCarloBarostat.thisown" title="openmm.openmm.RPMDMonteCarloBarostat.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.Pressure">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">Pressure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.Pressure" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This is the name of the parameter which stores the current pressure acting on the system (in bar).</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.getDefaultPressure">
+<span class="sig-name descname"><span class="pre">getDefaultPressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">double</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.getDefaultPressure" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the default pressure acting on the system (in bar).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the default pressure acting on the system, measured in bar.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>double</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.setDefaultPressure">
+<span class="sig-name descname"><span class="pre">setDefaultPressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.setDefaultPressure" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the default pressure acting on the system. This will affect any new Contexts you create, but not ones that already exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pressure</strong> (<em>double</em>) â the default pressure acting on the system, measured in bar.</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.getFrequency">
+<span class="sig-name descname"><span class="pre">getFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.getFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the frequency (in time steps) at which Monte Carlo pressure changes should be attempted. If this is set to 0, the barostat is disabled.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.setFrequency">
+<span class="sig-name descname"><span class="pre">setFrequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.setFrequency" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the frequency (in time steps) at which Monte Carlo pressure changes should be attempted. If this is set to 0, the barostat is disabled.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.getRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">getRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.getRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the random number seed. See setRandomNumberSeed() for details.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.setRandomNumberSeed">
+<span class="sig-name descname"><span class="pre">setRandomNumberSeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.setRandomNumberSeed" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the random number seed. It is guaranteed that if two simulations are run with different random number seeds, the sequence of Monte Carlo steps will be different. On the other hand, no guarantees are made about the behavior of simulations that use the same seed. In particular, Platforms are permitted to use non-deterministic algorithms which produce different results on successive runs, even if those runs were initialized identically.</p>
+<p>If seed is set to 0 (which is the default value assigned), a unique seed is chosen when a Context is created from this Force. This is done to ensure that each Context receives unique random seeds without you needing to set them explicitly.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if force uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.RPMDMonteCarloBarostat.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.RPMDMonteCarloBarostat.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>

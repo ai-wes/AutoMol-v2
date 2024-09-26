@@ -1,0 +1,267 @@
+<div class="body" role="main">
+<section id="drudeforce">
+<h1>DrudeForce<a class="headerlink" href="#drudeforce" title="Permalink to this headline">Â¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">openmm.openmm.</span></span><span class="sig-name descname"><span class="pre">DrudeForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>This class implements forces that are specific to Drude oscillators. There are two distinct forces it applies: an anisotropic harmonic force connecting each Drude particle to its parent particle; and a screened Coulomb interaction between specific pairs of dipoles. The latter is typically used between closely bonded particles whose Coulomb interaction would otherwise be fully excluded.</p>
+<p>To use this class, create a DrudeForce object, then call addParticle() once for each Drude particle in the System to define its parameters. After a particle has been added, you can modify its force field parameters by calling setParticleParameters(). This will have no effect on Contexts that already exist unless you call updateParametersInContext(). Likewise, call addScreenedPair() for each pair of dipoles (each dipole consisting of a Drude particle and its parent) that should be computed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.DrudeForce" title="openmm.openmm.DrudeForce"><span class="pre">DrudeForce</span></a><a class="headerlink" href="#openmm.openmm.DrudeForce.__init__" title="Permalink to this definition">Â¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span> → <a class="reference internal" href="#openmm.openmm.DrudeForce" title="openmm.openmm.DrudeForce"><span class="pre">DrudeForce</span></a></dt>
+<dd><p>Create a DrudeForce.</p>
+</dd></dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.__init__" title="openmm.openmm.DrudeForce.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(-&gt;Â DrudeForce)</p></td>
+<td><p>Create a DrudeForce.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.addParticle" title="openmm.openmm.DrudeForce.addParticle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addParticle</span></code></a>(self,Â particle,Â particle1,Â â¦)</p></td>
+<td><p>Add a Drude particle to which forces should be applied.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.addScreenedPair" title="openmm.openmm.DrudeForce.addScreenedPair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">addScreenedPair</span></code></a>(self,Â particle1,Â particle2,Â â¦)</p></td>
+<td><p>Add an interaction to the list of screened pairs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.getForceGroup" title="openmm.openmm.DrudeForce.getForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getForceGroup</span></code></a>(self)</p></td>
+<td><p>Get the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.getName" title="openmm.openmm.DrudeForce.getName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getName</span></code></a>(self)</p></td>
+<td><p>Get the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.getNumParticles" title="openmm.openmm.DrudeForce.getNumParticles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumParticles</span></code></a>(self)</p></td>
+<td><p>Get the number of particles for which force field parameters have been defined.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.getNumScreenedPairs" title="openmm.openmm.DrudeForce.getNumScreenedPairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNumScreenedPairs</span></code></a>(self)</p></td>
+<td><p>Get the number of special interactions that should be calculated differently from other interactions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.getParticleParameters" title="openmm.openmm.DrudeForce.getParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParticleParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the parameters for a Drude particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.getScreenedPairParameters" title="openmm.openmm.DrudeForce.getScreenedPairParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getScreenedPairParameters</span></code></a>(self,Â index)</p></td>
+<td><p>Get the force field parameters for screened pair.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.setForceGroup" title="openmm.openmm.DrudeForce.setForceGroup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setForceGroup</span></code></a>(self,Â group)</p></td>
+<td><p>Set the force group this Force belongs to.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.setName" title="openmm.openmm.DrudeForce.setName"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setName</span></code></a>(self,Â name)</p></td>
+<td><p>Set the name of this Force.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.setParticleParameters" title="openmm.openmm.DrudeForce.setParticleParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setParticleParameters</span></code></a>(self,Â index,Â particle,Â â¦)</p></td>
+<td><p>Set the parameters for a Drude particle.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.setScreenedPairParameters" title="openmm.openmm.DrudeForce.setScreenedPairParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setScreenedPairParameters</span></code></a>(self,Â index,Â â¦)</p></td>
+<td><p>Set the force field parameters for screened pair.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.updateParametersInContext" title="openmm.openmm.DrudeForce.updateParametersInContext"><code class="xref py py-obj docutils literal notranslate"><span class="pre">updateParametersInContext</span></code></a>(self,Â context)</p></td>
+<td><p>Update the particle and screened pair parameters in a Context to match those stored in this Force object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.usesPeriodicBoundaryConditions" title="openmm.openmm.DrudeForce.usesPeriodicBoundaryConditions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">usesPeriodicBoundaryConditions</span></code></a>(self)</p></td>
+<td><p>Returns whether or not this force makes use of periodic boundary conditions.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#openmm.openmm.DrudeForce.thisown" title="openmm.openmm.DrudeForce.thisown"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thisown</span></code></a></p></td>
+<td><p>The membership flag</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.thisown">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">thisown</span></span><a class="headerlink" href="#openmm.openmm.DrudeForce.thisown" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>The membership flag</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.getNumParticles">
+<span class="sig-name descname"><span class="pre">getNumParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeForce.getNumParticles" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of particles for which force field parameters have been defined.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.getNumScreenedPairs">
+<span class="sig-name descname"><span class="pre">getNumScreenedPairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeForce.getNumScreenedPairs" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the number of special interactions that should be calculated differently from other interactions.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.addParticle">
+<span class="sig-name descname"><span class="pre">addParticle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarizability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aniso12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aniso34</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeForce.addParticle" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add a Drude particle to which forces should be applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle</strong> (<em>int</em>) â the index within the System of the Drude particle</p></li>
+<li><p><strong>particle1</strong> (<em>int</em>) â the index within the System of the particle to which the Drude particle is attached</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index within the System of the second particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso12 will be ignored.</p></li>
+<li><p><strong>particle3</strong> (<em>int</em>) â the index within the System of the third particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso34 will be ignored.</p></li>
+<li><p><strong>particle4</strong> (<em>int</em>) â the index within the System of the fourth particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso34 will be ignored.</p></li>
+<li><p><strong>charge</strong> (<em>double</em>) â The charge on the Drude particle</p></li>
+<li><p><strong>polarizability</strong> (<em>double</em>) â The isotropic polarizability</p></li>
+<li><p><strong>aniso12</strong> (<em>double</em>) â The scale factor for the polarizability along the direction defined by particle1 and particle2</p></li>
+<li><p><strong>aniso34</strong> (<em>double</em>) â The scale factor for the polarizability along the direction defined by particle3 and particle4</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the particle that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.getParticleParameters">
+<span class="sig-name descname"><span class="pre">getParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.getParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the parameters for a Drude particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the Drude particle for which to get parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>particle</strong> (<em>int</em>) â the index within the System of the Drude particle</p></li>
+<li><p><strong>particle1</strong> (<em>int</em>) â the index within the System of the particle to which the Drude particle is attached</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index within the System of the second particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso12 will be ignored.</p></li>
+<li><p><strong>particle3</strong> (<em>int</em>) â the index within the System of the third particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso34 will be ignored.</p></li>
+<li><p><strong>particle4</strong> (<em>int</em>) â the index within the System of the fourth particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso34 will be ignored.</p></li>
+<li><p><strong>charge</strong> (<em>double</em>) â The charge on the Drude particle</p></li>
+<li><p><strong>polarizability</strong> (<em>double</em>) â The isotropic polarizability</p></li>
+<li><p><strong>aniso12</strong> (<em>double</em>) â The scale factor for the polarizability along the direction defined by particle1 and particle2</p></li>
+<li><p><strong>aniso34</strong> (<em>double</em>) â The scale factor for the polarizability along the direction defined by particle3 and particle4</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.setParticleParameters">
+<span class="sig-name descname"><span class="pre">setParticleParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polarizability</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aniso12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aniso34</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.setParticleParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the parameters for a Drude particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the Drude particle for which to set parameters</p></li>
+<li><p><strong>particle</strong> (<em>int</em>) â the index within the System of the Drude particle</p></li>
+<li><p><strong>particle1</strong> (<em>int</em>) â the index within the System of the particle to which the Drude particle is attached</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index within the System of the second particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso12 will be ignored.</p></li>
+<li><p><strong>particle3</strong> (<em>int</em>) â the index within the System of the third particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso34 will be ignored.</p></li>
+<li><p><strong>particle4</strong> (<em>int</em>) â the index within the System of the fourth particle used for defining anisotropic polarizability. This may be set to -1, in which case aniso34 will be ignored.</p></li>
+<li><p><strong>charge</strong> (<em>double</em>) â The charge on the Drude particle</p></li>
+<li><p><strong>polarizability</strong> (<em>double</em>) â The isotropic polarizability</p></li>
+<li><p><strong>aniso12</strong> (<em>double</em>) â The scale factor for the polarizability along the direction defined by particle1 and particle2</p></li>
+<li><p><strong>aniso34</strong> (<em>double</em>) â The scale factor for the polarizability along the direction defined by particle3 and particle4</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.addScreenedPair">
+<span class="sig-name descname"><span class="pre">addScreenedPair</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thole</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeForce.addScreenedPair" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Add an interaction to the list of screened pairs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particle1</strong> (<em>int</em>) â the index within this Force of the first particle involved in the interaction</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index within this Force of the second particle involved in the interaction</p></li>
+<li><p><strong>thole</strong> (<em>double</em>) â the Thole screening factor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the index of the screenedPair that was added</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.getScreenedPairParameters">
+<span class="sig-name descname"><span class="pre">getScreenedPairParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.getScreenedPairParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force field parameters for screened pair.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) â the index of the pair for which to get parameters</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>particle1</strong> (<em>int</em>) â the index within this Force of the first particle involved in the interaction</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index within this Force of the second particle involved in the interaction</p></li>
+<li><p><strong>thole</strong> (<em>double</em>) â the Thole screening factor</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.setScreenedPairParameters">
+<span class="sig-name descname"><span class="pre">setScreenedPairParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">particle2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thole</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.setScreenedPairParameters" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force field parameters for screened pair.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) â the index of the pair for which to get parameters</p></li>
+<li><p><strong>particle1</strong> (<em>int</em>) â the index within this Force of the first particle involved in the interaction</p></li>
+<li><p><strong>particle2</strong> (<em>int</em>) â the index within this Force of the second particle involved in the interaction</p></li>
+<li><p><strong>thole</strong> (<em>double</em>) â the Thole screening factor</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.updateParametersInContext">
+<span class="sig-name descname"><span class="pre">updateParametersInContext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.updateParametersInContext" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Update the particle and screened pair parameters in a Context to match those stored in this Force object. This method provides an efficient method to update certain parameters in an existing Context without needing to reinitialize it. Simply call setParticleParameters() and setScreenedPairParameters() to modify this objectâs parameters, then call updateParametersInContext() to copy them over to the Context.</p>
+<p>This method has several limitations. It can be used to modify the numeric parameters associated with a particle or screened pair (polarizability, thole, etc.), but not the identities of the particles they involve. It also cannot be used to add new particles or screenedPairs, only to change the parameters of existing ones.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.usesPeriodicBoundaryConditions">
+<span class="sig-name descname"><span class="pre">usesPeriodicBoundaryConditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">bool</span><a class="headerlink" href="#openmm.openmm.DrudeForce.usesPeriodicBoundaryConditions" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Returns whether or not this force makes use of periodic boundary conditions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>true if nonbondedMethod uses PBC and false otherwise</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.getForceGroup">
+<span class="sig-name descname"><span class="pre">getForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">int</span><a class="headerlink" href="#openmm.openmm.DrudeForce.getForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the force group this Force belongs to.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.getName">
+<span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> → <span class="pre">std::string</span> <span class="pre">const</span> <span class="pre">&amp;</span><a class="headerlink" href="#openmm.openmm.DrudeForce.getName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Get the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.setForceGroup">
+<span class="sig-name descname"><span class="pre">setForceGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.setForceGroup" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the force group this Force belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>group</strong> (<em>int</em>) â the group index. Legal values are between 0 and 31 (inclusive).</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="openmm.openmm.DrudeForce.setName">
+<span class="sig-name descname"><span class="pre">setName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#openmm.openmm.DrudeForce.setName" title="Permalink to this definition">Â¶</a></dt>
+<dd><p>Set the name of this Force. This is an arbitrary, user modifiable identifier. By default it equals the class name, but you can change it to anything useful.</p>
+</dd></dl>
+</dd></dl>
+</section>
+</div>
