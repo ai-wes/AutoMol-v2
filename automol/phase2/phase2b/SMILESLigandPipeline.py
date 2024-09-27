@@ -18,7 +18,7 @@ import torch
 from rdkit import Chem
 from rdkit.Chem import AllChem, Descriptors, Crippen
 from rdkit.Chem.MolStandardize import rdMolStandardize
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 from deap import base, creator, tools, algorithms
 from transformers import EncoderDecoderModel, RobertaTokenizer

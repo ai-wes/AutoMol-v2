@@ -1,6 +1,6 @@
 import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer

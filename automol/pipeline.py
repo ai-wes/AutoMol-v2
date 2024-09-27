@@ -4,6 +4,12 @@ import sys
 import json
 from pathlib import Path
 from typing import Callable, Dict, Any
+import sys
+from pathlib import Path
+
+# Add the project root directory to the Python path
+project_root = Path(__file__).resolve().parent.parent.parent
+sys.path.insert(0, str(project_root))
 
 from phase1.phase1_run import run_Phase_1
 from phase2.phase2a.phase2a_run import run_Phase_2a

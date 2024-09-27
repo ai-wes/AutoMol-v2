@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import os
 import logging
 from typing import Dict, Any, List
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 
 # Configure logging to display INFO level messages

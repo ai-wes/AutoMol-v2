@@ -1,50 +1,48 @@
 {
   "base_output_dir": "results",
-  "input_text": "Develop a bispecific antibody that simultaneously targets a tissue-specific marker and a telomerase regulatory protein to achieve localized telomerase activation in desired cell types.\n",
+  "input_text": "",
   "num_sequences": 2,
-  "optimization_steps": 15,
-  "score_threshold": 0.55,
+  "optimization_steps": 20,
+  "score_threshold": 0.6,
   "device": "cuda",
+  "skip_description_gen": true,
   "output_paths": {
     "log_file": "logs/automol_run.log"
   },
   "phase1": {
-    "max_articles": 20,
+    "max_articles": 10,
     "base_url": "http://localhost:11434",
     "api_key": "ollama",
-    "llm_model": "deepseek-coder-v2:16b-lite-instruct-q6_K"
+    "llm_model": "deepseek-coder-v2:16b-lite-instruct-q6_K",
+    "skip_description_gen": true
   },
   "phase2a": {
-    "model_path": "hugohrban/progen2-large",
-    "num_sequences_to_generate": 50
+    "num_sequences": 2,
+    "optimization_steps": 20,
+    "score_threshold": 0.6
   },
   "phase2b": {
-    "smiles_generation_model": "gokceuludogan/WarmMolGenTwo",
-    "docking_software": "autodock_vina",
-    "docking_exhaustiveness": 8
+    "num_sequences": 2,
+    "optimization_steps": 20,
+    "score_threshold": 0.6
   },
   "phase3": {
-    "simulation_software": "openmm",
-    "simulation_steps": 1000000,
-    "temperature": 300,
-    "pressure": 1,
-    "timestep": 0.002
+    "simulation_steps": 1000
   },
   "phase4": {
-    "digital_twin_iterations": 100,
+    "digital_twin_iterations": 2,
     "analysis_metrics": [
       "growth_rate",
       "metabolite_levels",
       "protein_stability"
     ]
   },
+  "phase5": {
+    "base_output_dir": "results"
+  },
   "mongodb": {
     "uri": "mongodb://localhost:27017/",
     "database": "automol_db",
     "collection": "screening_results"
-  },
-  "max_generations": 2,
-  "num_reflections": 2,
-  "output_dir": "results",
-  "skip_description_gen": false
+  }
 }

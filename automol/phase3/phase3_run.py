@@ -13,7 +13,7 @@ import gc
 import torch
 from openbabel import openbabel
 
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 import logging
 import os
@@ -68,11 +68,11 @@ def run_Phase_3(
     protein_results: List[Dict[str, Any]],
     ligand_results: List[Dict[str, Any]],
     output_dir: str,
-    device: str
+
 ) -> Dict[str, Any]:
     logger = logging.getLogger(__name__)
     phase3_results = {"simulation_results": [], "docking_results": [], "analysis_results": []}
-    
+    device = "cuda"
     try:
         # Ensure output directories exist
         simulation_subdir = os.path.join(output_dir, "simulations")

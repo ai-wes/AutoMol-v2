@@ -9,7 +9,7 @@ from typing import List, Dict, Any
 from datetime import datetime
 from colorama import Fore, Style, init
 import torch
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 # Initialize colorama
 init(autoreset=True)

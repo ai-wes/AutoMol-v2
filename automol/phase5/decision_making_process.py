@@ -13,7 +13,7 @@ import logging
 from pathlib import Path
 import json
 from phase5.generate_final_report import load_results, analyze_phase2a_results, analyze_phase2b_results, analyze_phase3_results, analyze_phase4_results
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
 from phase3.phase3_run import run_Phase_3

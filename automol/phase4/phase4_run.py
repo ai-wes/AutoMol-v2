@@ -17,7 +17,7 @@ from utils.save_utils import save_json
 from phase4.analysis_modules.setup_logger import setup_logger
 from phase4.analysis_modules.base_bio_analysis import run_bio_analysis_pipeline
 import numpy as np
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 

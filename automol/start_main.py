@@ -4,7 +4,7 @@ import sys
 import json
 from pathlib import Path
 
-from pipeline import run_main_pipeline
+from automol.pipeline import run_main_pipeline
 
 def merge_config_with_args(config: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any]:
     """Merge command-line arguments into the configuration dictionary."""

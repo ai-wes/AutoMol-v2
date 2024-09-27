@@ -12,7 +12,7 @@ from rdkit.Chem import Descriptors
 from Bio.SeqUtils import molecular_weight, ProtParam
 from Bio.Blast import NCBIWWW, NCBIXML
 
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 logger = logging.getLogger(__name__)
 

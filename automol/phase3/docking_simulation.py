@@ -4,7 +4,7 @@ from openbabel import openbabel
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from typing import List, Dict, Any, Tuple
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 logger = logging.getLogger(__name__)
 

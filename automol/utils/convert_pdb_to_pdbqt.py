@@ -1,4 +1,4 @@
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 import os
 import subprocess
 import logging

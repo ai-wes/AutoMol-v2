@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 from phase5.generate_final_report import load_results, analyze_phase1_results, analyze_phase2a_results, analyze_phase2b_results, analyze_phase3_results, analyze_phase4_results, generate_final_report
 from phase5.decision_making_process import decision_making_process, main as decision_main
-from server.app import emit_progress
+from automol.emit_progress import emit_progress
 
 def run_Phase_5(base_output_dir: str, config_path: str):
     emit_progress("Starting Phase 5", 0)
