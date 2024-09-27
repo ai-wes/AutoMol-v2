@@ -1,26 +1,24 @@
+# AutoMol-v2/automol/server/utils/save_utils.py
+
 import os
 from datetime import datetime
 import csv
-import asyncio
 import json
 import logging
 
-
 def create_organized_directory_structure(base_output_dir):
-    """
-    Creates a standardized directory structure for the pipeline run.
-    Returns paths to main run directory and phase-specific subdirectories.
-    """
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = os.path.join(base_output_dir, f"run_{timestamp}")
-    
+    log_dir = os.path.join(run_dir, 'logs')
+    os.makedirs(log_dir, exist_ok=True)
     # Define phase-specific directories
     phase_dirs = {
         "phase1": ["processed_articles"],
         "phase2a": ["generated_sequences"],
-        "phase2b": ["ligands"],  # Correct subdirectory
+        "phase2b": ["ligands"],
         "phase3": ["simulations", "docking", "analysis"],
-        "phase4": []
+        "phase4": [],
+        "logs": []  # Add a logs directory
     }
     
     # Create directories
@@ -30,10 +28,8 @@ def create_organized_directory_structure(base_output_dir):
         for subdir in subdirs:
             os.makedirs(os.path.join(phase_dir, subdir), exist_ok=True)
     
-    logging.info(f"Organized directory structure created at {run_dir}.")
-    return run_dir, phase_dirs
-
-
+    log_file_path = os.path.join(run_dir, "logs", "pipeline.log")
+    return run_dir, phase_dirs, log_file_path
 
 def create_sequence_directories(results_dir, sequence_id):
     """

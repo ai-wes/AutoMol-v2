@@ -1,1 +1,0 @@
-AtomÂ¶ class openmm.app.topology.Atom(name, element, index, residue, id)Â¶ An Atom object represents an atom within a Topology. __init__(name, element, index, residue, id)Â¶ Construct a new Atom. You should call addAtom() on the Topology instead of calling this directly. Methods __init__(name,Â element,Â index,Â residue,Â id) Construct a new Atom.

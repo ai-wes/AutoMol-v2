@@ -1,1 +1,0 @@
-OpenMMExceptionÂ¶ class openmm.OpenMMExceptionÂ¶ This is the class used for all exceptions thrown by the C++ library. __init__(*args, **kwargs)Â¶ Initialize self. See help(type(self)) for accurate signature. with_traceback()Â¶ Exception.with_traceback(tb) â set self.__traceback__ to tb and return self.

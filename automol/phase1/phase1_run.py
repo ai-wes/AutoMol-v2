@@ -14,10 +14,11 @@ from sentence_transformers import SentenceTransformer
 from nltk.stem import WordNetLemmatizer
 import string
 from typing import Dict, Any, List
-from server.app import emit_progress
 
 from openai import OpenAI
 from colorama import Fore, Style, init
+
+os.environ["OPENAI_API_KEY"] = "ollama"
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +45,7 @@ except AttributeError:
 else:
     ssl._create_default_https_context = _create_unverified_https_context
 
-client = OpenAI(base_url="http://localhost:11434/v1", api_key="lm-studio")
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
 llm_model = "minicpm-v:8b-2.6-q6_K"
 
 # Download necessary NLTK data
@@ -470,6 +471,8 @@ import time
 import random
 
 def run_Phase_1(config: Dict[str, Any]) -> Dict[str, Any]:
+    logger = logging.getLogger(__name__)
+
     phase1 = Phase1(config)
     results = phase1.run(config['input_text'])  # Changed to 'input_text' based on config.json
     

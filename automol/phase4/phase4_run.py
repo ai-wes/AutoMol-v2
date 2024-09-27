@@ -21,44 +21,6 @@ from server.app import emit_progress
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-print("Starting Phase 4 module")
-emit_progress("Phase 4", 0)
-
-def setup_logger(log_file_path):
-    """
-    Set up and configure a logger.
-
-    Args:
-    log_file_path (str): Path to the log file.
-
-    Returns:
-    logging.Logger: Configured logger object.
-    """
-    # Create the directory for the log file if it doesn't exist
-    os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
-
-    # Create a logger
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-        
-    # Create handlers
-    file_handler = logging.FileHandler(log_file_path)
-    console_handler = logging.StreamHandler()
-
-    # Create formatters and add it to handlers
-    log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    formatter = logging.Formatter(log_format)
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
-
-    # Add handlers to the logger
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
-
-    logger.info("Logger setup complete.")
-    emit_progress("Phase 4", 5)
-    return logger
-
 
 class SimpleDigitalTwin:
     def __init__(self, initial_growth_rate=0.5):
