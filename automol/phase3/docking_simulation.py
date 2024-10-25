@@ -4,7 +4,6 @@ from openbabel import openbabel
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from typing import List, Dict, Any, Tuple
-from automol.emit_progress import emit_progress
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +12,7 @@ def smiles_to_pdbqt(smiles: str, output_dir: str) -> str:
     Convert SMILES to PDBQT format using RDKit and Open Babel.
     """
     try:
-        emit_progress("Converting SMILES to PDBQT")
+        print("Converting SMILES to PDBQT")
         # Generate 3D coordinates using RDKit
         mol = Chem.MolFromSmiles(smiles)
         mol = Chem.AddHs(mol)
@@ -34,11 +33,11 @@ def smiles_to_pdbqt(smiles: str, output_dir: str) -> str:
         obConversion.WriteFile(mol, pdbqt_file)
 
         logger.info(f"Successfully converted SMILES to PDBQT: {pdbqt_file}")
-        emit_progress(f"Successfully converted SMILES to PDBQT: {pdbqt_file}")
+        print(f"Successfully converted SMILES to PDBQT: {pdbqt_file}")
         return pdbqt_file
     except Exception as e:
         logger.error(f"Error converting SMILES to PDBQT: {str(e)}", exc_info=True)
-        emit_progress(f"Error converting SMILES to PDBQT: {str(e)}")
+        print(f"Error converting SMILES to PDBQT: {str(e)}")
         raise
 
 def calculate_grid_parameters(receptor_pdbqt: str, buffer: float = 10.0) -> Tuple[List[float], List[float]]:
@@ -46,7 +45,7 @@ def calculate_grid_parameters(receptor_pdbqt: str, buffer: float = 10.0) -> Tupl
     Calculate grid center and size based on the receptor's active site.
     """
     try:
-        emit_progress(f"Calculating grid parameters for receptor: {receptor_pdbqt}")
+        print(f"Calculating grid parameters for receptor: {receptor_pdbqt}")
         logger.info(f"Calculating grid parameters for receptor: {receptor_pdbqt}")
         obConversion = openbabel.OBConversion()
         obConversion.SetInAndOutFormats("pdbqt", "pdbqt")
@@ -77,11 +76,11 @@ def calculate_grid_parameters(receptor_pdbqt: str, buffer: float = 10.0) -> Tupl
         ]
 
         logger.info(f"Grid center: {center}, Grid size: {size}")
-        emit_progress(f"Grid center: {center}, Grid size: {size}")
+        print(f"Grid center: {center}, Grid size: {size}")
         return center, size
     except Exception as e:
         logger.error(f"Error calculating grid parameters: {e}", exc_info=True)
-        emit_progress(f"Error calculating grid parameters: {e}")
+        print(f"Error calculating grid parameters: {e}")
         raise
 
 def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, config_file: str) -> Dict[str, Any]:
@@ -89,7 +88,7 @@ def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, 
     Run a single docking simulation using LeDock.
     """
     try:
-        emit_progress(f"Running docking for ligand: {ligand_pdbqt}")
+        print(f"Running docking for ligand: {ligand_pdbqt}")
         logger.info(f"Running docking for ligand: {ligand_pdbqt}")
         
         # Ensure output directory exists
@@ -99,7 +98,7 @@ def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, 
         # Construct the command for LeDock
         command = f"LeDock {config_file} {receptor_pdbqt} {ligand_pdbqt} -o {output_dir}"
         logger.info(f"Docking command: {command}")
-        emit_progress(f"Docking command: {command}")
+        print(f"Docking command: {command}")
         
         # TODO: Uncomment the following lines when LeDock is properly installed
         # result = os.system(command)
@@ -108,7 +107,7 @@ def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, 
         
         # For now, we'll just log that docking would be performed here
         logger.info("Docking would be performed here. LeDock command execution is currently commented out.")
-        emit_progress("Docking would be performed here. LeDock command execution is currently commented out.")
+        print("Docking would be performed here. LeDock command execution is currently commented out.")
         
         # Simulated output for testing
         output_file = os.path.join(output_dir, "simulated_docked.pdbqt")
@@ -118,7 +117,7 @@ def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, 
         best_score = -7.5  # Simulated score
         
         logger.info(f"Simulated docking completed for ligand: {ligand_pdbqt} with score: {best_score}")
-        emit_progress(f"Simulated docking completed for ligand: {ligand_pdbqt} with score: {best_score}")
+        print(f"Simulated docking completed for ligand: {ligand_pdbqt} with score: {best_score}")
         return {
             "ligand": ligand_pdbqt,
             "docked_pose": output_file,
@@ -126,7 +125,7 @@ def run_single_docking(receptor_pdbqt: str, ligand_pdbqt: str, output_dir: str, 
         }
     except Exception as e:
         logger.error(f"Error during docking: {e}", exc_info=True)
-        emit_progress(f"Error during docking: {e}")
+        print(f"Error during docking: {e}")
         return {
             "ligand": ligand_pdbqt,
             "docked_pose": None,
@@ -138,7 +137,7 @@ def dock_ligand(ligand: Dict[str, Any], receptor_pdbqt: str, output_dir: str) ->
     smiles = ligand.get('smiles')
     if not smiles:
         logger.error(f"Ligand is missing 'smiles' key: {ligand}")
-        emit_progress(f"Ligand is missing 'smiles' key: {ligand}")
+        print(f"Ligand is missing 'smiles' key: {ligand}")
         return {
             "ligand": ligand,
             "docked_pose": None,
@@ -150,7 +149,7 @@ def dock_ligand(ligand: Dict[str, Any], receptor_pdbqt: str, output_dir: str) ->
         ligand_pdbqt = smiles_to_pdbqt(smiles, output_dir)
     except Exception as e:
         logger.error(f"Failed to convert ligand {smiles} to PDBQT: {e}")
-        emit_progress(f"Failed to convert ligand {smiles} to PDBQT: {e}")
+        print(f"Failed to convert ligand {smiles} to PDBQT: {e}")
         return {
             "ligand": ligand,
             "docked_pose": None,
@@ -169,7 +168,7 @@ def dock_ligand(ligand: Dict[str, Any], receptor_pdbqt: str, output_dir: str) ->
         return docking_result
     except Exception as e:
         logger.error(f"Error during docking for ligand {smiles}: {e}")
-        emit_progress(f"Error during docking for ligand {smiles}: {e}")
+        print(f"Error during docking for ligand {smiles}: {e}")
         return {
             "ligand": ligand,
             "docked_pose": None,
@@ -179,24 +178,24 @@ def dock_ligand(ligand: Dict[str, Any], receptor_pdbqt: str, output_dir: str) ->
 
 def run_docking_pipeline(protein_results: List[Dict[str, Any]], ligand_results: List[Dict[str, Any]], output_dir: str) -> List[Dict[str, Any]]:
     logger.info("Starting Docking Pipeline...")
-    emit_progress("Starting Docking Pipeline...")
+    print("Starting Docking Pipeline...")
 
     if not protein_results:
         logger.error("No protein results provided for docking.")
-        emit_progress("No protein results provided for docking.")
+        print("No protein results provided for docking.")
         return []
 
     receptor_pdbqt = protein_results[0].get('pdbqt_file')
     if not receptor_pdbqt:
         logger.error("No PDBQT file found for receptor.")
-        emit_progress("No PDBQT file found for receptor.")
+        print("No PDBQT file found for receptor.")
         return []
 
     try:
         grid_center, grid_size = calculate_grid_parameters(receptor_pdbqt)
     except Exception as e:
         logger.error(f"Failed to calculate grid parameters: {e}")
-        emit_progress(f"Failed to calculate grid parameters: {e}")
+        print(f"Failed to calculate grid parameters: {e}")
         return []
 
     docking_results = []
@@ -206,7 +205,7 @@ def run_docking_pipeline(protein_results: List[Dict[str, Any]], ligand_results: 
         docking_results.append(result)
 
     logger.info("Docking Pipeline completed.")
-    emit_progress("Docking Pipeline completed.")
+    print("Docking Pipeline completed.")
     return docking_results
 
 def main():
@@ -222,18 +221,18 @@ def main():
     ]
     output_dir = 'aging_docking_results'
     
-    emit_progress("Starting docking pipeline")
+    print("Starting docking pipeline")
     results = run_docking_pipeline(protein_results, ligand_results, output_dir)
 
     for result in results:
         if result['docked_pose']:
             print(f"Docking successful for {result['ligand']}. Best score: {result['best_score']}")
-            emit_progress(f"Docking successful for {result['ligand']}. Best score: {result['best_score']}")
+            print(f"Docking successful for {result['ligand']}. Best score: {result['best_score']}")
         else:
             print(f"Docking failed for {result['ligand']}. Error: {result['error']}")
-            emit_progress(f"Docking failed for {result['ligand']}. Error: {result['error']}")
+            print(f"Docking failed for {result['ligand']}. Error: {result['error']}")
 
 if __name__ == "__main__":
-    emit_progress("Starting main function")
+    print("Starting main function")
     main()
-    emit_progress("Main function completed")
+    print("Main function completed")

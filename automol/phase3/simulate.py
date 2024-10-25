@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import os
 import logging
 from typing import Dict, Any, List
-from automol.emit_progress import emit_progress
 
 
 # Configure logging to display INFO level messages
@@ -21,25 +20,26 @@ def molecular_dynamics_simulation(
     """
     try:
         logger.info(f"Loading PDB file: {pdb_file}")
-        emit_progress(f"Loading PDB file: {pdb_file}")
+        print(f"Loading PDB file: {pdb_file}")
+
         pdb = PDBFile(pdb_file)
 
         logger.info("Defining forcefield")
-        emit_progress("Defining forcefield")
+        print("Defining forcefield")
         forcefield = ForceField('amber14-all.xml', 'amber14/tip3pfb.xml')
 
         logger.info("Cleaning up and adding hydrogens")
-        emit_progress("Cleaning up and adding hydrogens")
+        print("Cleaning up and adding hydrogens")
         modeller = Modeller(pdb.topology, pdb.positions)
         modeller.deleteWater()
         modeller.addHydrogens(forcefield)
 
         logger.info("Adding solvent")
-        emit_progress("Adding solvent")
+        print("Adding solvent")
         modeller.addSolvent(forcefield, padding=1.0*nanometer)
 
         logger.info("Setting up system and integrator")
-        emit_progress("Setting up system and integrator")
+        print("Setting up system and integrator")
         system = forcefield.createSystem(modeller.topology, nonbondedMethod=PME, 
                                          nonbondedCutoff=1.0*nanometer, constraints=HBonds)
         integrator = LangevinMiddleIntegrator(300*kelvin, 1/picosecond, 0.004*picoseconds)
@@ -52,7 +52,7 @@ def molecular_dynamics_simulation(
         simulation.context.setPositions(modeller.positions)
 
         logger.info("Minimizing energy")
-        emit_progress("Minimizing energy")
+        print("Minimizing energy")
         simulation.minimizeEnergy()
 
         trajectory_file = os.path.join(output_dir, "trajectory.pdb")
@@ -65,20 +65,20 @@ def molecular_dynamics_simulation(
         simulation.minimizeEnergy()  # Perform an energy minimization before the main simulation
 
         logger.info("Running NVT equilibration")
-        emit_progress("Running NVT equilibration")
+        print("Running NVT equilibration")
         simulation.step(10000)  # 10,000 steps of NVT equilibration
 
         logger.info("Adding barostat for NPT simulation")
-        emit_progress("Adding barostat for NPT simulation")
+        print("Adding barostat for NPT simulation")
         system.addForce(MonteCarloBarostat(1*bar, 300*kelvin))
         simulation.context.reinitialize(preserveState=True)
 
         logger.info("Running NPT production MD")
-        emit_progress("Running NPT production MD")
+        print("Running NPT production MD")
         simulation.step(total_steps)
 
         logger.info("Simulation completed. Performing basic analysis.")
-        emit_progress("Simulation completed. Performing basic analysis.")
+        print("Simulation completed. Performing basic analysis.")
         data = np.loadtxt(log_file, delimiter=',', skiprows=1)
         
         step = data[:,0]
@@ -106,6 +106,8 @@ def molecular_dynamics_simulation(
         plt.savefig(os.path.join(output_dir, "analysis_plots.png"))
         plt.close()
 
+        print("Simulation and analysis completed")
+
         return {
             "pdb_file": pdb_file,
             "trajectory_file": trajectory_file,
@@ -115,7 +117,7 @@ def molecular_dynamics_simulation(
     
     except Exception as e:
         logger.error(f"An error occurred during simulation: {str(e)}")
-        emit_progress(f"An error occurred during simulation: {str(e)}")
+        print(f"Error in Phase 3: {str(e)}")
         # Print more detailed error information
         import traceback
         logger.error(traceback.format_exc())
@@ -139,7 +141,7 @@ def simulate(protein: Dict[str, Any], simulation_dir: str) -> Dict[str, Any]:
     pdb_file = protein["pdb_file"]
     protein_sim_dir = os.path.join(simulation_dir, f"protein_{protein_id}")
     os.makedirs(protein_sim_dir, exist_ok=True)
-    emit_progress(f"Starting simulation for protein {protein_id}")
+    print(f"Starting simulation for protein {protein_id}")
     return molecular_dynamics_simulation(pdb_file, protein_sim_dir)
 
 def run_simulation_pipeline(protein_results: List[Dict[str, Any]], simulation_dir: str) -> List[Dict[str, Any]]:
@@ -153,12 +155,12 @@ def run_simulation_pipeline(protein_results: List[Dict[str, Any]], simulation_di
     Returns:
     List of dictionaries containing simulation result file paths for each protein.
     """
-    emit_progress("Starting simulation pipeline")
+    print("Starting simulation pipeline")
     results = []
-    for protein in protein_results:
-        emit_progress(f"Simulating protein {protein['id']}")
+    for i, protein in enumerate(protein_results):
+        progress = int((i / len(protein_results)) * 100)
         results.append(simulate(protein, simulation_dir))
-    emit_progress("Simulation pipeline completed")
+    print("Simulation pipeline completed")
     return results
 
 if __name__ == "__main__":

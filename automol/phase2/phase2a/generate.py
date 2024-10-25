@@ -1,6 +1,5 @@
 import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
-from automol.emit_progress import emit_progress
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -26,7 +25,7 @@ VALID_AMINO_ACIDS = set('ACDEFGHIKLMNPQRSTVWY')
 def extract_amino_acids(sequence):
     """Extract only valid amino acids from the sequence."""
     logger.info(f"Extracting amino acids from sequence: {sequence}")
-    emit_progress(f"Extracting amino acids from sequence: {sequence}")
+    print(f"Extracting amino acids from sequence: {sequence}")
     return ''.join(char for char in sequence if char in VALID_AMINO_ACIDS)
 
 def generate_protein_sequence(input_text, num_sequences=1):
@@ -39,7 +38,7 @@ def generate_protein_sequence(input_text, num_sequences=1):
     attention_mask = inputs['attention_mask'].to(device)
 
     logger.info(f"Generating {num_sequences} sequence(s) for input: {input_text}")
-    emit_progress(f"Generating {num_sequences} sequence(s) for input: {input_text}")
+    print(f"Generating {num_sequences} sequence(s) for input: {input_text}")
 
     try:
         with torch.no_grad():
@@ -61,11 +60,11 @@ def generate_protein_sequence(input_text, num_sequences=1):
             extracted_sequence = extract_amino_acids(sequence)
             generated_sequences.append(extracted_sequence)
             logger.info(f"Generated and extracted sequence {i+1}: {extracted_sequence[:50]}...")  # Log first 50 amino acids
-            emit_progress(f"Generated and extracted sequence {i+1}: {extracted_sequence[:50]}...")
 
         return generated_sequences
     except Exception as e:
         logger.error(f"Error in generate_protein_sequence: {str(e)}")
+        print(f"Error in generate_protein_sequence: {str(e)}")
         return None
     
     

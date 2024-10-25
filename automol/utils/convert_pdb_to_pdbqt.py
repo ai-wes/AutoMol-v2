@@ -1,4 +1,3 @@
-from automol.emit_progress import emit_progress
 import os
 import subprocess
 import logging
@@ -41,11 +40,14 @@ def convert_pdb_to_pdbqt(pdb_file_path, output_dir):
 
     except FileNotFoundError as e:
         logging.error(f"File not found error: {e}")
+        print("75, message=f"File not found error: {e}")
     except subprocess.CalledProcessError as e:
         logging.error(f"Error running obabel command: {e}")
         logging.error(f"Command output: {e.output}")
+        print("75, message=f"Error running obabel command: {e}")
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
+        print("75, message=f"An unexpected error occurred: {e}")
 
     return None
 
@@ -56,8 +58,8 @@ if __name__ == "__main__":
     result = convert_pdb_to_pdbqt(pdb_file_path, output_dir)
     
     if result:
-        emit_progress("conversion_success", {"message": f"Conversion successful. Output file: {result}"})
+        print("75, message=f"Conversion successful. Output file: {result}")
         print(f"Conversion successful. Output file: {result}")
     else:
-        emit_progress("conversion_failure", {"message": "Conversion failed. Check the logs for more information."})
+        print("75, message="Conversion failed. Check the logs for more information.")
         print("Conversion failed. Check the logs for more information.")

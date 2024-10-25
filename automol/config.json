@@ -17,28 +17,19 @@
     "skip_description_gen": true
   },
   "phase2a": {
-    "model_path": "hugohrban/progen2-large",
-    "num_sequences_to_generate": 2
+    "num_sequences": 2,
+    "optimization_steps": 20,
+    "score_threshold": 0.6
   },
   "phase2b": {
-    "smiles_generation_model": "gokceuludogan/WarmMolGenTwo",
-    "docking_software": "autodock_vina",
-    "docking_exhaustiveness": 8
+    "num_sequences": 2,
+    "optimization_steps": 20,
+    "score_threshold": 0.6
   },
-  "phase3": {
-    "simulation_software": "openmm",
-    "simulation_steps": 1000,
-    "temperature": 300,
-    "pressure": 1,
-    "timestep": 0.002
-  },
-  "phase4": {
-    "digital_twin_iterations": 2,
-    "analysis_metrics": [
-      "growth_rate",
-      "metabolite_levels",
-      "protein_stability"
-    ]
+  "phase3": {},
+  "phase4": {},
+  "phase5": {
+    "base_output_dir": "results"
   },
   "mongodb": {
     "uri": "mongodb://localhost:27017/",

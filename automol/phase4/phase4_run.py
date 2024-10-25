@@ -17,7 +17,6 @@ from utils.save_utils import save_json
 from phase4.analysis_modules.setup_logger import setup_logger
 from phase4.analysis_modules.base_bio_analysis import run_bio_analysis_pipeline
 import numpy as np
-from automol.emit_progress import emit_progress
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -36,7 +35,7 @@ class SimpleDigitalTwin:
             'metabolic_boost': 1.03
         }
         print(f"Initialized SimpleDigitalTwin with growth rate: {self.growth_rate}")
-        emit_progress("Phase 4", 10)
+        print("Initialized SimpleDigitalTwin")
 
     def simulate_step(self):
         print("Simulating step in SimpleDigitalTwin")
@@ -47,33 +46,33 @@ class SimpleDigitalTwin:
             self.metabolites['atp'] += 2
             self.growth_rate *= 1.01  # Slight growth increase
             print("Metabolism simulated: resources consumed, ATP produced")
-            emit_progress("Phase 4", 15)
+            print("Metabolism simulated")
         else:
             self.growth_rate *= 0.99  # Slight growth decrease
             print("Insufficient resources: growth rate decreased")
-            emit_progress("Phase 4", 15)
+            print("Insufficient resources")
         # Apply random perturbations
         for perturbation, effect in self.perturbations.items():
             if np.random.random() < 0.1:  # 10% chance of perturbation
                 self.growth_rate *= effect
                 print(f"Applied perturbation: {perturbation}, new growth rate: {self.growth_rate:.4f}")
                 logger.info(f"Applied perturbation: {perturbation}")
-                emit_progress("Phase 4", 20)
+                print(f"Applied perturbation: {perturbation}")
 
         # Basic homeostasis
         self.growth_rate = max(0.1, min(self.growth_rate, 1.0))
         print(f"Growth rate after homeostasis: {self.growth_rate:.4f}")
-        emit_progress("Phase 4", 25)
+        print("Homeostasis applied")
         # Replenish resources (simplified environment interaction)
         self.metabolites['glucose'] = min(self.metabolites['glucose'] + 5, 100)
         self.metabolites['oxygen'] = min(self.metabolites['oxygen'] + 5, 100)
         print(f"Resources replenished. Current levels: {self.metabolites}")
-        emit_progress("Phase 4", 30)
+        print("Resources replenished")
         return self.growth_rate, dict(self.metabolites)
 
 def run_digital_twin_simulation(time_steps=100):
     print(f"Starting digital twin simulation for {time_steps} time steps")
-    emit_progress("Phase 4", 35)
+    print("Starting digital twin simulation")
     twin = SimpleDigitalTwin()
     growth_rates = []
     metabolite_history = []
@@ -83,10 +82,9 @@ def run_digital_twin_simulation(time_steps=100):
         growth_rate, metabolites = twin.simulate_step()
         growth_rates.append(growth_rate)
         metabolite_history.append(metabolites)
-        emit_progress("Phase 4", 35 + (step + 1) * 25 // time_steps)
 
     print("Digital twin simulation completed")
-    emit_progress("Phase 4", 60)
+    print("Digital twin simulation completed")
     return growth_rates, metabolite_history
 
 def run_Phase_4(phase3_results, config):
@@ -97,16 +95,16 @@ def run_Phase_4(phase3_results, config):
         print("Initializing Phase 4: Digital Twin Simulation and Analysis")
         logger = setup_logger(config['output_paths']['log_file'])
         logger.info("Starting Phase 4: Digital Twin Simulation")
-        emit_progress("Phase 4", 65)
+        print("Initializing Phase 4")
 
         # Run the digital twin simulation
         print("Running digital twin simulation")
-        emit_progress("Phase 4", 70)
+        print("Running digital twin simulation")
         growth_rates, metabolite_history = run_digital_twin_simulation()
 
         # Analyze results
         print("Analyzing simulation results")
-        emit_progress("Phase 4", 75)
+        print("Analyzing simulation results")
         final_growth_rate = growth_rates[-1]
         avg_growth_rate = np.mean(growth_rates)
         min_growth_rate = min(growth_rates)
@@ -125,7 +123,7 @@ def run_Phase_4(phase3_results, config):
 
         print("Simulation results:")
         print(json.dumps(simulation_results, indent=2))
-        emit_progress("Phase 4", 80)
+        print("Simulation results processed")
 
         # Save simulation results
         print("Saving simulation results")
@@ -134,12 +132,12 @@ def run_Phase_4(phase3_results, config):
         simulation_output_path = os.path.join(output_dir, "simulation_results.json")
         save_json(simulation_results, simulation_output_path)
         print(f"Simulation results saved to: {simulation_output_path}")
-        emit_progress("Phase 4", 90)
+        print("Simulation results saved")
         print("Running bio analysis pipeline")
-        emit_progress("Phase 4", 95)
+        print("Running bio analysis pipeline")
         run_bio_analysis_pipeline()
         logger.info(f"Phase 4 completed successfully. Final growth rate: {final_growth_rate:.4f}")
-        emit_progress("Phase 4", 97)
+        print("Bio analysis pipeline completed")
         
         # Perform final analysis
         final_analysis_results = perform_final_analysis(phase3_results)
@@ -148,17 +146,17 @@ def run_Phase_4(phase3_results, config):
         final_report_path = os.path.join(output_dir, "final_analysis_report.json")
         save_json(final_analysis_results, final_report_path)
         logger.info(f"Final analysis report saved at {final_report_path}.")
-        emit_progress("Phase 4", 100)
+        print("Final analysis report saved")
         return final_analysis_results
 
     except Exception as e:
         logger.error(f"Error in Phase 4: {str(e)}", exc_info=True)
-        emit_progress("Phase 4", 100)
+        print(f"Error in Phase 4: {str(e)}")
         raise
 
 def perform_final_analysis(phase3_results):
     print("Performing final analysis")
-    emit_progress("Phase 4", 98)
+    print("Performing final analysis")
     # Example analysis: Calculate the average score from phase3 results
     if phase3_results and 'simulation_results' in phase3_results and phase3_results['simulation_results']:
         average_score = sum(result['score'] for result in phase3_results['simulation_results']) / len(phase3_results['simulation_results'])
@@ -170,26 +168,26 @@ def perform_final_analysis(phase3_results):
     }
     print("Final analysis results:")
     print(json.dumps(final_analysis_results, indent=2))
-    emit_progress("Phase 4", 99)
+    print("Final analysis completed")
     return final_analysis_results
 
 
 if __name__ == "__main__":
     print("Running Phase 4 module as main")
-    emit_progress("Phase 4", 0)
+    print("Running Phase 4 module as main")
     # Load configuration
     try:
         with open('config.json', 'r') as config_file:
             config = json.load(config_file)
         print("Configuration loaded successfully")
-        emit_progress("Phase 4", 5)
+        print("Configuration loaded successfully")
     except FileNotFoundError:
         print("Error: config.json file not found")
-        emit_progress("Phase 4", 100)
+        print("Error: config.json file not found")
         sys.exit(1)
     except json.JSONDecodeError:
         print("Error: Invalid JSON in config.json")
-        emit_progress("Phase 4", 100)
+        print("Error: Invalid JSON in config.json")
         sys.exit(1)
 
     # Mock phase3_results for testing
@@ -200,11 +198,11 @@ if __name__ == "__main__":
     print("Using mock phase3 results for testing")
     print("Mock phase3 results:")
     print(json.dumps(mock_phase3_results, indent=2))
-    emit_progress("Phase 4", 10)
+    print("Mock phase3 results prepared")
 
     print("Running Phase 4")
-    emit_progress("Phase 4", 15)
+    print("Starting Phase 4 execution")
     simulation_results = run_Phase_4(mock_phase3_results, config)
     print("Phase 4 completed. Final simulation results:")
     print(json.dumps(simulation_results, indent=2))
-    emit_progress("Phase 4", 100)
+    print("Phase 4 completed")

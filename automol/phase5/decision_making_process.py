@@ -1,10 +1,6 @@
-
 import os   
 import sys
 # Add the parent directory to the Python path
-
-
-
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -13,13 +9,11 @@ import logging
 from pathlib import Path
 import json
 from phase5.generate_final_report import load_results, analyze_phase2a_results, analyze_phase2b_results, analyze_phase3_results, analyze_phase4_results
-from automol.emit_progress import emit_progress
 from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
 from phase3.phase3_run import run_Phase_3
 from phase4.phase4_run import run_Phase_4
 
-# Configure logging
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,13 +21,13 @@ logger = logging.getLogger(__name__)
 def execute_phase(phase_function, phase_name, *args, **kwargs):
     """Execute a phase function with error handling."""
     try:
-        emit_progress(f"Starting {phase_name}")
+        print(f"Starting {phase_name}")
         result = phase_function(*args, **kwargs)
-        emit_progress(f"{phase_name} completed successfully")
+        print(f"{phase_name} completed successfully")
         return result
     except Exception as e:
         logger.error(f"Error in {phase_name}: {str(e)}", exc_info=True)
-        emit_progress(f"Error in {phase_name}: {str(e)}")
+        print(f"Error in {phase_name}: {str(e)}")
         return None
     
     
@@ -51,7 +45,7 @@ def decision_making_process(analysis: dict, config: dict) -> str:
     previous_overall_score = 0
 
     while True:
-        emit_progress(f"Starting decision-making process (Iteration {iteration}).")
+        print(f"Starting decision-making process (Iteration {iteration}).")
         logger.info(f"Starting decision-making process (Iteration {iteration}).")
         logger.debug(f"Analysis data: {json.dumps(analysis, indent=2)}")
 
@@ -63,10 +57,10 @@ def decision_making_process(analysis: dict, config: dict) -> str:
         # Calculate overall score
         overall_score = (average_sequence_score + simulation_score) / 2
 
-        emit_progress(f"Average Sequence Score: {average_sequence_score}")
-        emit_progress(f"Total Ligands: {total_ligands}")
-        emit_progress(f"Simulation Score: {simulation_score}")
-        emit_progress(f"Overall Score: {overall_score}")
+        print(f"Average Sequence Score: {average_sequence_score}")
+        print(f"Total Ligands: {total_ligands}")
+        print(f"Simulation Score: {simulation_score}")
+        print(f"Overall Score: {overall_score}")
 
         logger.info(f"Average Sequence Score: {average_sequence_score}")
         logger.info(f"Total Ligands: {total_ligands}")
@@ -89,7 +83,7 @@ def decision_making_process(analysis: dict, config: dict) -> str:
         else:
             decision = "Proceed to experimental validation of promising molecules."
 
-        emit_progress(f"Decision: {decision}")
+        print(f"Decision: {decision}")
         logger.info(f"Decision: {decision}")
 
         # Check if we've reached the desired metrics
@@ -112,7 +106,7 @@ def decision_making_process(analysis: dict, config: dict) -> str:
             return f"Maximum iterations ({MAX_ITERATIONS}) reached. Proceeding with best available results."
 
         if phases_to_rerun:
-            emit_progress(f"Re-running phases: {', '.join(phases_to_rerun)}")
+            print(f"Re-running phases: {', '.join(phases_to_rerun)}")
             logger.info(f"Re-running phases: {', '.join(phases_to_rerun)}")
 
             # Execute the necessary phases
@@ -129,10 +123,10 @@ def decision_making_process(analysis: dict, config: dict) -> str:
             run_dir = config.get('run_dir', 'results/latest_run')
             new_analysis = {
                 'phase1': analysis.get('phase1', {}),
-                'phase2a': analyze_phase2a_results(load_results(run_dir, 'phase2a'), 'phase2a'),
-                'phase2b': analyze_phase2b_results(load_results(run_dir, 'phase2b'), 'phase2b'),
-                'phase3': analyze_phase3_results(load_results(run_dir, 'phase3'), 'phase3'),
-                'phase4': analyze_phase4_results(load_results(run_dir, 'phase4'), 'phase4'),
+                'phase2a': analyze_phase2a_results(load_results(run_dir, 'phase2a')),
+                'phase2b': analyze_phase2b_results(load_results(run_dir, 'phase2b')),
+                'phase3': analyze_phase3_results(load_results(run_dir, 'phase3')),
+                'phase4': analyze_phase4_results(load_results(run_dir, 'phase4')),
             }
 
             previous_overall_score = overall_score
@@ -165,7 +159,7 @@ def main(config_path: str):
     }
     
     # Make decision and execute phases if necessary
-    decision = decision_making_process(analysis)
+    decision = decision_making_process(analysis, config)
     
     # Save the decision to a file
     decision_file = run_dir / 'decision.txt'

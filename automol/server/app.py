@@ -122,7 +122,7 @@ def handle_pipeline_control(data):
     action = data.get('action')
     if action == 'start':
         config_data = data.get('config')
-        emit_progress(phase="System", progress=0, message="Pipeline control received in server.")
+        print("Pipeline control received in server.")
         socketio.start_background_task(run_pipeline, config_data)
     else:
         logger.warning("Invalid action received in pipeline_control.")
@@ -140,15 +140,15 @@ def run_pipeline(config_data):
         with open(CONFIG_PATH, 'w') as f:
             json.dump(config_data, f, indent=2)
         logger.info("Configuration saved successfully.")
-        emit_progress(phase="System", progress=10, message="Configuration saved successfully at " + str(CONFIG_PATH))
+        print("Configuration saved successfully at " + str(CONFIG_PATH))
         
         # Execute the main script in a non-blocking manner
         socketio.start_background_task(run_main_pipeline)
         logger.info("Pipeline started successfully.")
-        emit_progress(phase="System", progress=20, message="Pipeline Initialized from server.")
+        print("Pipeline Initialized from server.")
     except Exception as e:
         logger.error(f"Error in run_pipeline: {e}")
-        emit_progress(phase="System", progress=0, message="Internal Server Error.")
+        print("Internal Server Error.")
 
 def build_preflight_response():
     response = make_response()

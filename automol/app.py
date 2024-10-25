@@ -8,31 +8,23 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from flask import Flask, jsonify, request, send_from_directory, make_response
+from flask_cors import CORS, cross_origin
+from flask_socketio import SocketIO, emit
+import logging
+from pymongo import MongoClient
+from pythonjsonlogger import jsonlogger
+from logging.handlers import RotatingFileHandler
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from flask import Flask, jsonify, request, send_from_directory, make_response
-from flask_cors import CORS, cross_origin
-from flask_socketio import SocketIO, emit
-import logging
-from pymongo import MongoClient
-sys.path.append(os.path.dirname(parent_dir))
 # Install eventlet for asynchronous support
-# AutoMol-v2/automol/server/main.py
+import eventlet
+eventlet.monkey_patch()
 
-import os
-from datetime import datetime
-import json
-import sys
-import logging
-from pathlib import Path
-import subprocess
-import argparse
-import socketio  # Import Socket.IO client
-from automol.emit_progress import emit_progress
 from phase1.phase1_run import run_Phase_1
 from phase2.phase2a.phase2a_run import run_Phase_2a
 from phase2.phase2b.phase2b_run import run_Phase_2b
@@ -40,32 +32,60 @@ from phase3.phase3_run import run_Phase_3
 from phase4.phase4_run import run_Phase_4
 from phase5.phase5_run import run_Phase_5
 from utils.save_utils import save_json, create_organized_directory_structure
-import os
-from datetime import datetime
-import json
-import sys
-from pathlib import Path
 
-from flask import jsonify, request, send_from_directory, make_response
-from flask_cors import cross_origin
-import logging
-from pymongo import MongoClient
+# Initialize Flask app
+app = Flask(__name__)
 
-from socket_manager import socketio, app  # Import socketio and app from socket_manager
+# Configure CORS
+CORS(app, resources={
+    r"/api/*": {
+        "origins": ["http://localhost:3000", "https://dashboard.automol-ai.com"],
+        "methods": ["GET", "POST", "OPTIONS", "DELETE"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    },
+    r"/socket.io/*": {
+        "origins": ["http://localhost:3000", "https://dashboard.automol-ai.com"],
+        "supports_credentials": True
+    }
+}, supports_credentials=True)
+
+# Setup Flask-SocketIO with eventlet (only for non-logging purposes)
+socketio = SocketIO(
+    app,
+    cors_allowed_origins=["http://localhost:3000", "https://dashboard.automol-ai.com"],
+    allow_credentials=True
+)
+
+# Setup main logger
+logger = logging.getLogger('main_logger')
+logger.setLevel(logging.INFO)
+
+# Create JSON formatter
+json_formatter = jsonlogger.JsonFormatter('%(asctime)s %(name)s %(levelname)s %(message)s')
+
+# Rotating File Handler for main logs
+LOG_JSON_PATH = 'cli_logs.json'  # You can change this path as needed
+file_handler = RotatingFileHandler(LOG_JSON_PATH, maxBytes=10*1024*1024, backupCount=5)
+file_handler.setFormatter(json_formatter)
+logger.addHandler(file_handler)
+
+# Also log to stdout
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setFormatter(json_formatter)
+logger.addHandler(stream_handler)
 
 # Placeholder for database connection (update with actual connection details)
 client = MongoClient('mongodb://localhost:27017/')
 db = client['autoprotdb']
 molecules_collection = db['molecules']
 
-logger = logging.getLogger(__name__)
-
 # Ensure upload folder exists
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-CONFIG_PATH =   'config.json'
+CONFIG_PATH = 'config.json'
 
 # Pipeline status tracking
 pipeline_status = {
@@ -77,11 +97,15 @@ pipeline_status = {
 
 notifications = []
 
+@socketio.on('test_event')
+def handle_test_event(data):
+    logger.info(f"Received test event: {data}")
+    socketio.emit('test_response', {'message': 'Test event received'})
+
 @socketio.on('connect')
 def handle_connect():
-    logger = logging.getLogger(__name__)
     logger.info('Client connected')
-    
+
     # Generate current progress data
     current_progress = {}
     phases = [
@@ -95,10 +119,10 @@ def handle_connect():
             'progress': pipeline_status[phase]['progress'],
             'message': pipeline_status[phase]['message']
         }
-    
+
     # Generate a sample CLI log message
     log_message = f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Server log: Client connected"
-    
+
     # Compile all data into a single object
     initial_data = {
         'pipeline_status': pipeline_status,
@@ -107,16 +131,17 @@ def handle_connect():
         'status_message': 'Connected to server',
         'cli_log': log_message
     }
-    
+
     # Emit all data in a single event
     emit('initial_state', initial_data)
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    logger = logging.getLogger(__name__)
     logger.info("Client disconnected")
 
-
+def emit_progress(phase, progress, message):
+    logger.info(f"Emitting progress: phase={phase}, progress={progress}, message={message}")
+    socketio.emit('progress_update', {'phase': phase, 'progress': progress, 'message': message})
 
 def build_preflight_response():
     response = make_response()
@@ -133,7 +158,6 @@ def build_actual_response(response, status=200):
 
 @app.route('/api/notifications', methods=['GET', 'OPTIONS'])
 def get_notifications():
-    logger = logging.getLogger(__name__)
     if request.method == "OPTIONS":
         return build_preflight_response()
     try:
@@ -144,7 +168,6 @@ def get_notifications():
 
 @app.route('/api/upload_pdb', methods=['POST'])
 def upload_pdb():
-    logger = logging.getLogger(__name__)
     try:
         if 'file' not in request.files:
             logger.warning("No file part in upload_pdb request.")
@@ -167,7 +190,6 @@ def upload_pdb():
 
 @app.route('/api/pdb_files/<filename>', methods=['GET'])
 def get_pdb_file(filename):
-    logger = logging.getLogger(__name__)
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename), 200
     except FileNotFoundError:
@@ -180,12 +202,39 @@ def get_pdb_file(filename):
 @app.route('/api/pipeline_status', methods=['GET'])
 @cross_origin()
 def get_pipeline_status():
-    logger = logging.getLogger(__name__)
     try:
         return jsonify(pipeline_status), 200
     except Exception as e:
         logger.error(f"Error in get_pipeline_status: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
+
+@app.route('/api/logs', methods=['GET', 'DELETE'])
+@cross_origin()
+def handle_logs():
+    if request.method == 'GET':
+        try:
+            if not os.path.exists(LOG_JSON_PATH):
+                return jsonify({"logs": []}), 200
+
+            with open(LOG_JSON_PATH, 'r') as log_file:
+                # Each line in the log file is a JSON object
+                logs = [json.loads(line) for line in log_file if line.strip()]
+            
+            return jsonify({"logs": logs}), 200
+        except Exception as e:
+            logger.error(f"Error in get_logs: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
+    elif request.method == 'DELETE':
+        try:
+            if os.path.exists(LOG_JSON_PATH):
+                os.remove(LOG_JSON_PATH)
+                logger.info("Logs cleared successfully.")
+                return jsonify({"message": "Logs cleared successfully."}), 200
+            else:
+                return jsonify({"message": "Log file does not exist."}), 200
+        except Exception as e:
+            logger.error(f"Error in clear_logs: {e}")
+            return jsonify({"error": "Internal Server Error"}), 500
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -193,10 +242,8 @@ def allowed_file(filename):
 
 def send_idle_message():
     while True:
-        socketio.emit('log_message', {'message': 'IDLE: Server is running'})
+        emit('log_message', {'message': 'IDLE: Server is running'})
         socketio.sleep(10)  # Use socketio.sleep for compatibility with eventlet
-
-
 
 def merge_config_with_args(config, args):
     """Merge command-line arguments into the configuration dictionary."""
@@ -206,6 +253,7 @@ def merge_config_with_args(config, args):
     return config
 
 def parse_arguments():
+    import argparse
     parser = argparse.ArgumentParser(description="AutoMol-v2: Novel molecule generation and analysis pipeline")
     parser.add_argument("--config", type=str, default="config.json", help="Path to the configuration file")
     parser.add_argument("--input_text", type=str, help="Input text describing the desired molecule function")
@@ -217,23 +265,27 @@ def parse_arguments():
     return parser.parse_args()
 
 def run_main_pipeline(config_data):
-    logger = logging.getLogger(__name__)
     if not config_data:
         logger.warning("No configuration data provided.")
-        socketio.emit('pipeline_control_response', {"error": "No configuration data provided."}, namespace='/')
+        emit_progress(phase="System", progress=0, message="No configuration data provided.")
         return
-    
+
     CONFIG_PATH = 'config.json'
-    
+
     # Save configuration to config.json
-    with open(CONFIG_PATH, 'w') as f:
-        json.dump(config_data, f, indent=2)
-    logger.info("Configuration saved successfully.")
-    emit_progress(phase="System", progress=10, message=f"Configuration saved successfully at {CONFIG_PATH}")
-    
+    try:
+        with open(CONFIG_PATH, 'w') as f:
+            json.dump(config_data, f, indent=2)
+        logger.info("Configuration saved successfully.")
+        emit_progress(phase="System", progress=10, message=f"Configuration saved successfully at {CONFIG_PATH}")
+    except Exception as e:
+        logger.error(f"Failed to save configuration: {e}")
+        emit_progress(phase="System", progress=0, message=f"Failed to save configuration: {e}")
+        return
+
     # Use the config_data directly instead of loading from file
     config = config_data
-    
+
     logger.info("Pipeline started successfully.")
     emit_progress(phase="System", progress=20, message="Pipeline Initialized from server.")
 
@@ -242,7 +294,7 @@ def run_main_pipeline(config_data):
     # We'll skip merging with command-line arguments as we want to prioritize the passed config_data
     # args = parse_arguments()
     # config = merge_config_with_args(config, args)
-    
+
     print("Final Config: ", config)
     logger.info("Configuration prepared.")
     emit_progress(phase="Phase 1 - Research and Hypothesize", progress=10, message="Configuration prepared.")
@@ -283,18 +335,16 @@ def run_main_pipeline(config_data):
         emit_progress(phase="System", progress=0, message=f"Failed to create log directory: {e}")
         return
 
-    # Reconfigure logging to include the new log file
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-            logging.FileHandler(log_file_path)
-        ]
-    )
-    logger = logging.getLogger(__name__)
+    # Reconfigure main logger to include the new log file
+    try:
+        file_handler_main = RotatingFileHandler(log_file_path, maxBytes=10*1024*1024, backupCount=5)
+        file_handler_main.setFormatter(json_formatter)
+        logger.addHandler(file_handler_main)
+        logger.info("Additional log file handler added.")
+    except Exception as e:
+        logger.error(f"Failed to add additional log file handler: {e}")
+        emit_progress(phase="System", progress=0, message=f"Failed to add additional log file handler: {e}")
+        return
 
     emit_progress(phase="Phase 1 - Research and Hypothesize", progress=15, message="Creating organized directory structure...")
     try:
@@ -407,7 +457,7 @@ def run_main_pipeline(config_data):
             'simulation_results': phase3_results,
             'output_dir': os.path.join(run_dir, "phase4")
         })
-        phase4_results = run_Phase_4(phase3_results, config = phase4_config)
+        phase4_results = run_Phase_4(phase3_results, config=phase4_config)
         save_json(phase4_results, Path(run_dir) / "phase4_results.json")
         logger.info("Phase 4 results saved successfully.")
         emit_progress(phase="Phase 4 - Validation and Verification", progress=100, message="Phase 4 results saved successfully.")
@@ -427,7 +477,7 @@ def run_main_pipeline(config_data):
         # Phase 5: Final Report and Decision Making Process
         logger.info("Starting Phase 5: Decision Making Process")
         phase5_config = config['phase5']
-        base_output_dir = config['base_output_dir']
+        base_output_dir = run_dir
         phase5_config.update({
             'base_output_dir': base_output_dir  
         })
@@ -440,22 +490,22 @@ def run_main_pipeline(config_data):
         logger.error(f"An unexpected error occurred: {e}")
         emit_progress(phase="System", progress=0, message=f"An unexpected error occurred: {e}")
 
-# Modify the handle_pipeline_control function
 @socketio.on('pipeline_control')
 def handle_pipeline_control(data):
     action = data.get('action')
     if action == 'start':
         config_data = data.get('config')
+        logger.info(f"Received start action with config: {config_data}")
         emit_progress(phase="System", progress=0, message="Pipeline control received in server.")
-        socketio.start_background_task(run_main_pipeline, config_data)
+        bio_pipeline = threading.Thread(target=run_main_pipeline, args=(config_data,))
+        bio_pipeline.start()
     elif action == 'stop':
-        # Implement stop logic if needed
         logger.info("Stop request received. Implementing stop logic.")
-        emit('pipeline_control_response', {"message": "Stop request received"})
+        socketio.emit('pipeline_control_response', {"message": "Stop request received"})
+        # Implement stop logic as needed
     else:
         logger.warning("Invalid action received in pipeline_control.")
-        emit('pipeline_control_response', {"error": "Invalid action"})
-        
-        
+        socketio.emit('pipeline_control_response', {"error": "Invalid action"})
+
 if __name__ == '__main__':
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
