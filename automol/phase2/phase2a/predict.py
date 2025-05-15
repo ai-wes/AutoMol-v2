@@ -31,52 +31,60 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 esm3_model:ESM3InferenceClient = ESM3.from_pretrained("esm3_sm_open_v1").to("cuda")  # or "cpu"
 
 
+import os
+import logging
+from typing import List, Union, Dict, Any
+from esm.sdk.api import ESMProteinError
+from esm.sdk.api import ESMProtein, GenerationConfig
+from Bio.SeqUtils.ProtParam import ProteinAnalysis
+from scipy.stats import truncnorm
 
+logger = logging.getLogger(__name__)
 
-def predict_protein_function(sequence):
-    """Predict the function score of a given protein sequence."""
+# Ensure esm3_model and ESM3InferenceClient are globally loaded
+from esm.models.esm3 import ESM3
+import torch
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+esm3_model = ESM3.from_pretrained("esm3_sm_open_v1").to(device)
+
+valid_aa = set('ACDEFGHIKLMNPQRSTVWY')
+
+def predict_protein_function(sequence: str) -> float:
     try:
-        print(f"Received sequence for prediction: {sequence}")
-        valid_aa = set('ACDEFGHIKLMNPQRSTVWY')
         sequence = ''.join(char.upper() for char in sequence if char.upper() in valid_aa)
-        print(f"Cleaned sequence: {sequence}")
         if not sequence:
-            print("Empty or invalid sequence for protein function prediction")
-            logger.error("Empty or invalid sequence for protein function prediction")
+            logger.warning("Invalid or empty amino acid sequence.")
             return 0.5
 
         analysis = ProteinAnalysis(sequence)
-        molecular_weight = analysis.molecular_weight()
-        aromaticity = analysis.aromaticity()
-        instability_index = analysis.instability_index()
-        isoelectric_point = analysis.isoelectric_point()
+        mw = analysis.molecular_weight()
+        arom = analysis.aromaticity()
+        instab = analysis.instability_index()
+        pI = analysis.isoelectric_point()
 
-        norm_weight = truncnorm.cdf((molecular_weight - 25000) / 10000, -2, 2)
-        norm_aromaticity = aromaticity
-        norm_instability = 1 - truncnorm.cdf((instability_index - 40) / 10, -2, 2)
-        norm_isoelectric = truncnorm.cdf((isoelectric_point - 7) / 2, -2, 2)
+        norm_weight = truncnorm.cdf((mw - 25000) / 10000, -2, 2)
+        norm_instability = 1 - truncnorm.cdf((instab - 40) / 10, -2, 2)
+        norm_isoelectric = truncnorm.cdf((pI - 7) / 2, -2, 2)
+
         aa_count = {aa: sequence.count(aa) for aa in valid_aa}
-        total_aa = len(sequence)
-        composition_balance = 1 - sum(abs(count/total_aa - 0.05) for count in aa_count.values()) / 2
+        total = len(sequence)
+        comp_balance = 1 - sum(abs(count / total - 0.05) for count in aa_count.values()) / 2
 
         weights = [0.25, 0.15, 0.25, 0.15, 0.2]
-        score = sum(w * v for w, v in zip(weights, [norm_weight, norm_aromaticity, norm_instability, norm_isoelectric, composition_balance]))
-        print(f"Predicted function score for sequence: {score}")
-        logger.info(f"Predicted function score for sequence: {score}")
-        return max(0, min(1, score))
-    except Exception as e:
-        print(f"Error in predict_protein_function: {str(e)}")
-        logger.error(f"Error in predict_protein_function: {str(e)}")
-        return 0.5
-    
+        score = sum(w * v for w, v in zip(weights, [norm_weight, arom, norm_instability, norm_isoelectric, comp_balance]))
 
-    
-    
-def predict_properties(sequence):
-    """Predict various properties of a protein sequence."""
+        score = max(0, min(1, score))
+        logger.info(f"Predicted function score: {score:.3f}")
+        return score
+
+    except Exception as e:
+        logger.error(f"Error in predict_protein_function: {e}")
+        return 0.5
+
+def predict_properties(sequence: str) -> Dict[str, Any]:
     try:
         analysis = ProteinAnalysis(sequence)
-        properties = {
+        return {
             "molecular_weight": analysis.molecular_weight(),
             "aromaticity": analysis.aromaticity(),
             "instability_index": analysis.instability_index(),
@@ -84,42 +92,35 @@ def predict_properties(sequence):
             "gravy": analysis.gravy(),
             "secondary_structure_fraction": analysis.secondary_structure_fraction()
         }
-        logger.info(f"Predicted properties for sequence: {properties}")
-        return properties
     except Exception as e:
-        logger.error(f"Error in predict_properties: {str(e)}")
+        logger.error(f"Error in predict_properties: {e}")
         return {}
 
-
-
-import pdb
-
-        
-
-def predict_structure(sequence):
-    """Predict the structure of a protein sequence using ESM-3."""
+def predict_structure(sequence: str, output_dir: str) -> Union[str, None]:
     try:
         protein = ESMProtein(sequence=sequence)
         config = GenerationConfig(track="structure", num_steps=8)
         result = esm3_model.generate(protein, config)
 
-        logger.info(f"Structure generation result type: {type(result)}")
-        logger.info(f"Structure generation result attributes: {dir(result)}")
-
-        # Save the PDB file
-        output_dir = "predicted_structures"
         os.makedirs(output_dir, exist_ok=True)
-        pdb_file = os.path.join(output_dir, f"{sequence[:10]}_structure.pdb")
-        result.to_pdb(pdb_file)
+        pdb_path = os.path.join(output_dir, f"{sequence[:10]}_structure.pdb")
 
-        logger.info(f"Structure predicted and saved to {pdb_file}")
-        return pdb_file
+        if hasattr(result, "to_pdb"):
+            result.to_pdb(pdb_path)
+            logger.info(f"Structure saved to: {pdb_path}")
+            return pdb_path
+        else:
+            logger.error("Generated result does not support to_pdb().")
+            return None
     except ESMProteinError as e:
-        logger.error(f"ESM Protein Error in predict_structure: {str(e)}")
+        logger.error(f"ESMProteinError in predict_structure: {e}")
         return None
     except Exception as e:
-        logger.error(f"Unexpected error in predict_structure: {str(e)}")
+        logger.error(f"Unexpected error in predict_structure: {e}")
         return None
+
+
+
 
 def esm3_refinement(sequence):
     try:
@@ -150,46 +151,37 @@ def esm3_refinement(sequence):
     
         
 
-def run_prediction_pipeline(sequences, output_dir):
-    try:
-        results = []
-        for i, sequence in enumerate(sequences):
-            if isinstance(sequence, dict):
-                sequence = sequence['optimized_sequence']
-            logger.info(f"Processing sequence {i+1}/{len(sequences)}: {sequence}")
-            
-            try:
-                score = predict_protein_function(sequence)
-                properties = predict_properties(sequence)
-                pdb_file = os.path.join(output_dir, f"{sequence[:10]}_structure.pdb") 
-                
-                pdb_file = predict_structure(sequence)
-            except Exception as e:
-                logger.error(f"Error processing sequence {i+1}: {str(e)}")
-                score, properties, pdb_file = None, None, None
 
-            results.append({
+
+
+def run_prediction_pipeline(sequences: List[Union[str, Dict[str, Any]]], output_dir: str) -> List[Dict[str, Any]]:
+    results = []
+
+    for i, entry in enumerate(sequences):
+        try:
+            sequence = entry["optimized_sequence"] if isinstance(entry, dict) else entry
+            logger.info(f"Predicting sequence {i + 1}/{len(sequences)}")
+
+            score = predict_protein_function(sequence)
+            properties = predict_properties(sequence)
+            pdb_file = predict_structure(sequence, output_dir)
+
+            result = {
                 "sequence": sequence,
                 "score": score,
                 "properties": properties,
-                "pdb_file": pdb_file
+                "pdb_file": pdb_file if pdb_file and os.path.exists(pdb_file) else None
+            }
+
+            results.append(result)
+
+        except Exception as e:
+            logger.error(f"Failed to process sequence index {i}: {e}")
+            results.append({
+                "sequence": sequence if 'sequence' in locals() else "unknown",
+                "score": None,
+                "properties": {},
+                "pdb_file": None
             })
 
-        return results
-    except Exception as e:
-        logger.error(f"Error in run_prediction_pipeline: {str(e)}")
-        logger.error(f"Sequences: {sequences}")
-        logger.error(f"Output directory: {output_dir}")
-        return None
-
-
-        
-if __name__ == "__main__":
-    sequences = ["HMPYHFQGTNWFGCIASVRNGMRTKWFELSFAWYERSMMYQWNKVWWTKFYWYVWFLWQKLWQQMLYWAVGWRHFHPTRHPSFHVKKFFVQKAVSFAICHPWYKWKHPQQRFIQGRISMQNPWHPMNVNTFHLDWKLIFKYQNLWIGNEWMLITWKDWRFNPYWIWKSKLGIWWWYWYTWFRHMFRNAFQHMVTQYYINNFYRLMMFVLDSFKELITYWFRFRKHGQGRCNWQTAYWFYKYTFDHERRVGPIS",
-        "KFRWSWNRYYKWNWQTWWNTQWFVQMWTTIFFYWSFMMGRTWGWRTRYSYAFFFTFMLLYKIHTWAEMWPMIYWTCGAMMYQHFWVFSWWPHKLYIWQRIWRHRKMRYWIHDWWYQCFYKHVSNWQLLREKSTFKGNNFFPWNWAVFRRPCYRPRHWIPERMVVRPYHDNVFFRKLLRTDQKSIRYNSLVRFCIKHLYFKMQNPNGAVPYFNHFWYWYYTFTQWMKIVYWHYWKLCVFDKFWPNYLHMPAQFSAII",
-        "FKVFTRVFFWTWKLYEYEFHAHWWTWPGHYYLYWYRVIKEKEWWNNFTLFWRMWGWFPLRRWKPPWKSWLYWWTQQMPCSFILFWRFSFRAAMMWHMRGENRARLKPIMTYWQVWDQVWEAWRIRPWYKQCANHDRFWWEPHSPLMRFDWWQIIFFKPRNTSLNFHWRYSKAQYNPLFKWYYLTWWFVMVNWQHVCYFAYQKFGKWCHYWIHLTFWIAMPTNEVLHCRNAHFIRYRMFWWRCITARNNQISHD",
-        "LLRTQVRMIPNYAAWYMAHMWWYIVMGRDWFFAWYRQFVLGWPRIRYKPKGLHRYIQHNNKHTWFSQHFTFQCKWWWKKHWPWPRLHMWKWWLYTNYVFMIMDVGATWMNHEKYTLACRHWDWMKKIKWWDNYNTRVWTMQFFPGFFKLTYWIIQNWWHWLAWRYQWFQIVYPFTWWQYWVSQFLENPWPRDAWRHRGSFLPHISRSWFWNTWGGFVRKMVFNMKNIWRFSSVFDRIMQLWPWWTLSGRFSFIPFK",
-        "FGTLKVQMYWWNGWKGAWWLYFRTHRRHGKSKYFFFTWWFPKWWNSPRQPMYSWWAPIFCRYSMEGNVMEYNWAKWREYEWDQWFWLEKLIGFEVFNARNHLRNRQWKSNFQPWSLEHPYWLDFFRFGTIMYWWSHWCFWIWFWRMNYTNYQQHFVWTTHPPPWPLQWTQMFQIYWEVAIKFRLMEHRMHFKWWRATPWIVMARKNMGFVSIYKYWRKVRVWVRTNFWHLYFAMRMSFKYLRHHCEWIWRWIHTQA"
-    ]
-    asyncio.run(run_prediction_pipeline(sequences, "predicted_structures"))
-    
+    return results
