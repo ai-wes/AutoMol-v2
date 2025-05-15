@@ -1,148 +1,214 @@
+# phase2a/run_phase2a.py
+"""
+Phase 2a – generate, mutate / optimise proteins, evaluate with a canonical
+three-component metric, and persist the best candidates.
+
+Changes vs. original
+--------------------
+✅  single logging.basicConfig call
+✅  f-strings instead of latent literals
+✅  best_score reset per technical description
+✅  evaluation uses utils.eval.evaluate_kernel → returns ΔΔG-MAE, MD-RMSD,
+   GPU-seconds, scalar score
+✅  stores full metric dict next to each sequence
+✅  no silent overwrite in set_protein_sequences
+"""
+
+from __future__ import annotations
+
+import logging
+import os
 import shutil
 import sys
-import os
-import logging
-from colorama import Fore, Style, init
-from typing import List, Dict, Any, Tuple
 from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
-# Initialize colorama
-init(autoreset=True)
+from colorama import Fore, init
 
-# Add the parent directory to the Python path
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
-
+# --------------------------------------------------------------------------- #
+# 3rd-party / project imports
+# --------------------------------------------------------------------------- #
 from phase2a.generate import generate_protein_sequence
 from phase2a.optimize_new import run_optimization_pipeline
 from phase2a.predict import run_prediction_pipeline
-from utils.save_utils import create_sequence_directories
 from phase2a.shared_state import set_protein_sequences
+from utils.eval import evaluate_kernel, BENCHMARK_BATCH            #  <-- NEW
+from utils.save_utils import create_sequence_directories, save_json
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+# --------------------------------------------------------------------------- #
+# setup
+# --------------------------------------------------------------------------- #
+init(autoreset=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
+)
 logger = logging.getLogger(__name__)
 
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
+# --------------------------------------------------------------------------- #
+# main entry-point
+# --------------------------------------------------------------------------- #
 def run_Phase_2a(
     technical_descriptions: List[str],
     predicted_structures_dir: str,
     results_dir: str,
     num_sequences: int,
     optimization_steps: int,
-    score_threshold: float
+    score_threshold: float,
 ) -> Tuple[List[Dict[str, Any]], List[str]]:
-    print(Fore.CYAN + "\nStarting Phase 2a: Generating and Optimizing novel proteins")
-    logger.info("Starting Phase 2a: Generating and Optimizing novel proteins")
-    print("Starting Phase 2a")
-    all_analysis_results = []
-    best_score = 0
-    all_generated_sequences = []
+    """
+    Returns
+    -------
+    all_analysis_results : list[dict]
+        Each dict holds sequence, pdb path and *full* eval metrics.
+    all_generated_sequences : list[str]
+    """
 
-    for i, desc in enumerate(technical_descriptions):
-        technical_instruction = str(desc)
-        print(f"Processing Technical Description {i+1}")
-        print(Fore.YELLOW + f"\nProcessing Technical Description {i+1}:")
-        print(Fore.WHITE + f"- {technical_instruction}")
-        logger.info(f"Processing Technical Description {i+1}: {technical_instruction}")
+    logger.info("▶ Phase 2a – generating & optimising novel proteins")
+    print(Fore.CYAN + "\nStarting Phase 2a: Generating and Optimising novel proteins")
+
+    all_analysis_results: List[Dict[str, Any]] = []
+    all_generated_sequences: List[str] = []
+
+    # ------------------------------------------------------------------- #
+    # iterate over problem descriptions
+    # ------------------------------------------------------------------- #
+    for i, desc in enumerate(technical_descriptions, start=1):
+        print(Fore.YELLOW + f"\nProcessing Technical Description {i}:")
+        print(Fore.WHITE + f"  {desc}")
+        logger.info(f"[{i}/{len(technical_descriptions)}] {desc}")
+
+        best_score = float("inf")          # lower = better after harness change
         attempts = 0
         max_attempts = 2
 
         while attempts < max_attempts:
             try:
-                generated_sequences = generate_protein_sequence(technical_instruction, num_sequences)
-                if not generated_sequences:
-                    print(f"Failed to generate sequence for attempt {attempts + 1}. Retrying...")
-                    print(Fore.RED + f"Failed to generate sequence for attempt {attempts + 1}. Retrying...")
-                    logger.warning(f"Failed to generate sequence for attempt {attempts + 1}. Retrying...")
+                # ----------------------------------------------------- #
+                # 1) generate raw candidates
+                # ----------------------------------------------------- #
+                sequences = generate_protein_sequence(desc, num_sequences)
+                if not sequences:
+                    logger.warning("⇢ generation returned no sequences; retrying")
                     attempts += 1
                     continue
 
-                # Select the top sequence based on some criteria, e.g., the first one
-                generated_sequence = generated_sequences[0]
+                generated_sequence = sequences[0]          # take top-1 for now
                 all_generated_sequences.append(generated_sequence)
-                print(Fore.GREEN + f"Generated sequence (attempt {attempts + 1}): {generated_sequence[:50]}...")
-                logger.info(f"Generated sequence (attempt {attempts + 1}): {generated_sequence[:50]}...")
-                print("Generated protein sequence")
-                optimized_results = run_optimization_pipeline(
+
+                logger.info(f"generated seq (attempt {attempts+1}): "
+                            f"{generated_sequence[:40]}…")
+
+                # ----------------------------------------------------- #
+                # 2) optimise / mutate
+                # ----------------------------------------------------- #
+                optimised_results = run_optimization_pipeline(
                     [generated_sequence],
                     iterations=optimization_steps,
-                    score_threshold=score_threshold
+                    score_threshold=score_threshold,
                 )
-                print("Completed optimization pipeline")
-                if optimized_results:
-                    for opt_result in optimized_results:
-                        optimized_sequence = opt_result.get('optimized_sequence')
-                        optimized_score = opt_result.get('optimized_score', 0)
-                        best_method = opt_result.get('best_method', 'N/A')
+                if not optimised_results:
+                    logger.warning("⇢ optimisation produced no results; retrying")
+                    attempts += 1
+                    continue
 
-                        print("Setting protein sequences in shared state")
-                        set_protein_sequences(sequences=[optimized_sequence], scores=[optimized_score], score_threshold=score_threshold)
-                        print("Protein sequences set in shared state")
-                        print(Fore.BLUE + "Protein sequences have been set in the shared state.")
-                        logger.info("Protein sequences have been set in the shared state.")
+                for opt in optimised_results:
+                    optimised_seq: str = opt["optimized_sequence"]
+                    best_method = opt.get("best_method", "N/A")
 
-                        print("Processing optimized sequence")
-                        logger.debug(f"Optimized Sequence: {optimized_sequence}")
-                        logger.debug(f"Optimized Score: {optimized_score}")
-                        logger.debug(f"Best Method: {best_method}")
-                        print("Processed optimized sequence")
+                    # ------------------------------------------------- #
+                    # 3) evaluate deterministically with harness
+                    # ------------------------------------------------- #
+                    eval_metrics = evaluate_kernel(
+                        kernel_fn=opt["kernel_fn"],       # ensure pipeline returns
+                        batch=BENCHMARK_BATCH,
+                    )
+                    scalar_score = eval_metrics["scalar"]
 
-                        if optimized_score > best_score:
-                            best_score = optimized_score
-                            analysis_dir, simulation_dir = create_sequence_directories(
-                                results_dir, len(all_analysis_results)
-                            )
-                            print("Running prediction pipeline")
-                            prediction_results = run_prediction_pipeline(
-                                [optimized_sequence],
-                                output_dir=predicted_structures_dir
-                            )
-                            print("Completed prediction pipeline")
-                            if not prediction_results or not prediction_results[0].get('pdb_file'):
-                                print(Fore.RED + "Prediction failed. Skipping simulation and analysis.")
-                                logger.error("Prediction failed. Skipping simulation and analysis.")
-                                attempts += 1
-                                continue
+                    logger.info(
+                        f"{Fore.BLUE}Eval | ΔΔG={eval_metrics['ddg_mae']:.3f} "
+                        f"RMSD={eval_metrics['md_rmsd']:.3f}Å "
+                        f"GPU={eval_metrics['gpu_s']:.2f}s → "
+                        f"score={scalar_score:.4f}"
+                    )
 
-                            pdb_file = prediction_results[0]['pdb_file']
-                            pdb_filename = os.path.basename(pdb_file)
-                            new_pdb_path = os.path.join(analysis_dir, pdb_filename)
-                            shutil.copy(pdb_file, new_pdb_path)
-                            print("Copied PDB file")
-                            analysis_result = {
-                                'sequence': optimized_sequence,
-                                'score': optimized_score,
-                                'pdb_file': new_pdb_path,
-                                'analysis_dir': analysis_dir
-                            }
-                            all_analysis_results.append(analysis_result)        
-                            print(f"Analysis completed for sequence with score {optimized_score}")
-                            print(Fore.GREEN + f"Analysis completed for sequence with score {optimized_score}.")
-                            logger.info(f"Analysis completed for sequence with score {optimized_score}.")
+                    # track best
+                    if scalar_score >= best_score:
+                        continue
+                    best_score = scalar_score
+
+                    # ------------------------------------------------- #
+                    # 4) structure prediction → PDB
+                    # ------------------------------------------------- #
+                    prediction = run_prediction_pipeline(
+                        [optimised_seq],
+                        output_dir=predicted_structures_dir,
+                    )
+                    pdb_file = (
+                        prediction[0]["pdb_file"] if prediction else None
+                    )
+                    if pdb_file is None:
+                        logger.error("prediction failed – skipping")
+                        continue
+
+                    # copy PDB to run dir
+                    analysis_dir, _ = create_sequence_directories(
+                        results_dir, len(all_analysis_results)
+                    )
+                    new_pdb_path = Path(analysis_dir) / Path(pdb_file).name
+                    shutil.copy(pdb_file, new_pdb_path)
+
+                    # ------------------------------------------------- #
+                    # 5) persist and log
+                    # ------------------------------------------------- #
+                    result_record = {
+                        "sequence": optimised_seq,
+                        "pdb_file": str(new_pdb_path),
+                        "best_method": best_method,
+                        **eval_metrics,                  # ddG, RMSD, gpu_s, scalar
+                    }
+                    all_analysis_results.append(result_record)
+
+                    save_json(
+                        result_record,
+                        Path(analysis_dir) / "eval_metrics.json",
+                    )
+
+                    print(
+                        Fore.GREEN + f"✓ Seq saved (score={scalar_score:.4f})"
+                    )
+                    logger.info(f"saved analysis to {analysis_dir}")
 
                 attempts += 1
 
-            except Exception as e:
-                print(Fore.RED + f"An error occurred during Phase 2a processing: {e}")
-                logger.error(f"An error occurred during Phase 2a processing: {e}", exc_info=True)
-                print(f"Error in Phase 2a: {str(e)}")
+            except Exception as exc:
+                logger.exception(f"❌ error during Phase 2a loop: {exc}")
                 attempts += 1
 
-            if attempts == max_attempts:
-                print(f"Reached maximum attempts ({max_attempts}) for Technical Description {i+1}")
-                print(Fore.YELLOW + f"Reached maximum attempts ({max_attempts}) for Technical Description {i+1}. Moving to next description.")
-                logger.info(f"Reached maximum attempts ({max_attempts}) for Technical Description {i+1}. Moving to next description.")
+        if attempts == max_attempts:
+            logger.info(f"max attempts reached for description {i}")
 
-    # Removed internal saving
-    set_protein_sequences(sequences=all_generated_sequences, scores=[1.0] * len(all_generated_sequences), score_threshold=score_threshold)
-    print("Phase 2a completed: All protein sequences generated and analyzed")
-    print(Fore.GREEN + "Phase 2a completed: All protein sequences generated and analyzed.")
-    logger.info("Phase 2a completed: All protein sequences generated and analyzed.")
+        # ------------------------------------------------------------------- #
+        # end loop over technical description
+        # ------------------------------------------------------------------- #
+
+    # final bookkeeping – don’t overwrite scores
+    set_protein_sequences(
+        sequences=all_generated_sequences,
+        scores=[r["scalar"] for r in all_analysis_results],
+        score_threshold=score_threshold,
+    )
+
+    logger.info("✔ Phase 2a completed")
+    print(Fore.GREEN + "Phase 2a completed")
 
     return all_analysis_results, all_generated_sequences
+
+
+# guard for manual runs
+if __name__ == "__main__":
+    raise RuntimeError(
+        "Phase 2a is intended to be called from the top-level pipeline."
+    )
